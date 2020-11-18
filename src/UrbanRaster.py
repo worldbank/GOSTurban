@@ -44,10 +44,10 @@ class urbanGriddedPop(object):
             CLASSES:
             (30) Urban centre - dens: 1500, totalpop: 50000, smoothed
             (23) Urban cluster, town, dense urban cluster - dens: 1500, totalpop: >5000, <50000, not type 30
-            (22) Urban cluster, town, semidense urban cluster - dens: 300, totalpop: >5000, farther than 3 km from 23 or 22
-            (21) Urban cluster, suburb - dens: 300, totalpop: >5000, within 3km of 23 or 22
-            (13) Rural, village  - dens: 300, totalpop: >500, <5000
-            (12) Rural, dispersed, low density - dens: 50,
+            (22) Urban cluster, town, semidense urban cluster - dens: 300, totalpop: >5000, farther than 3 km from 23 or another 22
+            (21) Urban cluster, suburb - dens: >300, totalpop: >5000, within 3km of 23 or 22
+            (13) Rural, village  - dens: >300, totalpop: >500, <5000
+            (12) Rural, dispersed, low density - dens: >50,
             (11) Rural, dispersed, low density - the rest that are populated
         
         :param urbDens: integer of the minimum density value to be counted as urban
@@ -62,9 +62,21 @@ class urbanGriddedPop(object):
         final_raster = data[0,:,:] * 0 + 11
         
         urban_raster[np.where(data > hdDens)] = 30
-        
         idx = 0
+        urban_raster = urban_raster.astype("int16")
         allFeatures = []
+        
+        if verbose:
+            tPrint(f'{print_message}: Smoothing Urban Clusters')
+        # Smooth the HD urban clusters
+        def modal(P):
+            mode = stats.mode(P)
+            return(mode.mode[0])
+
+        smooth_urban = generic_filter(urban_raster[0,:,:], modal, (3,3))
+        yy = np.dstack([smooth_urban, urban_raster[0,:,:]])
+        urban_raster[0,:,:] = np.amax(yy, axis=2)        
+        
         #Analyze the high density shapes
         if verbose:
             tPrint(f'{print_message}: extracting HD clusters')
@@ -74,7 +86,7 @@ class urbanGriddedPop(object):
                 tPrint("%s: Creating Shape %s" % (print_message, idx))
             idx = idx + 1
             if value > 0:
-                #if value == 30: # only smooth the HD density shapes
+                # RRemove holes from urban shape
                 origShape = cShape
                 xx = shape(cShape)
                 xx = Polygon(xx.exterior)
@@ -101,6 +113,7 @@ class urbanGriddedPop(object):
         urban_raster = data * 0
         final_raster = data[0,:,:] * 0 + 11    
         urban_raster[np.where(data > urbDens)] = 22
+        urban_raster = urban_raster.astype("int16")
         #Analyze the high density shapes
         if verbose:
             tPrint(f'{print_message}: extracting URBAN clusters')
@@ -129,12 +142,12 @@ class urbanGriddedPop(object):
         #Combine the urban layers
         yy = np.dstack([HD_raster, URB_raster])
         final_raster = np.amax(yy, axis=2)
-        final_raster[np.where(final_raster == 11) and np.where(data[0,:,:] > minPopThresh) and np.where(data[0,:,:] < urbDens)] = 12
+        final_raster[(final_raster == 11) & (data[0,:,:] > minPopThresh) & (data[0,:,:] < urbDens)] = 12
         
         if verbose:
             tPrint(f'{print_message}: performing distance calculations')
         
-        #Identify the urban areas of class 22 by measuring distance
+        #Identify the urban areas of class 22 by measuring distance to other features
         feats = allFeatures
         sel = pd.DataFrame(feats, columns=['ID','POP','CLASS','geometry'])
         sel = gpd.GeoDataFrame(sel, geometry="geometry", crs=self.inR.crs)
