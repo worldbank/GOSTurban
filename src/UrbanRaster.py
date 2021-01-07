@@ -108,6 +108,7 @@ class urbanGriddedPop(object):
                 yy = np.dstack([final_raster, mask])
                 final_raster = np.amax(yy, axis=2)
                 allFeatures.append([idx, pop, val, shape(geojson.loads(json.dumps(cShape)))])
+        
         HD_raster = final_raster
             
         urban_raster = data * 0
@@ -118,7 +119,7 @@ class urbanGriddedPop(object):
         if verbose:
             tPrint(f'{print_message}: extracting URBAN clusters')
         
-        for cShape, value in features.shapes(urban_raster, transform=popRaster.transform):
+        for cShape, value in features.shapes(urban_raster, transform=popRaster.transform, connectivity=8):
             if idx % 1000 == 0 and verbose:
                 tPrint("%s: Creating Shape %s" % (print_message, idx))
             idx = idx + 1

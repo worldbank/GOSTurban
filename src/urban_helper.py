@@ -1,4 +1,5 @@
 import sys, os, importlib, shutil
+import sys, os, importlib, shutil
 import requests
 import rasterio, elevation, richdem
 import rasterio.warp
@@ -78,7 +79,7 @@ class urban_country(object):
     '''
     '''
     
-    def __init__(self, iso3, output_folder, country_bounds):
+    def __init__(self, iso3, output_folder, country_bounds, final_folder = "", ghspop_suffix=""):
         ''' Create object for managing input data for summarizing urban extents
         
         INPUT
@@ -89,16 +90,20 @@ class urban_country(object):
         '''
         self.iso3 = iso3
         self.out_folder = output_folder
-        self.final_folder = os.path.join(self.out_folder, "FINAL_STANDARD")
+        if final_folder == "":
+            self.final_folder = os.path.join(self.out_folder, "FINAL_STANDARD") 
+        else:
+            self.final_folder = os.path.join(self.out_folder, final_folder) 
         if not os.path.exists(self.out_folder):
             os.makedirs(self.out_folder)
+        if not os.path.exists(self.final_folder):
             os.makedirs(self.final_folder)
             
         self.dem_file = os.path.join(output_folder, "%s_DEM.tif" % iso3)
         self.slope_file = os.path.join(output_folder, "%s_SLOPE.tif" % iso3)
         self.lc_file = os.path.join(output_folder, "%s_LC.tif" % iso3)
         self.lc_file_h20 = os.path.join(output_folder, "%s_LC_H20.tif" % iso3)
-        self.ghspop_file = os.path.join(output_folder, "%s_GHS.tif" % iso3)
+        self.ghspop_file = os.path.join(output_folder, "%s_GHS%s.tif" % (iso3, ghspop_suffix))
         self.ghsbuilt_file = os.path.join(output_folder, "%s_GHSBUILT.tif" % iso3)
         self.admin_file  =  os.path.join(output_folder, "%s_ADMIN.tif" % iso3)
         self.admin_shp  =  os.path.join(self.final_folder, "%s_ADMIN.shp" % iso3)
@@ -108,15 +113,19 @@ class urban_country(object):
         if not os.path.exists(self.admin_shp):
             self.inD.to_file(self.admin_shp)
             
-    def process_dem(self):
+    def process_dem(self, global_dem=''):
         ''' Download DEM from AWS, calculate slope
         '''
         # Download DEM
 
-        if not os.path.exists(self.dem_file):
+        if not os.path.exists(self.dem_file) and global_dem == '':
             tPrint("Downloading DEM")
             elevation.clip(bounds=self.inD.total_bounds, max_download_tiles=90000, output=self.dem_file, product='SRTM3')
 
+        if not os.path.exists(self.dem_file) and not global_dem == '':
+            tPrint("Downloading DEM")
+            rMisc.clipRaster(rasterio.open(global_dem), self.inD, self.dem_file)
+            
         # Calculate slope
         if not os.path.exists(self.slope_file) and os.path.exists(self.dem_file):
             tPrint("Calculating slope")
@@ -212,6 +221,19 @@ class urban_country(object):
         final = final.drop(['geometry'], axis=1)
         return(final)       
         
+    def compare_pop_rasters(self):
+        ''' read in and summarize population rasters        
+        '''
+        ghs_pop_file = os.path.join(self.final_folder, "%s_GHS.tif" % self.iso3)
+        pop_files = [os.path.join(self.final_folder, x) for x in os.listdir(self.final_folder) if ("ppp" in x) and (not "urban" in x) and (not "NO_DATA" in x)]
+        pop_files.append(ghs_pop_file)
+        
+        for pFile in pop_files:
+            inR = rasterio.open(pFile)
+            inD = inR.read()
+            inD = inD[inD > 0]
+            print(f"{os.path.basename(pFile)}: {inD.sum()}")
+        
     
     def standardize_rasters(self, pop_files):
         '''
@@ -219,12 +241,6 @@ class urban_country(object):
             :param: pop_files - list of string paths to population layers
         '''
         ghs_R = rasterio.open(self.ghspop_file)    
-        out_array = ghs_R.read() * 0
-        #Read in admin data and get nodata area
-        in_admin = rasterio.open(self.admin_file)
-        in_a = in_admin.read()
-        in_a_mask = in_a == 0
-        
         file_defs = [
                 #file, type, scale values
                 [self.admin_file,'C',False],
@@ -241,14 +257,16 @@ class urban_country(object):
             file_defs.append([cFile, 'N', True])
                 
         for file_def in file_defs:
-            print(file_def[0])
-            out_file = os.path.join(self.final_folder, os.path.basename(file_def[0]))    
-            # scale and project file to GHS pop
+            print(file_def[0])            
+            out_file = os.path.join(self.final_folder, os.path.basename(file_def[0]))                
+            if (file_def[0] == self.admin_file) and (os.path.exists(out_file)):
+                os.remove(out_file)
+            out_array = np.zeros(ghs_R.shape)           
             if not os.path.exists(out_file) and os.path.exists(file_def[0]):
-                out_array = ghs_R.read() * 0
                 in_raster = rasterio.open(file_def[0])
                 in_r = in_raster.read()
-                rSample = rasterio.warp.Resampling.cubic
+                in_r[in_r == in_raster.meta['nodata']] = 0
+                rSample = rasterio.warp.Resampling.max
                 if file_def[1] == 'C':
                     rSample = rasterio.warp.Resampling.nearest
                 rasterio.warp.reproject(in_r, out_array, 
@@ -257,20 +275,44 @@ class urban_country(object):
                                         src_nodata = in_raster.meta['nodata'], dst_nodata = ghs_R.meta['nodata'],
                                        resample = rSample)
                 out_array[out_array == ghs_R.meta['nodata']] = 0.
+                # scale and project file to GHS pop if defined so
+                if (file_def[0] == self.admin_file):
+                    in_a = out_array
+                    in_a_mask = in_a == 0
+                
                 # If values are to be scaled based on area change, do it here
                 if file_def[2]:
+                    out_array_sum = out_array.sum()
+                    original_sum = in_r.sum()
+                    total_ratio = original_sum / out_array_sum
+                    '''
+                        temp = gpd.GeoDataFrame([[1,box(*in_raster.bounds)]], columns=['ID', 'geometry'], crs=in_raster.crs) 
+                        temp = temp.to_crs(ghs_R.crs) 
+                        t = temp.bounds
+
+                        xSize = (t.maxx - t.minx) / in_raster.shape[1]
+                        ySize = (t.maxy - t.miny) / in_raster.shape[0]
+
+                        total_ratio = (ghs_R.meta['transform'][0] / (np.array([xSize, ySize]).min())) ** 2
+                    '''
+                    '''
                     #Determine scale difference between rasters
                     width_ratio = in_raster.shape[0] / ghs_R.shape[0]
                     height_ratio = in_raster.shape[1] / ghs_R.shape[1]
                     total_ratio = width_ratio * height_ratio
+                    '''
+                    self.total_ratio = total_ratio
                     out_array = out_array * total_ratio
                     out_array[out_array < 0] = ghs_R.meta['nodata']
+                    
+                    
                 # Set area outside national boundaries to nodata
                 out_array[in_a_mask] = ghs_R.meta['nodata']
                 out_meta = ghs_R.meta.copy()
                 out_meta.update(nodata=ghs_R.meta['nodata'])
+                out_array = out_array.astype(out_meta['dtype'])
                 with rasterio.open(out_file, 'w', **out_meta) as outR:
-                    outR.write(out_array)
+                    outR.write_band(1, out_array)
             # Write no data layers to file
             out_no_data_file = os.path.join(self.final_folder, "NO_DATA_%s" % os.path.basename(file_def[0]))
             if not os.path.exists(out_no_data_file) and os.path.exists(file_def[0]):
