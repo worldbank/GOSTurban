@@ -13,6 +13,7 @@ import pandas as pd
 import numpy as np
 
 from scipy import stats
+from scipy import ndimage
 from scipy.ndimage import generic_filter
 from scipy.sparse.csgraph import connected_components
 from rasterio import features
@@ -211,11 +212,10 @@ class urbanGriddedPop(object):
         data = popRaster.read()
         urbanData = (data > densVal) * 1
         urbanData = urbanData.astype('int16')
+            
         if verbose:
             tPrint("%s: Read in urban data" % print_message)
 
-        allFeatures = []
-        badFeatures = []
         idx = 0     
         # create output array to store urban raster
         urban_raster = urbanData * 0
@@ -223,10 +223,40 @@ class urbanGriddedPop(object):
             if idx % 1000 == 0 and verbose:
                 tPrint("%s: Creating Shape %s" % (print_message, idx))
             if value == 1:            
-                if smooth:
-                    xx = shape(cShape)
-                    xx = Polygon(xx.exterior)
-                    cShape = xx.__geo_interface__
+                #If the shape is urban, claculate total pop        
+                mask = rasterize([(cShape, 0)], out_shape=data[0,:,:].shape,fill=1,transform=popRaster.transform)
+                inData = np.ma.array(data=data, mask=mask.astype(bool))
+                curPop = np.nansum(inData) 
+                if curPop < 0: # when smoothed, sometimes the pop withh be < 0 because of no data
+                    inData = np.ma.array(data=inData, mask=(inData < 0).astype(bool))
+                    curPop = np.nansum(inData) 
+                if curPop > totalPopThresh:            
+                    urban_raster += (mask^1)
+                
+            idx = idx + 1
+        
+        if smooth:
+            inD = urban_raster[0,:,:]
+            total_urban_cells = inD.sum()
+            current_cells = 0
+            cnt = 0
+            urban_res = inD
+            while (total_urban_cells != current_cells) and (cnt < 100):
+                cnt = cnt + 1
+                total_urban_cells = current_cells
+                newD = ndimage.median_filter(urban_res, size=3)
+                stackD = np.dstack([newD, inD])
+                finalD = np.amax(stackD, axis=2)
+                current_cells = finalD.sum()
+                urban_res = finalD
+            urban_raster[0,:,:] = urban_res
+        
+        allFeatures = []
+        badFeatures = []
+        for cShape, value in features.shapes(urban_raster, transform=popRaster.transform):
+            if idx % 1000 == 0 and verbose:
+                tPrint("%s: Creating Shape %s" % (print_message, idx))
+            if value == 1:            
                 #If the shape is urban, claculate total pop        
                 mask = rasterize([(cShape, 0)], out_shape=data[0,:,:].shape,fill=1,transform=popRaster.transform)
                 inData = np.ma.array(data=data, mask=mask.astype(bool))
@@ -236,9 +266,7 @@ class urbanGriddedPop(object):
                     curPop = np.nansum(inData) 
                 if curPop > totalPopThresh:            
                     allFeatures.append([idx, curPop, shape(geojson.loads(json.dumps(cShape)))])
-                    urban_raster += (mask^1)
-                else:
-                    badFeatures.append([idx, curPop, shape(geojson.loads(json.dumps(cShape)))])
+
             idx = idx + 1
         
         if len(raster):

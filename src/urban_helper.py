@@ -1,9 +1,12 @@
-import sys, os, importlib, shutil
-import sys, os, importlib, shutil
-import requests
+import sys, os, importlib, shutil, pyproj, json, requests
 import rasterio, elevation, richdem
 import rasterio.warp
+
+from shapely.ops import transform
+from shapely.geometry import box
+from functools import partial
 from rasterio import features
+from rasterio.mask import mask
 
 import pandas as pd
 import geopandas as gpd
@@ -79,7 +82,7 @@ class urban_country(object):
     '''
     '''
     
-    def __init__(self, iso3, output_folder, country_bounds, final_folder = "", ghspop_suffix=""):
+    def __init__(self, iso3, output_folder, country_bounds, pop_files, final_folder = "", ghspop_suffix=""):
         ''' Create object for managing input data for summarizing urban extents
         
         INPUT
@@ -87,9 +90,20 @@ class urban_country(object):
         :param: output_folder - string path to folder to hold results
         :param: country_bounds - geopandas dataframe of admin0 boundary
         
+        
+        NAMING CONVENTION
+        To save this renaming step on my side, which can also induce mistakes, would be possible for you Ben to rename the files in your code directly? This would be also helpful for all other countries we have to do, and for the 1km*1km rasters.
+        My conventions are pretty simple. All rasters starts with the three lettres of the country and then _ as you do, and then 3 lettres for the variable, and possibly two figures for the year. So for instance for Tanzania, this is:
+        tza_ele tza_slo tza_wat for elevation, slope and water
+        tza_gpo tza_gbu for GHS population and built-up
+        tza_upo15 and tza_upo18 for WorldPop population unconstrained 
+        tza_cpo15 and tza_cpo18 for WorldPop population constrained.
+        Then for 1km*1km raster, names are the same except that the three lettres of the country's name are followed by 1k, ie tza1k_slo, tza1k_ele and so on.
         '''
         self.iso3 = iso3
         self.out_folder = output_folder
+        self.suffix = ghspop_suffix
+        
         if final_folder == "":
             self.final_folder = os.path.join(self.out_folder, "FINAL_STANDARD") 
         else:
@@ -99,17 +113,31 @@ class urban_country(object):
         if not os.path.exists(self.final_folder):
             os.makedirs(self.final_folder)
             
-        self.dem_file = os.path.join(output_folder, "%s_DEM.tif" % iso3)
-        self.slope_file = os.path.join(output_folder, "%s_SLOPE.tif" % iso3)
-        self.lc_file = os.path.join(output_folder, "%s_LC.tif" % iso3)
-        self.lc_file_h20 = os.path.join(output_folder, "%s_LC_H20.tif" % iso3)
-        self.ghspop_file = os.path.join(output_folder, "%s_GHS%s.tif" % (iso3, ghspop_suffix))
-        self.ghsbuilt_file = os.path.join(output_folder, "%s_GHSBUILT.tif" % iso3)
-        self.admin_file  =  os.path.join(output_folder, "%s_ADMIN.tif" % iso3)
-        self.admin_shp  =  os.path.join(self.final_folder, "%s_ADMIN.shp" % iso3)
+        self.dem_file = os.path.join(output_folder, "%s_ele.tif" % iso3.lower())
+        self.slope_file = os.path.join(output_folder, "%s_slo.tif" % iso3.lower())
+        self.lc_file = os.path.join(output_folder, "%s_lc.tif" % iso3.lower())
+        self.lc_file_h20 = os.path.join(output_folder, "%s_wat_lc.tif" % iso3.lower())
+        self.ghsl_h20 = os.path.join(output_folder, "%s_wat.tif" % iso3.lower())
+        self.ghspop_file = os.path.join(output_folder, "%s_gpo.tif" % iso3.lower())
+        self.ghspop1k_file = os.path.join(output_folder, "%s1k_gpo.tif" % iso3.lower())
+        self.ghsbuilt_file = os.path.join(output_folder, "%s_gbu.tif" % iso3.lower())
+        self.ghssmod_file = os.path.join(output_folder, "%s_gsmod.tif" % iso3.lower())
+        self.admin_file  =  os.path.join(output_folder, "%s_adm.tif" % iso3.lower())
+        self.admin_shp  =  os.path.join(self.final_folder, "%s_adm.shp" % iso3.lower())
+        self.pop_files = []
+        # Copy and rename the population files
+        for fileDef in pop_files:
+            out_pop_file = os.path.join(output_folder, fileDef[1])
+            self.pop_files.append(out_pop_file)
+            if not os.path.exists(out_pop_file):
+                shutil.copy(fileDef[0], out_pop_file)
+        if ghspop_suffix == '1k':
+            self.pop_files.append(self.ghspop1k_file)
+        else:
+            self.pop_files.append(self.ghspop_file)
         
+        # Write admin shapefile to output file
         self.inD = country_bounds
-        # Write shapefile to file
         if not os.path.exists(self.admin_shp):
             self.inD.to_file(self.admin_shp)
             
@@ -138,7 +166,7 @@ class urban_country(object):
             with rasterio.open(self.slope_file, 'w', **meta) as outR:
                 outR.write_band(1, slope)
                 
-    def extract_layers(self, global_landcover, global_ghspop, global_ghbuilt):
+    def extract_layers(self, global_landcover, global_ghspop, global_ghspop1k, global_ghbuilt, global_ghsl, global_smod):
         ''' extract global layers for current country
         '''
         # Extract water from globcover
@@ -155,15 +183,65 @@ class urban_country(object):
                 out.write(tempL)
             os.remove(self.lc_file)
             
+        # Extract water from GHSL
+        if not os.path.exists(self.ghsl_h20):
+            tPrint("Extracting water from GHSL")
+            inR = rasterio.open(global_ghsl)
+            ul = inR.index(*self.inD.total_bounds[0:2])
+            lr = inR.index(*self.inD.total_bounds[2:4])
+            # read the subset of the data into a numpy array
+            window = ((float(lr[0]), float(ul[0]+1)), (float(ul[1]), float(lr[1]+1)))
+            data = inR.read(1, window=window, masked = False)
+            data = data == 1
+            b = self.inD.total_bounds
+            new_transform = rasterio.transform.from_bounds(b[0], b[1], b[2], b[3], data.shape[1], data.shape[0])
+            meta = inR.meta.copy()
+            meta.update(driver='GTiff',width=data.shape[1], height=data.shape[0], transform=new_transform)
+            data = data.astype(meta['dtype'])
+            with rasterio.open(self.ghsl_h20, 'w', **meta) as outR:
+                outR.write_band(1, data)
+            '''
+            bounds = box(*self.inD.total_bounds)
+            if inG.crs != self.inD.crs:
+                destCRS = pyproj.Proj(inG.crs)
+                fromCRS = pyproj.Proj(self.inD.crs)
+                projector = partial(pyproj.transform, fromCRS, destCRS)
+                bounds = transform(projector, bounds)
+            def getFeatures(gdf):
+                #Function to parse features from GeoDataFrame in such a manner that rasterio wants them
+                return [json.loads(gdf.to_json())['features'][0]['geometry']]
+            tD = gpd.GeoDataFrame([[1]], geometry=[bounds])
+            coords = getFeatures(tD)
+            out_img, out_transform = mask(inG, shapes=coords, crop=True)
+            out_meta = inG.meta.copy()
+            out_meta.update({"driver": "GTiff",
+                             "height": out_img.shape[1],
+                             "width": out_img.shape[2],
+                             "transform": out_transform})
+            water_data = (out_img == 1).astype(out_meta['dtype'])
+            with rasterio.open(self.ghsl_h20, 'w', **out_meta) as outR:
+                outR.write(water_data)
+            '''
+            
         #Extract GHS-Pop
         if not os.path.exists(self.ghspop_file):
             tPrint("Extracting GHS-POP")
             rMisc.clipRaster(rasterio.open(global_ghspop), self.inD, self.ghspop_file)
+            
+        #Extract GHS-Pop-1k
+        if not os.path.exists(self.ghspop1k_file):
+            tPrint("Extracting GHS-POP")
+            rMisc.clipRaster(rasterio.open(global_ghspop1k), self.inD, self.ghspop1k_file)
 
         #Extract GHS-Built
         if not os.path.exists(self.ghsbuilt_file):
             tPrint("Clipping GHS-Built")
-            rMisc.clipRaster(rasterio.open(global_ghbuilt), self.inD, self.ghsbuilt_file)
+            rMisc.clipRaster(rasterio.open(global_ghbuilt), self.inD, self.ghsbuilt_file)        
+            
+        #Extract GHS-SMOD
+        if not os.path.exists(self.ghssmod_file):
+            tPrint("Clipping GHS-SMOD")
+            rMisc.clipRaster(rasterio.open(global_smod), self.inD, self.ghssmod_file)
             
         #Rasterize admin boundaries
         if not os.path.exists(self.admin_file):
@@ -178,36 +256,36 @@ class urban_country(object):
             with rasterio.open(self.admin_file, 'w', **meta) as outR:
                 outR.write_band(1, burned)
                 
-    def calculate_urban(self, pop_files):
+    def calculate_urban(self, urb_val=300, hd_urb_val=1500):
         ''' Calculate urban and HD urban extents from population files
         '''
         # Calculate urban extents from population layers
-        tPrint("***Starting ")
         ghs_R = rasterio.open(self.ghspop_file)
-        for p_file in pop_files:
-            final_pop = os.path.join(self.final_folder, os.path.basename(p_file))
+        for p_file in self.pop_files:            
+            final_pop = os.path.join(self.final_folder, os.path.basename(p_file).replace(self.iso3.lower(), "%s%s" % (self.iso3.lower(), self.suffix)))
+            if "1k1k" in final_pop:
+                final_pop = final_pop.replace("1k1k", "1k")
             final_urban    = final_pop.replace(".tif", "_urban.tif")
             final_urban_hd = final_pop.replace(".tif", "_urban_hd.tif")
             urbanR = urban.urbanGriddedPop(final_pop)
-            #calculate density values
-            in_raster = rasterio.open(p_file)
-            width_ratio = in_raster.shape[0] / ghs_R.shape[0]
-            height_ratio = in_raster.shape[1] / ghs_R.shape[1]
-            total_ratio = width_ratio * height_ratio
-            tPrint(final_urban)
+            # Convert density values for urbanization from 1km resolution to current resolution
+            in_raster = rasterio.open(final_pop)
+            total_ratio = (in_raster.res[0] * in_raster.res[1]) / 1000000
+            print(final_pop)
             if not os.path.exists(final_urban):
-                urban_shp   = urbanR.calculateUrban(densVal= (3 * total_ratio), totalPopThresh=5000,  raster=final_urban)
+                urban_shp   = urbanR.calculateUrban(densVal= (urb_val * total_ratio), totalPopThresh=5000,  raster=final_urban)
             if not os.path.exists(final_urban_hd):
-                cluster_shp = urbanR.calculateUrban(densVal=(15 * total_ratio), totalPopThresh=50000, raster=final_urban_hd)
-            tPrint(final_urban_hd)
+                cluster_shp = urbanR.calculateUrban(densVal=(hd_urb_val * total_ratio), totalPopThresh=50000, raster=final_urban_hd, smooth=True, queen=True)
     
-
     def pop_zonal_admin(self, admin_layer):
         ''' calculate urban and rural 
         
             :param: - admin_layer
         '''
-        for pop_file in self.final_pop_files:
+        for p_file in self.pop_files:            
+            pop_file = os.path.join(self.final_folder, os.path.basename(p_file).replace(self.iso3.lower(), "%s%s" % (self.iso3.lower(), self.suffix)))
+            if "1k1k" in pop_file:
+                pop_file = pop_file.replace("1k1k", "1k")
             yy = summarize_population(pop_file, admin_layer)
             if yy.check_inputs():
                 res = yy.calculate_zonal(out_name='')
@@ -215,50 +293,53 @@ class urban_country(object):
                     final = final.join(res)
                 except:
                     final = res
+            else:
+                print("Error summarizing population for %s" % pop_file)
         admin_layer = admin_layer.reset_index()
         final = final.filter(regex='_SUM')
         final = final.join(admin_layer)
         final = final.drop(['geometry'], axis=1)
         return(final)       
         
-    def compare_pop_rasters(self):
+    def compare_pop_rasters(self, verbose=True):
         ''' read in and summarize population rasters        
-        '''
-        ghs_pop_file = os.path.join(self.final_folder, "%s_GHS.tif" % self.iso3)
-        pop_files = [os.path.join(self.final_folder, x) for x in os.listdir(self.final_folder) if ("ppp" in x) and (not "urban" in x) and (not "NO_DATA" in x)]
-        pop_files.append(ghs_pop_file)
-        
-        for pFile in pop_files:
+        '''        
+        all_res = []
+        for pFile in self.pop_files:
             inR = rasterio.open(pFile)
             inD = inR.read()
             inD = inD[inD > 0]
-            print(f"{os.path.basename(pFile)}: {inD.sum()}")
-        
-    
-    def standardize_rasters(self, pop_files):
+            all_res.append([os.path.basename(pFile), inD.sum()])
+            if verbose:
+                print(f"{os.path.basename(pFile)}: {inD.sum()}")
+        return(all_res)
+            
+    def standardize_rasters(self):
+        '''        
         '''
-        
-            :param: pop_files - list of string paths to population layers
-        '''
-        ghs_R = rasterio.open(self.ghspop_file)    
+        ghs_R = rasterio.open(self.ghspop_file)
+        if self.suffix == "1k":
+            ghs_R = rasterio.open(self.ghspop1k_file)
         file_defs = [
                 #file, type, scale values
                 [self.admin_file,'C',False],
                 [self.ghspop_file, 'N', True],
                 [self.lc_file_h20, 'C', False],
+                [self.ghsl_h20, 'C', False],
                 [self.slope_file, 'N', False],
                 [self.dem_file, 'N', False],
-                [self.ghsbuilt_file, 'N', False]        
+                [self.ghssmod_file, 'N', False],        
+                [self.ghsbuilt_file, 'N', False],        
             ]
             
-        self.final_pop_files = [os.path.join(self.final_folder, os.path.basename(self.ghspop_file))]
-        for cFile in pop_files:            
-            self.final_pop_files.append(os.path.join(self.final_folder, os.path.basename(cFile)))
+        for cFile in self.pop_files:            
             file_defs.append([cFile, 'N', True])
                 
         for file_def in file_defs:
             print(file_def[0])            
-            out_file = os.path.join(self.final_folder, os.path.basename(file_def[0]))                
+            out_file = os.path.join(self.final_folder, os.path.basename(file_def[0]).replace(self.iso3.lower(), "%s%s" % (self.iso3.lower(), self.suffix)))   
+            if "1k1k" in out_file:
+                out_file = out_file.replace("1k1k", "1k")
             if (file_def[0] == self.admin_file) and (os.path.exists(out_file)):
                 os.remove(out_file)
             out_array = np.zeros(ghs_R.shape)           
@@ -285,22 +366,6 @@ class urban_country(object):
                     out_array_sum = out_array.sum()
                     original_sum = in_r.sum()
                     total_ratio = original_sum / out_array_sum
-                    '''
-                        temp = gpd.GeoDataFrame([[1,box(*in_raster.bounds)]], columns=['ID', 'geometry'], crs=in_raster.crs) 
-                        temp = temp.to_crs(ghs_R.crs) 
-                        t = temp.bounds
-
-                        xSize = (t.maxx - t.minx) / in_raster.shape[1]
-                        ySize = (t.maxy - t.miny) / in_raster.shape[0]
-
-                        total_ratio = (ghs_R.meta['transform'][0] / (np.array([xSize, ySize]).min())) ** 2
-                    '''
-                    '''
-                    #Determine scale difference between rasters
-                    width_ratio = in_raster.shape[0] / ghs_R.shape[0]
-                    height_ratio = in_raster.shape[1] / ghs_R.shape[1]
-                    total_ratio = width_ratio * height_ratio
-                    '''
                     self.total_ratio = total_ratio
                     out_array = out_array * total_ratio
                     out_array[out_array < 0] = ghs_R.meta['nodata']
@@ -330,19 +395,119 @@ class urban_country(object):
                 with rasterio.open(out_no_data_file, 'w', **out_meta) as outR:
                     outR.write(out_array)
                 
+    def evaluateOutput(self):
+        '''
+        Check the outputs to determine if processing worked correctly
         
+            1. compare population totals between raw, 250m and 1km data
+            2. Calculate urbanization rate
+            3. Water mask
+               a. calculate overlap between water classes
+               b. calculate overlap between water and population
+               c. calculate overlap between water and urban
+               
+        https://ghsl.jrc.ec.europa.eu/documents/cfs01/V3/CFS_Ghana.pdf
+        '''
+        stats_file = os.path.join(self.out_folder, "DATA_EVALUATION_%s_%s.txt" % (self.iso3, self.suffix))
+        with open(stats_file, 'w') as out_stats:
+            # Compare pop rasters
+            pop_comparison = self.compare_pop_rasters(verbose=False)
+            out_stats.write("***** Evaluate Total Population *****\n")
+            for x in pop_comparison:
+                out_stats.write(f"{x[0]}: {x[1]}\n")
+            # define population and urbanization layers
+            pop_file_defs = []
+            for pop_file in self.pop_files:
+                name = "GHS"
+                if "upo" in pop_file:
+                    name = "WP_U_%s" % pop_file[-6:-4]
+                if "cpo" in pop_file:
+                    name = "WP_C_%s" % pop_file[-6:-4]
                 
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+                pop_file_base = os.path.basename(pop_file)
+                if self.suffix == "1k":
+                    pop_file_base = pop_file_base.replace(self.iso3.lower(), "%s%s" % (self.iso3.lower(), self.suffix))
+                    if "1k1k" in pop_file_base:
+                        pop_file_base = pop_file_base.replace("1k1k", "1k")
+                
+                out_pop_file = os.path.join(self.final_folder, pop_file_base)
+                urban_pop_file = out_pop_file.replace(".tif", "_urban.tif")
+                hd_pop_file = out_pop_file.replace(".tif", "_urban_hd.tif")
+                pop_file_defs.append([out_pop_file, urban_pop_file, hd_pop_file, name])
+            out_stats.write("***** Evaluate Urbanization *****\n")
+            for fileDef in pop_file_defs:        
+                pFile = fileDef[0]
+                urb_file = fileDef[1]
+                hd_file = fileDef[2]
+                name = fileDef[3]
+                try:
+                    inPop = rasterio.open(pFile).read()
+                    inPop = inPop * (inPop > 0)
+                    inUrb = rasterio.open(urb_file).read()
+                    inHd = rasterio.open(hd_file).read()
+                            
+                    tPop = inPop.sum()
+                    urbPop = (inPop * inUrb).sum()
+                    hdPop = (inPop * inHd).sum()
+                    out_stats.write(f"{name}: TotalPop: {tPop.round(0)}, UrbanPop: {urbPop.round(0)}, HD Pop: {hdPop.round(0)}\n")
+                    out_stats.write(f"{name}: {((urbPop/tPop) * 100).round(2)}% Urban; {((hdPop/tPop) * 100).round(2)}% HD Urban\n")
+                except:
+                    print(f"Error processing {name}")
+                    print(fileDef)
+
+            # Summarize population in SMOD classes
+            out_stats.write('***** Evaluate SMOD ******\n')        
+            smod_vals = [10,11,12,13,21,22,23,30]
+            inSMOD = rasterio.open(os.path.join(self.final_folder, os.path.basename(self.ghssmod_file).replace("%s" % self.iso3.lower(), "%s%s" % (self.iso3.lower(), self.suffix))))
+            smod = inSMOD.read()
+            for pFile in self.pop_files:
+                if 'gpo' in pFile:
+                    inPop = rasterio.open(pFile)
+            pop = inPop.read()
+            pop[pop < 0] = 0
+            total_pop = pop.sum()
+            total_per = 0
+            for val in smod_vals:
+                cur_smod = (smod == val).astype(int)
+                cur_pop = pop * cur_smod
+                total_curpop = cur_pop.sum()
+                perUrban = (total_curpop.sum()/total_pop*100)
+                total_per = total_per + perUrban
+                out_stats.write(f'{val}: {perUrban}\n')        
+            out_stats.write(f'Total Urban: {total_per}\n')        
+                
+            '''3. Water mask                          
+            '''
+            out_stats.write("***** Evaluate Water Intersection *****\n")
+            # a. calculate overlap between water classes
+            water_ghsl = os.path.join(self.final_folder, "%s%s_wat.tif" % (self.iso3.lower(), self.suffix))
+            water_lc = os.path.join(self.final_folder, "%s%s_wat_lc.tif" % (self.iso3.lower(), self.suffix))    
+            inWG = rasterio.open(water_ghsl)
+            wgData = inWG.read()
+            wgData[wgData == inWG.meta['nodata']] = 0
+            inWLC= rasterio.open(water_lc)
+            wlcData = inWLC.read()
+            wlcData[wlcData == inWLC.meta['nodata']] = 0
+            combo = wgData + wlcData
+            out_stats.write(f"WATER: GHSL count: {wgData.sum()}; LC count: {wlcData.sum()}; overlap: {(combo == 2).sum()}\n")        
+
             
+            # b. calculate overlap between water and population
+            out_stats.write("***** Evaluate Water Population Overlap *****\n")
+            for fileDef in pop_file_defs:
+                pop_file = fileDef[0]
+                urb_file = fileDef[1]
+                hd_file  = fileDef[2]
+                name     = fileDef[3]
+                
+                cur_pop = rasterio.open(pop_file)
+                curP = cur_pop.read()
+                curP[curP == cur_pop.meta['nodata']] = 0
+                
+                urb = rasterio.open(urb_file).read()
+                hd  = rasterio.open(hd_file).read()
+                
+                # c. calculate overlap between water and urban
+                out_stats.write(f"WATER {name} Population: TotalPop: {curP.sum().round()}, WaterPop GHSL: {(curP * wgData).sum().round()}, WaterPop LC: {(curP * wlcData).sum().round()}\n")
+                out_stats.write(f"WATER {name} Urban Cells: TotalUrban Cells: {urb.sum().round()}, WaterUrban GHSL: {(urb * wgData).sum()}, WaterUrb LC: {(urb * wlcData).sum()}\n")
+                out_stats.write(f"WATER {name} HD Cells: TotalPop: {hd.sum().round()}, WaterHD GHSL: {(hd * wgData).sum()}, WaterHD LC: {(hd * wlcData).sum()}\n")
