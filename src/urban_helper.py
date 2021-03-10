@@ -24,10 +24,16 @@ from GOSTRocks.misc import tPrint
 class summarize_population(object):
     ''' summarize population and urban populations for defined admin regions
     '''
-    def __init__(self, pop_layer, admin_layer, temp_folder=''):
+    def __init__(self, pop_layer, admin_layer, urban_layer='', hd_urban_layer='', temp_folder=''):
         self.pop_layer = pop_layer
-        self.urban_layer = pop_layer.replace(".tif", "_urban.tif")
-        self.urban_hd_layer = pop_layer.replace(".tif", "_urban_hd.tif")
+        
+        self.urban_layer = urban_layer
+        if self.urban_layer == '':
+            self.urban_layer = pop_layer.replace(".tif", "_urban.tif")
+        
+        self.urban_hd_layer = hd_urban_layer
+        if self.urban_hd_layer == '':
+            self.urban_hd_layer = pop_layer.replace(".tif", "_urban_hd.tif")
         self.admin_layer = admin_layer
         
         #Open population layer
@@ -133,8 +139,10 @@ class urban_country(object):
                 shutil.copy(fileDef[0], out_pop_file)
         if ghspop_suffix == '1k':
             self.pop_files.append(self.ghspop1k_file)
+            #shutil.copy(self.ghspop1k_file, os.path.join(self.final_folder, os.path.basename(self.ghspop1k_file)))
         else:
             self.pop_files.append(self.ghspop_file)
+            shutil.copy(self.ghspop_file, os.path.join(self.final_folder, os.path.basename(self.ghspop_file)))
         
         # Write admin shapefile to output file
         self.inD = country_bounds
@@ -354,7 +362,7 @@ class urban_country(object):
                                         src_transform=in_raster.meta['transform'], dst_transform=ghs_R.meta['transform'],
                                         src_crs = in_raster.crs, dst_crs = ghs_R.crs,
                                         src_nodata = in_raster.meta['nodata'], dst_nodata = ghs_R.meta['nodata'],
-                                       resample = rSample)
+                                        resample = rSample)
                 out_array[out_array == ghs_R.meta['nodata']] = 0.
                 # scale and project file to GHS pop if defined so
                 if (file_def[0] == self.admin_file):
@@ -395,7 +403,7 @@ class urban_country(object):
                 with rasterio.open(out_no_data_file, 'w', **out_meta) as outR:
                     outR.write(out_array)
                 
-    def evaluateOutput(self):
+    def evaluateOutput(self, admin_stats, commune_stats):
         '''
         Check the outputs to determine if processing worked correctly
         
@@ -472,7 +480,8 @@ class urban_country(object):
                 cur_pop = pop * cur_smod
                 total_curpop = cur_pop.sum()
                 perUrban = (total_curpop.sum()/total_pop*100)
-                total_per = total_per + perUrban
+                if val > 20:
+                    total_per = total_per + perUrban
                 out_stats.write(f'{val}: {perUrban}\n')        
             out_stats.write(f'Total Urban: {total_per}\n')        
                 
@@ -511,3 +520,21 @@ class urban_country(object):
                 out_stats.write(f"WATER {name} Population: TotalPop: {curP.sum().round()}, WaterPop GHSL: {(curP * wgData).sum().round()}, WaterPop LC: {(curP * wlcData).sum().round()}\n")
                 out_stats.write(f"WATER {name} Urban Cells: TotalUrban Cells: {urb.sum().round()}, WaterUrban GHSL: {(urb * wgData).sum()}, WaterUrb LC: {(urb * wlcData).sum()}\n")
                 out_stats.write(f"WATER {name} HD Cells: TotalPop: {hd.sum().round()}, WaterHD GHSL: {(hd * wgData).sum()}, WaterHD LC: {(hd * wlcData).sum()}\n")
+                
+            #Summarize zonal stats files
+            for sFile in [admin_stats, commune_stats]:
+                if os.path.exists(sFile):
+                    tPrint(sFile)
+                    file_name = os.path.basename(sFile)
+                    inD = pd.read_csv(sFile, index_col=0)
+                    out_stats.write(f"***** Summarizing {file_name}\n")
+                    bad_cols = ['index','OBJECTID','WB_ADM1_CO','WB_ADM0_CO','WB_ADM2_CO','Shape_Leng','Shape_Area']
+                    for col in inD.columns:
+                        if not col in bad_cols:
+                            curD = inD[col]
+                            try:
+                                curD_sum = curD.loc[curD > 0].sum()
+                                out_stats.write(f"{col}: {round(curD_sum)}\n")
+                            except:
+                                pass
+                    
