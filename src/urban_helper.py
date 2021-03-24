@@ -139,7 +139,7 @@ class urban_country(object):
                 shutil.copy(fileDef[0], out_pop_file)
         if ghspop_suffix == '1k':
             self.pop_files.append(self.ghspop1k_file)
-            #shutil.copy(self.ghspop1k_file, os.path.join(self.final_folder, os.path.basename(self.ghspop1k_file)))
+            shutil.copy(self.ghspop1k_file, os.path.join(self.final_folder, os.path.basename(self.ghspop1k_file)))
         else:
             self.pop_files.append(self.ghspop_file)
             shutil.copy(self.ghspop_file, os.path.join(self.final_folder, os.path.basename(self.ghspop_file)))
@@ -195,41 +195,24 @@ class urban_country(object):
         if not os.path.exists(self.ghsl_h20):
             tPrint("Extracting water from GHSL")
             inR = rasterio.open(global_ghsl)
-            ul = inR.index(*self.inD.total_bounds[0:2])
-            lr = inR.index(*self.inD.total_bounds[2:4])
+            if inR.crs != self.inD.crs:
+                tempD = self.inD.to_crs(inR.crs)
+            else:
+                tempD = inD
+            ul = inR.index(*tempD.total_bounds[0:2])
+            lr = inR.index(*tempD.total_bounds[2:4])
             # read the subset of the data into a numpy array
             window = ((float(lr[0]), float(ul[0]+1)), (float(ul[1]), float(lr[1]+1)))
             data = inR.read(1, window=window, masked = False)
-            data = data == 1
-            b = self.inD.total_bounds
+            data = data == 2
+            b = tempD.total_bounds
             new_transform = rasterio.transform.from_bounds(b[0], b[1], b[2], b[3], data.shape[1], data.shape[0])
             meta = inR.meta.copy()
             meta.update(driver='GTiff',width=data.shape[1], height=data.shape[0], transform=new_transform)
             data = data.astype(meta['dtype'])
             with rasterio.open(self.ghsl_h20, 'w', **meta) as outR:
                 outR.write_band(1, data)
-            '''
-            bounds = box(*self.inD.total_bounds)
-            if inG.crs != self.inD.crs:
-                destCRS = pyproj.Proj(inG.crs)
-                fromCRS = pyproj.Proj(self.inD.crs)
-                projector = partial(pyproj.transform, fromCRS, destCRS)
-                bounds = transform(projector, bounds)
-            def getFeatures(gdf):
-                #Function to parse features from GeoDataFrame in such a manner that rasterio wants them
-                return [json.loads(gdf.to_json())['features'][0]['geometry']]
-            tD = gpd.GeoDataFrame([[1]], geometry=[bounds])
-            coords = getFeatures(tD)
-            out_img, out_transform = mask(inG, shapes=coords, crop=True)
-            out_meta = inG.meta.copy()
-            out_meta.update({"driver": "GTiff",
-                             "height": out_img.shape[1],
-                             "width": out_img.shape[2],
-                             "transform": out_transform})
-            water_data = (out_img == 1).astype(out_meta['dtype'])
-            with rasterio.open(self.ghsl_h20, 'w', **out_meta) as outR:
-                outR.write(water_data)
-            '''
+
             
         #Extract GHS-Pop
         if not os.path.exists(self.ghspop_file):
@@ -332,8 +315,9 @@ class urban_country(object):
                 #file, type, scale values
                 [self.admin_file,'C',False],
                 [self.ghspop_file, 'N', True],
-                [self.lc_file_h20, 'C', False],
+                [self.lc_file_h20, 'C', False],               
                 [self.ghsl_h20, 'C', False],
+                [self.ghsl_h20, 'N', False, "%s_wat.tif" % self.iso3.lower()],
                 [self.slope_file, 'N', False],
                 [self.dem_file, 'N', False],
                 [self.ghssmod_file, 'N', False],        
@@ -345,7 +329,10 @@ class urban_country(object):
                 
         for file_def in file_defs:
             print(file_def[0])            
-            out_file = os.path.join(self.final_folder, os.path.basename(file_def[0]).replace(self.iso3.lower(), "%s%s" % (self.iso3.lower(), self.suffix)))   
+            try:
+                out_file = file_def[3]
+            except:
+                out_file = os.path.join(self.final_folder, os.path.basename(file_def[0]).replace(self.iso3.lower(), "%s%s" % (self.iso3.lower(), self.suffix)))   
             if "1k1k" in out_file:
                 out_file = out_file.replace("1k1k", "1k")
             if (file_def[0] == self.admin_file) and (os.path.exists(out_file)):
@@ -355,14 +342,14 @@ class urban_country(object):
                 in_raster = rasterio.open(file_def[0])
                 in_r = in_raster.read()
                 in_r[in_r == in_raster.meta['nodata']] = 0
-                rSample = rasterio.warp.Resampling.max
+                rSample = rasterio.warp.Resampling.bilinear
                 if file_def[1] == 'C':
                     rSample = rasterio.warp.Resampling.nearest
                 rasterio.warp.reproject(in_r, out_array, 
                                         src_transform=in_raster.meta['transform'], dst_transform=ghs_R.meta['transform'],
                                         src_crs = in_raster.crs, dst_crs = ghs_R.crs,
                                         src_nodata = in_raster.meta['nodata'], dst_nodata = ghs_R.meta['nodata'],
-                                        resample = rSample)
+                                        resampling = rSample)
                 out_array[out_array == ghs_R.meta['nodata']] = 0.
                 # scale and project file to GHS pop if defined so
                 if (file_def[0] == self.admin_file):
