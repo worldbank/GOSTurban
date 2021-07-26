@@ -8,6 +8,7 @@ import numpy as np
 
 from shapely.geometry import shape, GeometryCollection
 from shapely.wkt import loads
+from shapely.errors import TopologicalError
 
 def calculate_LEI(inputGHSL, old_list = [4,5,6], new_list=[3], buffer_dist=300):
     ''' Calculate LEI using vector objects in rasterio
@@ -42,7 +43,11 @@ def calculate_LEI(inputGHSL, old_list = [4,5,6], new_list=[3], buffer_dist=300):
             curShape = shape(geom)
             bufferArea = curShape.buffer(buffer_dist)
             #Clip out the original shape to leave just the donut
-            donutArea = bufferArea.difference(curShape)
+            try:
+                donutArea = bufferArea.difference(curShape)
+            except TopologicalError:
+                curShape = curShape.buffer(0)
+                donutArea = bufferArea.difference(curShape)
             # Rasterize donut shape
             shapes = [(donutArea, 1)]
             burned = rasterio.features.rasterize(shapes=shapes, fill=0, 
