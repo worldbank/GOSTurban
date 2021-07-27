@@ -10,7 +10,6 @@ from shapely.geometry import shape, GeometryCollection
 from shapely.wkt import loads
 from shapely.errors import TopologicalError
 from rasterstats import zonal_stats
-from tqdm import tqdm
 
 custom_dict = {
     0 : 'new',
@@ -44,7 +43,7 @@ def calculate_LEI(inputGHSL, old_list = [4,5,6], new_list=[3], buffer_dist=300):
     newR = (np.isin(inR, new_list)).astype('int')
     oldR = (np.isin(inR, old_list)).astype('int')
     allVals = []
-    for geom, value in tqdm(rasterio.features.shapes(newR.astype('uint8'), transform=inRaster.transform)):
+    for geom, value in rasterio.features.shapes(newR.astype('uint8'), transform=inRaster.transform):
         if value == 1:
             # Convert the geom to a shape and buffer by 300 metres
             curShape = shape(geom)
