@@ -1,5 +1,9 @@
 # slumML
 
+## slumML STEP 1 and STEP 2
+The original codes were developed by Alex Chunet.
+Perform STEP 1 to generate morphological indices of the target building footprint layer. Then run STEP 2 to perform an automated supervised ML analysis.
+
 ## GOB2FC (Google Open Building layer to ESRI feature class
 This script is to convert the CSV file(s) of [Google Open Buildings](https://sites.research.google/open-buildings/) to a Feature Class.
 
