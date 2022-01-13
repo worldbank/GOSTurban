@@ -1,4 +1,6 @@
-# OpenBuildings2FeatureClass
+# slumML
+
+## GOB2FC (Google Open Building layer to ESRI feature class
 This script is to convert the CSV file(s) of [Google Open Buildings](https://sites.research.google/open-buildings/) to a Feature Class.
 
 ![Layout2](https://user-images.githubusercontent.com/64405484/137813865-0abd8f0c-ff15-4980-9251-042a8f9dc66b.png)
