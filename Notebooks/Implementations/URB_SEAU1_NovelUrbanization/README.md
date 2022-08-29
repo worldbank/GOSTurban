@@ -18,11 +18,11 @@ This method eschews the absolute density thresholds of the EC methodology and in
 4.	Grouping contiguous urban pixels to form urban areas
 5.	Then the random redistribution of pixels’ values is repeated but within these Urban areas only, which gives a new counterfactual distribution. Contiguous pixels of urban areas for which actual density is above the 95th percentile of this within urban area new counterfactual distribution are classified as Cores. Urban areas that have at least one core are classified as Cities.
 
-| Urban area | Definition |
-| --- | --- |
-| Urban areas | contiguous pixels for which the density is above the 95th percentile of the counterfactual |  
-| Cores | contiguous pixels within urban areas that are above the 95th percentile of the counterfactual within the urban core |
-| Cities | urban areas that have a core |  
+| Urban area | label | Definition |
+| --- | --- | --- |
+| Urban areas | __ur__ | contiguous pixels for which the density is above the 95th percentile of the counterfactual |  
+| Cores | __cc__ | contiguous pixels within urban areas that are above the 95th percentile of the counterfactual within the urban core |
+| Cities | __co__ | urban areas that have a core |  
 
 
 
