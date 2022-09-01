@@ -15,14 +15,166 @@ import GOSTRocks.rasterMisc as rMisc
 from GOSTRocks.misc import tPrint
 
 #Import GOST urban functions
-sys.path.append("../../src")
+sys.path.append("../../../src")
 import GOST_Urban.UrbanRaster as urban
 import GOST_Urban.urban_helper as helper
 
 importlib.reload(helper)
 importlib.reload(rMisc)
 
-def calculate_urban(iso3, inG, inG2, pop_files, ea_file, output_folder, km=True, small=True, include_ghsl_h20=True, evaluate=True):   
+class urban_data(object):
+    def __init__(self, iso3, base_folder, aapc_folder):
+        ''' Summarize completed urbanization layers; combine into single output
+        '''
+        self.iso3 = iso3
+        self.in_folder = base_folder
+        self.aapc_folder = aapc_folder
+        self.dou_urban_files, self.db_urban_files = self.get_urban_layers()         
+        
+    def get_urban_layers(self):
+        ''' get a list of all urban deleniations
+        
+        INPUT
+            aapc_folder [string] - folder containing dartboard deleniations
+            
+        RETURNS
+            [list of strings]
+        '''
+        db_urban_files = []
+        for root, dirs, files in os.walk(self.in_folder):
+            for f in files:
+                if "urban" in f and f.endswith('tif'):
+                    db_urban_files.append(os.path.join(root, f))
+        
+        dou_urban_files = []
+        for root, dirs, files in os.walk(self.aapc_folder):
+            for f in files:
+                if self.iso3.lower() in f and f.endswith('tif'):
+                    if f[-6:-4] in ['co','cc','ur']:
+                        dou_urban_files.append(os.path.join(root, f))
+        db_urban_files.sort()
+        dou_urban_files.sort()            
+        return([db_urban_files, dou_urban_files])
+    
+    def generate_combo_layer(self, pop_type='gpo', res='', debug=False):
+        ''' open urban rasters and combine into a single dataset
+        '''
+        sel_rasters = []
+        for f in self.dou_urban_files:
+            if pop_type in f:
+                if res == '':
+                    if not '1k' in f:
+                        sel_rasters.append(f)
+                elif res in f:
+                    sel_rasters.append(f)
+                
+        for f in self.db_urban_files:
+            if pop_type in f:
+                if res == '':
+                    if not '1k' in f:
+                        sel_rasters.append(f)
+                elif res in f:
+                    sel_rasters.append(f)
+        
+        if debug:
+            for p in sel_rasters:
+                print(p)
+        
+        if len(sel_rasters) > 0:
+            # Open all the ratser files and covert to pixel-level summary numbers
+            idx = 0
+            for cur_raster in sel_rasters:
+                curR = rasterio.open(cur_raster)
+                curD = curR.read()
+                sumD = (curD > 0).astype(int)
+                binD = (curD > 0).astype(int) * (10**idx)
+
+                if idx == 0:
+                    sumFinal = sumD
+                    binFinal = binD
+                else:
+                    sumFinal = sumFinal + sumD
+                    binFinal = binFinal + binD
+                idx +=1               
+                pro = curR.profile
+            pro.update(dtype='int32')
+            res = { 'sumD':sumFinal, 'profile':pro,
+                    'binD':binFinal}
+            return(res)
+        else:
+            return(None)
+        
+    def write_results(self, res, out_folder, reclass_bin=True, dbhd = 'co'):
+        ''' Write the results from the function generate_combo_layer to file
+        
+        INPUT
+            res [dictionary] - results from function generate_combo_layer
+            out_folder [string] - path to directory to create output tif files
+            [optional] reclass_bin [boolean: default True] - reclassify the binary map product into 
+                4 classes: agree urban, agree rural, disagree on urban class, disagree on rurality
+        '''
+        out_sum_file = os.path.join(out_folder, f"{self.iso3}_urban_sum_{dbhd}.tif")
+        out_bin_file = os.path.join(out_folder, f"{self.iso3}_urban_binary_{dbhd}.tif")
+        
+        if reclass_bin:
+            # DB UR, DB CO, DB CC, DOU HD, DOU UR
+            convert_dict_dbcc = {
+                            0:0,
+                            1:1, # Disagree rural
+                            10:1,
+                            11:1,
+                            10000:1,
+                            10001:3, # Agree urban
+                            10010:2, # Disagree class
+                            10011:2,
+                            10100:1,
+                            10101:2,
+                            10110:4, # Agree High density urban
+                            10111:4,
+                            11100:1,
+                            11101:2,
+                            11110:4,
+                            11111:4
+                        }
+            convert_dict_dbco = {
+                            0:0,
+                            1:1, # Disagree rural
+                            10:1,
+                            11:1,
+                            10000:1,
+                            10001:3, # Agree urban
+                            10010:2, # Disagree class
+                            10011:2,
+                            10100:1,
+                            10101:3,
+                            10110:2, 
+                            10111:2,
+                            11100:1,
+                            11101:2,
+                            11110:4,
+                            11111:4 # Agree High density urban
+                        }
+            if dbhd == 'co':
+                sel_dict = convert_dict_dbco
+            else:
+                sel_dict = convert_dict_dbcc
+            res['binD'] = np.vectorize(sel_dict.get)(res['binD'])
+        if not os.path.exists(out_folder):
+            os.makedirs(out_folder)
+        with rasterio.open(out_sum_file, 'w', **res['profile']) as outSum:
+            outSum.write(res['sumD'])
+        with rasterio.open(out_bin_file, 'w', **res['profile']) as outBin:
+            outBin.write(res['binD'])
+            
+def multiP(iso3):
+    country_folder = os.path.join(base_folder, f'{iso3}_URBAN_DATA_new_naming')
+    urb = urban_data(iso3, country_folder, aapc_folder)
+    comboRes = urb.generate_combo_layer(pop_type=pop_layer)
+    if comboRes:
+        urb.write_results(comboRes, agg_folder)
+    tPrint(iso3)
+
+def calculate_urban(iso3, inG, inG2, pop_files, ea_file, output_folder, km=True, small=True, include_ghsl_h20=True, evaluate=False):   
     global_landcover  = "/home/public/Data/GLOBAL/LANDCOVER/GLOBCOVER/2015/ESACCI-LC-L4-LCCS-Map-300m-P1Y-2015-v2.0.7.tif"
     global_ghspop = "/home/public/Data/GLOBAL/Population/GHS/250/GHS_POP_E2015_GLOBE_R2019A_54009_250_V1_0.tif"
     global_ghspop_1k = "/home/public/Data/GLOBAL/Population/GHS/GHS_POP_E2015_GLOBE_R2019A_54009_1K_V1_0.tif"
@@ -217,6 +369,7 @@ def run_country(iso3):
 def run_zonal(iso3, output_folder, inG, pop_files, ea_file, pt_file):
     ''' Summarize zonal statistics for urbanization numbers against polygons and points for both WB and PP urban calculations
     '''
+    tPrint(f'Starting zonal calculations {iso3}')
     pp_deleniations_folder = "/home/wb411133/data/Projects/MR_Novel_Urbanization/Data/AAPPC/Delineations"
     
     inD = inG.loc[inG['ISO3'] == iso3].copy()
@@ -236,7 +389,7 @@ def run_zonal(iso3, output_folder, inG, pop_files, ea_file, pt_file):
         zonal_ea.to_csv(out_ea_zonal)
     
     # Run zonal stats on pp urban using ea boundary
-    out_ea_pp_zonal = os.path.join(output_folder, f"{iso3}_EA_PP_URBAN.csv")
+    out_ea_pp_zonal = os.path.join(output_folder, f"{iso3}_EA_PP_URBAN_Updated.csv")
     if (os.path.exists(ea_file)): # & not os.path.exists(out_ea_pp_zonal):
         pp_zonal_ea = calc_pp_urban(pp_deleniations_folder, pop_files[0][1], ea_file, output_folder, iso3)
         if 'geometry' in pp_zonal_ea.columns:
@@ -260,6 +413,7 @@ def run_zonal(iso3, output_folder, inG, pop_files, ea_file, pt_file):
         # Get list of urban tiffs from PP
         urban_tiffs = [os.path.join(pp_deleniations_folder, x) for x in os.listdir(pp_deleniations_folder) if iso3.lower() in x]
         pp_point_urban_summaries(cur_pt, urban_tiffs, pp_out_file)
+    tPrint(f'Completed zonal calculations {iso3}')
         
     
 EA_DEFS = { # Define ea files per iso3
@@ -335,7 +489,7 @@ if __name__ == "__main__":
         cur_args = [iso3, inG, inG2, pop_files, ea_file, output_folder]
         all_commands.append(cur_args)
         
-        pop_files.append([constrained_WP_folder, f'{iso3.lower()}_gpo.tif'])               
+        pop_files.append([global_ghspop, f'{iso3.lower()}_gpo.tif'])         
         zonal_args = [iso3, output_folder, inG, pop_files, ea_file, pt_file]
         zonal_commands.append(zonal_args)
     

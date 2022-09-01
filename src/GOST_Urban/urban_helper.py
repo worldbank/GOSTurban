@@ -275,6 +275,7 @@ class urban_country(object):
         ghs_R = rasterio.open(self.ghspop_file)
         for p_file in self.pop_files:            
             final_pop = os.path.join(self.final_folder, os.path.basename(p_file).replace(self.iso3.lower(), "%s%s" % (self.iso3.lower(), self.suffix)))
+            print(final_pop)
             if "1k1k" in final_pop:
                 final_pop = final_pop.replace("1k1k", "1k")
             final_urban    = final_pop.replace(".tif", "_urban.tif")
