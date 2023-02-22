@@ -19,11 +19,44 @@ from scipy.sparse.csgraph import connected_components
 from rasterio import features
 from rasterio.features import rasterize
 from shapely.geometry import shape, Polygon
+from geopy.geocoders import Nominatim, GeoNames
 
 '''prints the time along with the message'''
 def tPrint(s):
     print("%s\t%s" % (time.strftime("%H:%M:%S"), s))
+    
+def geocode_cities(urban_extents):
+    ''' Generate names for polygon urban extents
+    
+    :param urban_extents: geopandas dataframe of polygons to be named. Need to be in epsg:4326    
+    '''
+    geolocator = Nominatim(user_agent="new_app")
+    all_res = []
+    for idx, row in urban_extents.iterrows():
+        res = geolocator.reverse(query = (row['geometry'].centroid.y, row['geometry'].centroid.x), language = "en", zoom = 10)
+        all_res.append(res)
+        
+    urban_extents['City'] = ''
+    urban_extents['State'] = ''
+    urban_extents['Country'] = ''
 
+    for idx, row in urban_extents.iterrows():
+        res = all_res[idx]
+        try:
+            urban_extents.loc[idx,'City'] = res.raw['address']['city']
+        except:
+            break
+        try:
+            urban_extents.loc[idx,'State'] = res.raw['address']['state']
+        except:
+            pass
+        try:
+            urban_extents.loc[idx,'Country'] = res.raw['address']['country']
+        except:
+            pass
+    return(urban_extents)
+    
+    
 class urbanGriddedPop(object):
     def __init__(self, inRaster):
         """
@@ -36,8 +69,8 @@ class urbanGriddedPop(object):
         elif isinstance(inRaster, rasterio.DatasetReader):
             self.inR = inRaster
         else:
-            raise(ValueError("Input raster dataset must be a file path or a rasterio object"))
-            
+            raise(ValueError("Input raster dataset must be a file path or a rasterio object"))                
+    
     def calculateDegurba(self, urbDens=300, hdDens=1500, urbThresh=5000, hdThresh=50000, minPopThresh=50,
             out_raster = '', print_message='', verbose=False):
         ''' Calculate complete DEGURBA classification based on gridded population data

@@ -20,9 +20,9 @@ The code to compare the data can be found here (LINK FORTHCOMING), for both comp
 
 |  | DB Core/City | DB Urban Area | DB Rural |
 | --- | --- | --- | --- |
-| __DoU High Density__ | High Density | Disagree Urban | Disagree Rural |
-| __DoU Urban Area__ | Disagree Urban | Urban | Disagree Rural |
-| __DoU Rural__ | Disagree Rural | Disagree Rural | Rural |
+| __DoU High Density__ | <span style="color:red"> __High Density__ </span> | <span style="color:orange"> Disagree Urban </span> | <span style="color:blue"> Disagree Rural </span> |
+| __DoU Urban Area__   | <span style="color:orange"> Disagree Urban </span> | <span style="color:goldenrod"> __Urban__ </span>    | <span style="color:blue"> Disagree Rural </span> |
+| __DoU Rural__        | <span style="color:deepskyblue"> Disagree Rural </span> | <span style="color:deepskyblue"> Disagree Rural </span> | <span style="color:black"> __Rural__ </span>|
 
 ## Kenya comparison
 Using these categories the maps below were created to compare the DB classes. Based on these results __we will focus on the comparison of the DB cores to DoU high density areas__.
