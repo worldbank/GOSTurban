@@ -69,27 +69,32 @@ def lei_from_feature(inD, inR, old_list = [4,5,6], new_list=[3], buffer_dist=300
     #res.drop(['idx'], axis=1, inplace=True)
     return(res)
 
-def calculate_LEI(inputGHSL, old_list = [4,5,6], new_list=[3], buffer_dist=300, transform=''):
-    ''' Generate urban, feature-level LEI; generate area calculations of new and old extents
-    
-    INPUT
-    inputGHSL [string or rasterio object] - path to a geotiff or a rasterio object, or a numpy array
-    [optional] old_list [list of numbers] - values in built area raster to consider old urban. In GHSL 4, 5, 6 indicates all built until 2000
-    [optional] new_list [int] - value in built area raster to consider new urban. In GHSL 3 indicates 2014
-    
-    RETURNS
-    [array] - individual new built areas with LEI results. Each item is a single new built feature with three columns: 
+def calculate_LEI(inputGHSL, old_list, new_list, buffer_dist=300, transform=''):
+    """ Calculate Landscape Expansion Index (LEI) through comparison of categorical values in a single raster dataset.
+
+    :param inputGHSL: Path to a geotiff or a rasterio object, or a numpy array containing the categorical
+        data used to calculate LEI
+    :type inputGHSL: rasterio.DatasetReader
+    :param old_list: Values in built area raster to consider old urban.
+    :type old_list: list of ints
+    :param new_list: Values in built area raster to consider new urban
+    :type new_list: list of ints
+    :param buffer_dist: distance to buffer new urban areas for comparison to old urban extents, defaults to 300 (m)
+    :type buffer_dist: int, optional
+    :param transform: rasterio transformation object. Required if inputGHSL is a numpy array, defaults to ''
+    :type transform: str, optional
+    :returns: individual vectors of new built areas with LEI results. Each item is a single new built feature with three columns: 
                 1. geometry of the new built area feature
                 2. number of pixels in new built area donut from old built area
                 3. area of new built area buffer
-                
-    EXAMPLE
-        # This calculates the change from 1990 and 2000
+
+    :example:
+        # This calculates the LEI between 1990 and 2000 in the categorical GHSL
         lei_raw = calculate_LEI(input_ghsl, old_list = [5,6], new_list=[4])
         lei_90_00 = pd.DataFrame(lei_raw, columns=['geometry', 'old', 'total'])
         lei_90_00['LEI'] = lei_90_00['old'] / lei_90_00['total']      
-        lei_90_00.head()    
-    '''
+        lei_90_00.head()   
+    """
     if isinstance(inputGHSL, str):
         inRaster = rasterio.open(inputGHSL).read()
         inR = inRaster.read()
@@ -128,12 +133,22 @@ def calculate_LEI(inputGHSL, old_list = [4,5,6], new_list=[3], buffer_dist=300, 
                 
     return(allVals)
     
-def summarize_LEI(in_file, leap_val=0.05, exp_val=0.9):
-    ''' Summarize the LEI csv files produced by calculate_LEI
+def summarize_LEI(in_file, leap_val=0.05, exp_val=0.9):    
+    """ Summarize the LEI results produced by self.calculate_LEI
+
+    :param in_file: LEI results generated from calculate_LEI above
+    :type in_file: string path to csv file or pandas dataframe
+    :param leap_val: LEI value below which areas are considered to be leapfrog, defaults to 0.05
+    :type leap_val: float, optional
+    :param exp_val: LEI value above which areas are considered to be infill, defaults to 0.9
+    :type exp_val: float, optional
+    """
+
+    ''' 
     
-    in_file [string path or datafrane]: generated from the calculate_LEI above
-    leap_val [float]: LEI value below which areas are considered to be leapfrog
-    exp_val [float]: LEI value above which areas are considered to be infill
+    in_file [string path or datafrane]: 
+    leap_val [float]: 
+    exp_val [float]: 
     
     returns
     [pandas groupby row]

@@ -198,8 +198,7 @@ class urbanGriddedPop(object):
                 return(min(dists[dists > 0]))
             except:
                 return(0)
-            
-            return(max(dists))           
+                                
         to_be['dist'] = to_be['geometry'].apply(lambda x: calc_nearest(x, distance, dist_shp))
         features_22 = to_be.loc[to_be['dist'] > 3000]
         
