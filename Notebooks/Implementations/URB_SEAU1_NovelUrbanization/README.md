@@ -21,8 +21,8 @@ This method eschews the absolute density thresholds of the EC methodology and in
 | Urban area | label | Definition |
 | --- | --- | --- |
 | Urban areas | __ur__ | contiguous pixels for which the density is above the 95th percentile of the counterfactual |  
-| Cores | __cc__ | contiguous pixels within urban areas that are above the 95th percentile of the counterfactual within the urban core |
-| Cities | __co__ | urban areas that have a core |  
+| Cores | __co__ | contiguous pixels within urban areas that are above the 95th percentile of the counterfactual within the urban core |
+| Cities | __cc__ | urban areas that have a core |  
 
 
 
