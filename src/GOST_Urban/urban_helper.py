@@ -1,4 +1,4 @@
-import sys, os, importlib, shutil, pyproj, json, requests
+import sys, os, importlib, shutil, pyproj, json, requests, math
 import rasterio, elevation, richdem
 import rasterio.warp
 
@@ -60,18 +60,26 @@ class summarize_population(object):
         self.check_vals = check_vals
         return(good)
     
-    def calculate_zonal(self, out_name=''):
-        
+    def calculate_zonal(self, out_name='', convert_urban_binary=False):
+        """ Run zonal statistics on input admin layers, population layers, and urban layers
+
+        Args:
+            out_name (str, optional): name to append to output populations columns. Defaults to ''.
+            convert_urban_binary (bool, optional): option to convert urban layer to binary. Anything > 0 becomes binary 1 for urban. Defaults to False.
+        """
+
         inP = self.in_pop.read()
         inA = self.admin_layer #gpd.read_file(self.admin_layer)        
         
         res = rMisc.zonalStats(inA, self.in_pop, minVal=0)
-        final = pd.DataFrame(res, columns=["TOTALPOP_%s_%s" % (os.path.basename(self.pop_layer), x) for x in ['SUM', 'MIN', 'MAX', 'MEAN']])
+        final = pd.DataFrame(res, columns=["TOTALPOP_%s_%s" % (os.path.basename(self.pop_layer).replace(".tif", ""), x) for x in ['SUM', 'MIN', 'MAX', 'MEAN']])
             
-        for lyr in [self.urban_layer, self.urban_hd_layer]:           
-            name = os.path.basename(lyr)
+        for lyr in [self.urban_layer, self.urban_hd_layer]:              
+            name = os.path.basename(lyr).replace(".tif", "")
             in_urban = rasterio.open(lyr)
             inU = in_urban.read()
+            if convert_urban_binary:
+                inU = (inU > 0) * 1
             cur_pop = inP * inU
             out_file = os.path.join(self.temp_folder, "urban_pop.tif")
             
@@ -366,8 +374,9 @@ class urban_country(object):
             if not os.path.exists(out_file) and os.path.exists(file_def[0]):
                 in_raster = rasterio.open(file_def[0])
                 in_r = in_raster.read()
-                in_r[in_r == in_raster.meta['nodata']] = 0
-                rSample = rasterio.warp.Resampling.bilinear
+                temp_nodata = type(in_r[0,0,0])(in_raster.meta['nodata'])
+                in_r[in_r == temp_nodata] = 0
+                rSample = rasterio.warp.Resampling.sum
                 if file_def[1] == 'C':
                     rSample = rasterio.warp.Resampling.nearest
                 rasterio.warp.reproject(in_r, out_array, 
