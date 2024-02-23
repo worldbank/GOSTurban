@@ -319,7 +319,7 @@ class urbanGriddedPop(object):
         xxGeom.crs = popRaster.crs
         
         if queen:
-            xxGeom['geometry '] = xxGeom.buffer((popRaster.res[0] / 2))
+            xxGeom['geometry'] = xxGeom.buffer((popRaster.res[0] / 2))
             s = xxGeom['geometry']
             overlap_matrix = s.apply(lambda x: s.intersects(x)).values.astype(int)
             n, ids = connected_components(overlap_matrix)

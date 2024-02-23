@@ -19,7 +19,6 @@ setup(
         'pyproj',
         'elevation',
         'richdem',
-        'functools',
         'gostrocks',
         'geojson'        
     ],
