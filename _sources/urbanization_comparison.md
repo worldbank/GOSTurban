@@ -1,13 +1,16 @@
 # Comparing urban methods
+
 Map comparison is a complicated process, as there are many tools and approaches. In this project, we are comparing two methdologies for quantifying urban, both of which produce multiple binary rasters of urban areas:
 
 ## Degree of Urbanization
+
 | Urban area | Min Pop Density | Min Settlement Pop |  
-| --- | --- | --- | 
+| --- | --- | --- |
 | Urban areas | 300 people/km2 | 5000 people |  
 | High density urban areas | 1500 people/km2 | 50000 people |  
 
 ## Dartboard
+
 | Urban area | Definition |
 | --- | --- |
 | Urban areas | contiguous pixels for which the density is above the 95th percentile of the counterfactual |  
@@ -20,29 +23,34 @@ The code to compare the data can be found here (LINK FORTHCOMING), for both comp
 
 |  | DB Core/City | DB Urban Area | DB Rural |
 | --- | --- | --- | --- |
-| __DoU High Density__ | High Density | Disagree Urban | Disagree Rural |
-| __DoU Urban Area__ | Disagree Urban | Urban | Disagree Rural |
-| __DoU Rural__ | Disagree Rural | Disagree Rural | Rural |
+| __DoU High Density__ | <span style="color:red"> __High Density__ </span> | <span style="color:orange"> Disagree Urban </span> | <span style="color:blue"> Disagree Rural </span> |
+| __DoU Urban Area__   | <span style="color:orange"> Disagree Urban </span> | <span style="color:goldenrod"> __Urban__ </span>    | <span style="color:blue"> Disagree Rural </span> |
+| __DoU Rural__        | <span style="color:deepskyblue"> Disagree Rural </span> | <span style="color:deepskyblue"> Disagree Rural </span> | <span style="color:black"> __Rural__ </span>|
 
 ## Kenya comparison
+
 Using these categories the maps below were created to compare the DB classes. Based on these results __we will focus on the comparison of the DB cores to DoU high density areas__.
+
 ```` {tabbed} DB Cores - Nairobi
-``` {figure} docs/KEN_Nairobi_Urbanization_Comparison_CO.png
+``` {figure} images/KEN_Nairobi_Urbanization_Comparison_CO.png
 Nairobi zoom: comparing DB cores to DoU high density areas
 ```
 ````
+
 ```` {tabbed} DB Cities - Nairobi
-``` {figure} docs/KEN_Nairobi_Urbanization_Comparison_CC.png
+``` {figure} images/KEN_Nairobi_Urbanization_Comparison_CC.png
 Nairboi zoom: comparing DB Cities to DoU high density areas
 ```
 ````
+
 ```` {tabbed} DB Cores
-``` {figure} docs/KEN_Urbanization_Comparison_CO.png
+``` {figure} images/KEN_Urbanization_Comparison_CO.png
 Comparing DB cores to DoU high density areas
 ```
 ````
+
 ```` {tabbed} DB Cities
-``` {figure} docs/KEN_Urbanization_Comparison_CC.png
+``` {figure} images/KEN_Urbanization_Comparison_CC.png
 Comparing DB Cities to DoU high density areas
 ```
 ````
