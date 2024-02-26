@@ -1,9 +1,9 @@
 [build-system]
-requires = ["setuptools>=64.0", "setuptools_scm[toml]>=6.2"]
-build-backend = "setuptools.build_meta"
+requires = ["hatchling>=1.21.0", "hatch-vcs>=0.3.0"]
+build-backend = "hatchling.build"
 
 [project]
-name = "GOST_Urban"
+name = "GOSTurban"
 dynamic = ["version"]
 description = "Multiple functions, tools, and tutorials for calculating urbanization based on gridded population data"
 readme = { file = "README.md", content-type = "text/markdown" }
@@ -20,20 +20,38 @@ classifiers = [
 	"Operating System :: OS Independent",
 ]
 requires-python = ">=3.8"
-
-[tool.setuptools.dynamic]
-dependencies = { file = ["requirements.txt"] }
+dependencies = [
+	"rasterio",
+	"geopandas",
+	"pandas",
+	"numpy",
+	"scipy",
+	"shapely",
+	"geopy",
+	"pyproj",
+	"elevation",
+	"geojson",
+]
 
 [project.optional-dependencies]
 dev = ["pytest", "pytest-cov"]
 docs = ["docutils==0.17.1", "jupyter-book>=1,<2"]
-osm = ["gdal", "geopy", "boltons"]
-opt = ["pulp"]
 
 [project.urls]
-"Homepage" = "https://github.com/worldbank/GOST_Urban"
-"Bug Reports" = "https://github.com/worldbank/GOST_Urban/issues"
-"Source" = "https://github.com/worldbank/GOST_Urban"
+"Homepage" = "https://github.com/worldbank/GOSTurban"
+"Bug Reports" = "https://github.com/worldbank/GOSTurban/issues"
+"Source" = "https://github.com/worldbank/GOSTurban"
 
-[tool.setuptools_scm]
-write_to = "src/GOST_Urban/_version.py"
+[tool.hatch.version]
+source = "vcs"
+
+[tool.hatch.build.hooks.vcs]
+version-file = "src/GOSTurban/_version.py"
+
+[tool.codespell]
+skip = 'docs/_build,docs/references.bib,__pycache__,*.png,*.gz,*.whl'
+ignore-regex = '^\s*"image\/png":\s.*'
+ignore-words-list = "gost,"
+
+[tool.ruff.pydocstyle]
+convention = "numpy"
