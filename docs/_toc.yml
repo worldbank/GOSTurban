@@ -1,0 +1,14 @@
+# Table of contents
+# Learn more at https://jupyterbook.org/customize/toc.html
+
+format: jb-book
+root: README
+parts:
+  - caption: Documentation
+    chapters:
+      - file: api/GOSTurban.rst
+      - file: CONTRIBUTING
+  - caption: Novel Urbanization
+    chapters:
+      - file: novel_context
+      - file: urbanization_comparison
