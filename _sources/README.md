@@ -20,7 +20,7 @@ pip install GOSTurban
 
     ```shell
     git clone https://github.com/worldbank/GOSTurban.git
-    cd blackmarblepy
+    cd GOSTurbang
     ```
 
 2. Create a virtual environment (optional but recommended):
