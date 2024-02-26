@@ -35,7 +35,11 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = ["pytest", "pytest-cov"]
-docs = ["docutils==0.17.1", "jupyter-book>=1,<2"]
+docs = [
+	"docutils==0.17.1",
+	"jupyter-book>=1,<2",
+	"sphinxcontrib-apidoc>=0.4.0,<1",
+]
 
 [project.urls]
 "Homepage" = "https://github.com/worldbank/GOSTurban"
