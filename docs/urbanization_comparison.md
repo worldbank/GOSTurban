@@ -31,26 +31,26 @@ The code to compare the data can be found here (LINK FORTHCOMING), for both comp
 
 Using these categories the maps below were created to compare the DB classes. Based on these results __we will focus on the comparison of the DB cores to DoU high density areas__.
 
-```` {tabbed} DB Cores - Nairobi
-``` {figure} images/KEN_Nairobi_Urbanization_Comparison_CO.png
+`````{tab-set}
+````{tab-item} DB Cores - Nairobi
+```{figure} images/KEN_Nairobi_Urbanization_Comparison_CO.png
 Nairobi zoom: comparing DB cores to DoU high density areas
-```
 ````
 
-```` {tabbed} DB Cities - Nairobi
-``` {figure} images/KEN_Nairobi_Urbanization_Comparison_CC.png
+````{tab-item} DB Cities - Nairobi
+```{figure} images/KEN_Nairobi_Urbanization_Comparison_CC.png
 Nairboi zoom: comparing DB Cities to DoU high density areas
 ```
 ````
 
-```` {tabbed} DB Cores
-``` {figure} images/KEN_Urbanization_Comparison_CO.png
+````{tab-item} DB Cores
+```{figure} images/KEN_Urbanization_Comparison_CO.png
 Comparing DB cores to DoU high density areas
 ```
 ````
 
-```` {tabbed} DB Cities
-``` {figure} images/KEN_Urbanization_Comparison_CC.png
+````{tab-item} DB Cities
+```{figure} images/KEN_Urbanization_Comparison_CC.png
 Comparing DB Cities to DoU high density areas
 ```
-````
+`````
