@@ -1,5 +1,5 @@
 # Commit to github
-git status 
+git status
 git add -A
 git commit -m "FUBAR"
 git push

@@ -8,11 +8,41 @@ This repo includes a [GitHub Pages](https://worldbank.github.io/GOSTurban/README
 
 ### From PyPI
 
-**GOSTurban** is available on [PyPI](https://pypi.org) and can installed using `pip`:
+**GOSTurban** is available on [PyPI](https://pypi.org/project/GOSTurban/) and can installed using `pip`:
 
 ```shell
 pip install GOSTurban
 ```
+
+### From Source
+
+1. Clone or download this repository to your local machine. Then, navigate to the root directory of the repository:
+
+    ```shell
+    git clone https://github.com/worldbank/GOSTurban.git
+    cd GOSTurbang
+    ```
+
+2. Create a virtual environment (optional but recommended):
+
+    ```shell
+    python3 -m venv venv
+    source venv/bin/activate  # On Windows, use `venv\Scripts\activate`
+    ```
+
+3. Install the package with dependencies:
+
+    ```shell
+    pip install .
+    ```
+
+    Install the package **in editable** mode with dependencies:
+
+    ```shell
+    pip install -e .
+    ```
+
+    The `-e` flag stands for "editable," meaning changes to the source code will immediately affect the installed package.
 
 ## License
 

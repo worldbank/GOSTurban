@@ -4,10 +4,10 @@
 
 The European Commission developed a globally consistent, people-centric definition of urban areas. The basic approach is to apply a threshold to population grids on both the minimum population density, and then on the minimum total population of the resulting settlements. While the team at the EC continues to advance and iterate on their methodology, we rely on the original definitions of urban they produced:
 
-| Urban area | Min Pop Density | Min Settlement Pop |  
+| Urban area | Min Pop Density | Min Settlement Pop |
 | --- | --- | --- |
-| Urban areas | 300 people/km2 | 5000 people |  
-| High density urban areas | 1500 people/km2 | 50000 people |  
+| Urban areas | 300 people/km2 | 5000 people |
+| High density urban areas | 1500 people/km2 | 50000 people |
 
 ## [Bellefon (2021)](https://www.sciencedirect.com/science/article/pii/S0094119019301032)
 
@@ -21,6 +21,6 @@ This method eschews the absolute density thresholds of the EC methodology and in
 
 | Urban area | Definition |
 | --- | --- |
-| Urban areas | contiguous pixels for which the density is above the 95th percentile of the counterfactual |  
+| Urban areas | contiguous pixels for which the density is above the 95th percentile of the counterfactual |
 | Cores | contiguous pixels within urban areas that are above the 95th percentile of the counterfactual within the urban core |
-| Cities | urban areas that have a core |  
+| Cities | urban areas that have a core |
