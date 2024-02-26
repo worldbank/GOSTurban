@@ -20,7 +20,7 @@ pip install GOSTurban
 
     ```shell
     git clone https://github.com/worldbank/GOSTurban.git
-    cd GOSTurbang
+    cd GOSTurban
     ```
 
 2. Create a virtual environment (optional but recommended):
