@@ -1,0 +1,57 @@
+[build-system]
+requires = ["hatchling>=1.21.0", "hatch-vcs>=0.3.0"]
+build-backend = "hatchling.build"
+
+[project]
+name = "GOSTurban"
+dynamic = ["version"]
+description = "Multiple functions, tools, and tutorials for calculating urbanization based on gridded population data"
+readme = { file = "README.md", content-type = "text/markdown" }
+license = { file = "LICENSE" }
+authors = [{ name = "World Bank", email = "github@worldbank.org" }]
+maintainers = [
+	{ name = "Benjamin P. Stewart", email = "bstewart@worldbankgroup.org" },
+	{ name = "Andres Chamorro", email = "achamorroelizond@worldbank.org" },
+]
+classifiers = [
+	"Programming Language :: Python :: 3 :: Only",
+	"Development Status :: 3 - Alpha",
+	"Intended Audience :: Developers",
+	"Operating System :: OS Independent",
+]
+requires-python = ">=3.8"
+dependencies = [
+	"rasterio",
+	"geopandas",
+	"pandas",
+	"numpy",
+	"scipy",
+	"shapely",
+	"geopy",
+	"pyproj",
+	"elevation",
+	"geojson",
+]
+
+[project.optional-dependencies]
+dev = ["pytest", "pytest-cov"]
+docs = ["docutils==0.17.1", "jupyter-book>=1,<2"]
+
+[project.urls]
+"Homepage" = "https://github.com/worldbank/GOSTurban"
+"Bug Reports" = "https://github.com/worldbank/GOSTurban/issues"
+"Source" = "https://github.com/worldbank/GOSTurban"
+
+[tool.hatch.version]
+source = "vcs"
+
+[tool.hatch.build.hooks.vcs]
+version-file = "src/GOSTurban/_version.py"
+
+[tool.codespell]
+skip = 'docs/_build,docs/references.bib,__pycache__,*.png,*.gz,*.whl'
+ignore-regex = '^\s*"image\/png":\s.*'
+ignore-words-list = "gost,"
+
+[tool.ruff.pydocstyle]
+convention = "numpy"
