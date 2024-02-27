@@ -6,7 +6,7 @@ import rasterio.features
 import pandas as pd
 import numpy as np
 
-from GOSTRocks.misc import tPrint
+from GOSTrocks.misc import tPrint
 from shapely.geometry import shape
 from shapely.wkt import loads
 
@@ -121,9 +121,9 @@ def calculate_LEI(inputGHSL, old_list, new_list, buffer_dist=300, transform=""):
         lei_90_00.head()
     """
     if isinstance(inputGHSL, str):
-        inRaster = rasterio.open(inputGHSL).read()
+        inRaster = rasterio.open(inputGHSL)
         inR = inRaster.read()
-        transform = inR.transform
+        transform = inRaster.transform
     elif isinstance(inputGHSL, rasterio.DatasetReader):
         inR = inputGHSL.read()
     else:
@@ -173,25 +173,8 @@ def summarize_LEI(in_file, leap_val=0.05, exp_val=0.9):
     :type leap_val: float, optional
     :param exp_val: LEI value above which areas are considered to be infill, defaults to 0.9
     :type exp_val: float, optional
-    """
-
-    """
-
-    in_file [string path or datafrane]:
-    leap_val [float]:
-    exp_val [float]:
-
-    returns
-    [pandas groupby row]
-
-    example
-
-    for res_file in all_results_files:
-        res = summarize_LEI(res_file)
-        baseName = os.path.basename(os.path.dirname(res_file))
-        summarized_results[baseName] = res
-
-    all_results = pd.DataFrame(summarized_results).transpose()
+    :returns: pandas groupby row summarizing area in m2 of leapfrog, expansion, and infill areas
+    :rtype: pandas groupby row
     """
     if isinstance(in_file, str):
         res = pd.read_csv(in_file)
@@ -211,4 +194,5 @@ def summarize_LEI(in_file, leap_val=0.05, exp_val=0.9):
 
     res["class"] = res["LEI"].apply(lambda x: calculate_LEI(x, leap_val, exp_val))
     xx = res.groupby("class")
-    return xx.sum()["area"]
+
+    return xx['area'].sum()

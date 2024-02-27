@@ -1,0 +1,8 @@
+{
+"type": "FeatureCollection",
+"name": "AOI_GHSL",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { }, "geometry": { "type": "Polygon", "coordinates": [ [ [ -77.8163518711835, 39.264068478768081 ], [ -77.825510304616969, 38.501628895431288 ], [ -76.731077509316719, 38.494760070356179 ], [ -76.705891817374663, 39.266358087126449 ], [ -77.8163518711835, 39.264068478768081 ] ] ] } }
+]
+}

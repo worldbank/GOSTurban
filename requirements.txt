@@ -1,0 +1,14 @@
+rasterio
+geopandas
+pandas
+numpy
+scipy
+shapely
+geopy
+pyproj
+elevation
+geojson
+hatch
+git
+
+
