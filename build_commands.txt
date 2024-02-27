@@ -10,3 +10,13 @@ conda activate urban_test
 conda install ipykernel
 python -m ipykernel install --user --name=urban_test
 pip install --no-build-isolation --no-deps .
+
+# upload to pypi https://wiki.worldbank.org/display/GEOS/Publish+Python+Library+to+Conda
+python -m pip install --upgrade pip setuptools wheel build
+python -m pip install tqdm
+python -m pip install --user --upgrade twine
+
+python -m build --sdist --wheel
+# python -m pip install dist/GOSTnets-0.1-py3-none-any.whl
+python -m twine upload --repository GOST_Urban dist/*
+

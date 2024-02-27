@@ -15,12 +15,11 @@ import GOSTRocks.rasterMisc as rMisc
 from GOSTRocks.misc import tPrint
 
 #Import GOST urban functions
-sys.path.append("../../../src")
-import GOST_Urban.UrbanRaster as urban
-import GOST_Urban.urban_helper as helper
-
-importlib.reload(helper)
-importlib.reload(rMisc)
+try:
+    import GOSTurban.UrbanRaster as urban
+    import GOSTurban.urban_helper as helper
+except:
+    raise ImportError("GOSTUrban not found. Please install GOSTUrban from source or Pypi")
 
 class urban_data(object):
     def __init__(self, iso3, base_folder, aapc_folder):
@@ -225,6 +224,7 @@ class urban_data(object):
             outBin.write(res['binD'])
             
 def calculate_urban(iso3, inG, inG2, pop_files, ea_file, output_folder, km=True, small=True, include_ghsl_h20=True, evaluate=False):   
+
     global_landcover  = "/home/public/Data/GLOBAL/LANDCOVER/GLOBCOVER/2015/ESACCI-LC-L4-LCCS-Map-300m-P1Y-2015-v2.0.7.tif"
     global_ghspop = "/home/public/Data/GLOBAL/Population/GHS/250/GHS_POP_E2015_GLOBE_R2019A_54009_250_V1_0.tif"
     global_ghspop_1k = "/home/public/Data/GLOBAL/Population/GHS/GHS_POP_E2015_GLOBE_R2019A_54009_1K_V1_0.tif"
@@ -548,7 +548,5 @@ if __name__ == "__main__":
     with multiprocessing.Pool(nCores) as pool:
         #pool.starmap(calculate_urban, all_commands)
         pool.starmap(run_zonal, zonal_commands)
-    
-        
-    
-    
+
+
