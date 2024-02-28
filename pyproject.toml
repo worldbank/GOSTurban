@@ -34,11 +34,12 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-dev = ["pytest", "pytest-cov"]
+dev = ["pytest", "pytest-cov", "GOSTurban[docs]"]
 docs = [
 	"docutils==0.17.1",
 	"jupyter-book>=1,<2",
 	"sphinxcontrib-apidoc>=0.4.0,<1",
+	"jupyter-cache>=0.6.0",
 ]
 
 [project.urls]

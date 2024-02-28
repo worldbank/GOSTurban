@@ -17,6 +17,9 @@ jobs:
       - name: Dependencies
         run: |
           if [ -f pyproject.toml ]; then pip install ".[docs]"; fi
+      - name: Copy the notebooks
+        run: |
+          if [ -d notebooks ]; then cp -r notebooks docs/notebooks; fi
       - name: Build Sphinx Documentation
         run: |
           sphinx-build docs _build/html -b html
