@@ -64,7 +64,7 @@
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="prev" title="Run simple urban extent calculation based on 1km gridded population data" href="UrbanAreas_tutorials.html" />
+    <link rel="prev" title="Degree of Urbanization" href="UrbanAreas_tutorials.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
     <meta name="docbuild:last-update" content="Feb 28, 2024"/>
@@ -191,7 +191,9 @@
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
 <ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="UrbanAreas_tutorials.html">Run simple urban extent calculation based on 1km gridded population data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="UrbanAreas_tutorials.html">Degree of Urbanization</a></li>
+
+
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Landscape Expansion Index</a></li>
 
 </ul>
@@ -407,7 +409,11 @@ document.write(`
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Landscape Expansion Index</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#ghsl-data">GHSL data</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#ghsl-data">GHSL data</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#calculate-lei-between-1990-and-2000">Calculate LEI between 1990 and 2000</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#calculate-lei-between-2000-and-2030">Calculate LEI between 2000 and 2030</a></li>
+</ul>
+</li>
 </ul>
 
             </nav>
@@ -457,6 +463,8 @@ document.write(`
 <span class="kn">import</span> <span class="nn">GOSTrocks.rasterMisc</span> <span class="k">as</span> <span class="nn">rMisc</span>
 <span class="kn">import</span> <span class="nn">GOSTrocks.ghslMisc</span> <span class="k">as</span> <span class="nn">ghslMisc</span>
 <span class="kn">import</span> <span class="nn">GOSTurban.LEI</span> <span class="k">as</span> <span class="nn">lei</span>
+<span class="kn">import</span> <span class="nn">GOSTrocks.mapMisc</span> <span class="k">as</span> <span class="nn">mapMisc</span>
+<span class="kn">import</span> <span class="nn">GOSTrocks.rasterMisc</span> <span class="k">as</span> <span class="nn">rMisc</span>
 
 <span class="o">%</span><span class="k">load_ext</span> autoreload
 <span class="o">%</span><span class="k">autoreload</span> 2
@@ -506,10 +514,29 @@ document.write(`
 <p>The current release of the data provides individual layers ber annum of fractional area built per 1 hectare cell. For the LEI examples, we need binary data of existing built and new built. We leverage a function from the <a class="reference external" href="https://github.com/worldbank/GOSTrocks">GOSTrocks library</a> to combine these multiple yearly layers into a single geotiff with each pixel labelled with the year it was built.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ghsl_r</span> <span class="o">=</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">input_ghsl</span><span class="p">)</span>
+<span class="n">ghsl_d</span> <span class="o">=</span> <span class="n">ghsl_r</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+<span class="n">ghsl_d</span><span class="p">[</span><span class="n">ghsl_d</span> <span class="o">==</span> <span class="n">ghsl_r</span><span class="o">.</span><span class="n">meta</span><span class="p">[</span><span class="s1">&#39;nodata&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="n">thresh</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1975</span><span class="p">,</span> <span class="mi">2031</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="k">with</span> <span class="n">rMisc</span><span class="o">.</span><span class="n">create_rasterio_inmemory</span><span class="p">(</span><span class="n">ghsl_r</span><span class="o">.</span><span class="n">profile</span><span class="p">,</span> <span class="n">ghsl_d</span><span class="p">)</span> <span class="k">as</span> <span class="n">temp_ghsl</span><span class="p">:</span>
+    <span class="n">mapMisc</span><span class="o">.</span><span class="n">static_map_raster</span><span class="p">(</span><span class="n">temp_ghsl</span><span class="p">,</span> <span class="n">thresh</span><span class="o">=</span><span class="n">thresh</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/202a17e65c7cec5d7d469008e2203432a76e38965e288933c7fa89992e1b24bd.png" src="../../_images/202a17e65c7cec5d7d469008e2203432a76e38965e288933c7fa89992e1b24bd.png" />
+</div>
+</div>
+<section id="calculate-lei-between-1990-and-2000">
+<h2>Calculate LEI between 1990 and 2000<a class="headerlink" href="#calculate-lei-between-1990-and-2000" title="Permalink to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># This calculates the change from 1990 and 2000</span>
 <span class="n">lei_raw</span> <span class="o">=</span> <span class="n">lei</span><span class="o">.</span><span class="n">calculate_LEI</span><span class="p">(</span><span class="n">input_ghsl</span><span class="p">,</span> <span class="n">old_list</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1975</span><span class="p">,</span><span class="mi">1991</span><span class="p">,</span><span class="mi">5</span><span class="p">)),</span> <span class="n">new_list</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1995</span><span class="p">,</span><span class="mi">2001</span><span class="p">,</span><span class="mi">5</span><span class="p">)))</span>
-<span class="n">lei_90_00</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">lei_raw</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;geometry&quot;</span><span class="p">,</span> <span class="s2">&quot;old&quot;</span><span class="p">,</span> <span class="s2">&quot;total&quot;</span><span class="p">])</span>
+<span class="n">lei_90_00</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">lei_raw</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;geometry&quot;</span><span class="p">,</span> <span class="s2">&quot;old&quot;</span><span class="p">,</span> <span class="s2">&quot;total&quot;</span><span class="p">]),</span> <span class="n">geometry</span><span class="o">=</span><span class="s1">&#39;geometry&#39;</span><span class="p">,</span> <span class="n">crs</span><span class="o">=</span><span class="n">ghsl_r</span><span class="o">.</span><span class="n">crs</span><span class="p">)</span>
 <span class="n">lei_90_00</span><span class="p">[</span><span class="s2">&quot;LEI&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">lei_90_00</span><span class="p">[</span><span class="s2">&quot;old&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="n">lei_90_00</span><span class="p">[</span><span class="s2">&quot;total&quot;</span><span class="p">]</span>
+
 <span class="n">lei_90_00</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -542,35 +569,35 @@ document.write(`
   <tbody>
     <tr>
       <th>0</th>
-      <td>POLYGON ((-6568500 4707300, -6568500 4707200, ...</td>
+      <td>POLYGON ((-6568500.000 4707300.000, -6568500.0...</td>
       <td>23</td>
       <td>25</td>
       <td>0.92</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>POLYGON ((-6568200 4707300, -6568200 4707200, ...</td>
+      <td>POLYGON ((-6568200.000 4707300.000, -6568200.0...</td>
       <td>23</td>
       <td>25</td>
       <td>0.92</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>POLYGON ((-6565700 4707300, -6565700 4707200, ...</td>
+      <td>POLYGON ((-6565700.000 4707300.000, -6565700.0...</td>
       <td>22</td>
       <td>25</td>
       <td>0.88</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>POLYGON ((-6563800 4707300, -6563800 4707200, ...</td>
+      <td>POLYGON ((-6563800.000 4707300.000, -6563800.0...</td>
       <td>16</td>
       <td>25</td>
       <td>0.64</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>POLYGON ((-6560800 4707300, -6560800 4707200, ...</td>
+      <td>POLYGON ((-6560800.000 4707300.000, -6560800.0...</td>
       <td>23</td>
       <td>25</td>
       <td>0.92</td>
@@ -581,7 +608,36 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Calculate summaries of lei</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#Map LEI results</span>
+<span class="n">leap_val</span><span class="o">=</span><span class="mf">0.30</span>
+<span class="n">exp_val</span><span class="o">=</span><span class="mf">0.70</span>
+<span class="n">lei_90_00</span><span class="p">[</span><span class="s1">&#39;area&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">lei_90_00</span><span class="p">[</span><span class="s1">&#39;geometry&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">area</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">calculate_LEI</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="n">leap_val</span><span class="p">,</span> <span class="n">exp_val</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">val</span> <span class="o">&lt;=</span> <span class="n">leap_val</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">3</span>
+    <span class="k">elif</span> <span class="n">val</span> <span class="o">&lt;</span> <span class="n">exp_val</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">2</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">1</span>
+<span class="n">lei_90_00</span><span class="p">[</span><span class="s2">&quot;class&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">lei_90_00</span><span class="p">[</span><span class="s2">&quot;LEI&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">calculate_LEI</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">leap_val</span><span class="p">,</span> <span class="n">exp_val</span><span class="p">))</span>
+<span class="n">mapMisc</span><span class="o">.</span><span class="n">static_map_vector</span><span class="p">(</span><span class="n">lei_90_00</span><span class="p">,</span> <span class="s2">&quot;class&quot;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;match&#39;</span><span class="p">,</span> <span class="n">colormap</span><span class="o">=</span><span class="s2">&quot;Dark2&quot;</span><span class="p">)</span><span class="c1">#, basemap=ctx.providers.CartoDB.Voyager)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\wbg\Anaconda3\envs\urban_test\Lib\site-packages\GOSTrocks\mapMisc.py:58: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
+  for label, mdata in v_data.groupby(&#39;tomap&#39;):
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;module &#39;matplotlib.pyplot&#39; from &#39;C:\\wbg\\Anaconda3\\envs\\urban_test\\Lib\\site-packages\\matplotlib\\pyplot.py&#39;&gt;
+</pre></div>
+</div>
+<img alt="../../_images/6d83ea7c17366b3e8e4109fabcdd1a3e6ecdca7a1b02bf65db8b48c349effe22.png" src="../../_images/6d83ea7c17366b3e8e4109fabcdd1a3e6ecdca7a1b02bf65db8b48c349effe22.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Calculate summaries of lei as area (km2) in each class</span>
 <span class="n">lei</span><span class="o">.</span><span class="n">summarize_LEI</span><span class="p">(</span><span class="n">lei_90_00</span><span class="p">,</span> <span class="n">leap_val</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">exp_val</span><span class="o">=</span><span class="mf">0.75</span><span class="p">)</span> <span class="o">/</span> <span class="mi">1000000</span>
 </pre></div>
 </div>
@@ -596,6 +652,9 @@ Name: area, dtype: float64
 </div>
 </div>
 </div>
+</section>
+<section id="calculate-lei-between-2000-and-2030">
+<h2>Calculate LEI between 2000 and 2030<a class="headerlink" href="#calculate-lei-between-2000-and-2030" title="Permalink to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># This calculates the change from 2000 and 2014</span>
@@ -673,6 +732,35 @@ Name: area, dtype: float64
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#Map LEI results</span>
+<span class="n">leap_val</span><span class="o">=</span><span class="mf">0.30</span>
+<span class="n">exp_val</span><span class="o">=</span><span class="mf">0.70</span>
+<span class="n">lei_90_00</span><span class="p">[</span><span class="s1">&#39;area&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">lei_90_00</span><span class="p">[</span><span class="s1">&#39;geometry&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">area</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">calculate_LEI</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="n">leap_val</span><span class="p">,</span> <span class="n">exp_val</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">val</span> <span class="o">&lt;=</span> <span class="n">leap_val</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">3</span>
+    <span class="k">elif</span> <span class="n">val</span> <span class="o">&lt;</span> <span class="n">exp_val</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">2</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">1</span>
+<span class="n">lei_90_00</span><span class="p">[</span><span class="s2">&quot;class&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">lei_90_00</span><span class="p">[</span><span class="s2">&quot;LEI&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">calculate_LEI</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">leap_val</span><span class="p">,</span> <span class="n">exp_val</span><span class="p">))</span>
+<span class="n">mapMisc</span><span class="o">.</span><span class="n">static_map_vector</span><span class="p">(</span><span class="n">lei_90_00</span><span class="p">,</span> <span class="s2">&quot;class&quot;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;match&#39;</span><span class="p">,</span> <span class="n">colormap</span><span class="o">=</span><span class="s2">&quot;Dark2&quot;</span><span class="p">)</span><span class="c1">#, basemap=ctx.providers.CartoDB.Voyager)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\wbg\Anaconda3\envs\urban_test\Lib\site-packages\GOSTrocks\mapMisc.py:58: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
+  for label, mdata in v_data.groupby(&#39;tomap&#39;):
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;module &#39;matplotlib.pyplot&#39; from &#39;C:\\wbg\\Anaconda3\\envs\\urban_test\\Lib\\site-packages\\matplotlib\\pyplot.py&#39;&gt;
+</pre></div>
+</div>
+<img alt="../../_images/6d83ea7c17366b3e8e4109fabcdd1a3e6ecdca7a1b02bf65db8b48c349effe22.png" src="../../_images/6d83ea7c17366b3e8e4109fabcdd1a3e6ecdca7a1b02bf65db8b48c349effe22.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Calculate summaries of lei</span>
 <span class="n">lei</span><span class="o">.</span><span class="n">summarize_LEI</span><span class="p">(</span><span class="n">lei_00_14</span><span class="p">,</span> <span class="n">leap_val</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">exp_val</span><span class="o">=</span><span class="mf">0.75</span><span class="p">)</span> <span class="o">/</span> <span class="mi">1000000</span>
 </pre></div>
@@ -696,7 +784,20 @@ Name: area, dtype: float64
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">11</span><span class="p">],</span> <span class="n">line</span> <span class="mi">2</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="c1"># write raw LEI results to file</span>
+<span class="ne">----&gt; </span><span class="mi">2</span> <span class="n">lei_90_00</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">input_folder</span><span class="p">,</span> <span class="s2">&quot;GHSL_LEI_90_00.csv&quot;</span><span class="p">))</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="n">lei_00_14</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">input_folder</span><span class="p">,</span> <span class="s2">&quot;GHSL_LEI_00_14.csv&quot;</span><span class="p">))</span>
+
+<span class="ne">NameError</span>: name &#39;input_folder&#39; is not defined
+</pre></div>
 </div>
+</div>
+</div>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -735,7 +836,7 @@ Name: area, dtype: float64
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Run simple urban extent calculation based on 1km gridded population data</p>
+        <p class="prev-next-title">Degree of Urbanization</p>
       </div>
     </a>
 </div>
@@ -755,7 +856,11 @@ Name: area, dtype: float64
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Landscape Expansion Index</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#ghsl-data">GHSL data</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#ghsl-data">GHSL data</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#calculate-lei-between-1990-and-2000">Calculate LEI between 1990 and 2000</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#calculate-lei-between-2000-and-2030">Calculate LEI between 2000 and 2030</a></li>
+</ul>
+</li>
 </ul>
 
   </nav></div>

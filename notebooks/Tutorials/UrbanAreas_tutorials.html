@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Run simple urban extent calculation based on 1km gridded population data</title>
+    <title>Degree of Urbanization</title>
   
   
   
@@ -192,7 +192,9 @@
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
 <ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Run simple urban extent calculation based on 1km gridded population data</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Degree of Urbanization</a></li>
+
+
 <li class="toctree-l1"><a class="reference internal" href="LEI_Example.html">Landscape Expansion Index</a></li>
 
 </ul>
@@ -384,7 +386,9 @@ document.write(`
   </button>
 `);
 </script>
-
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
 </div></div>
       
     </div>
@@ -395,11 +399,28 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Run simple urban extent calculation based on 1km gridded population data</h1>
+    <h1>Degree of Urbanization</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Degree of Urbanization</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#map-of-population-density-in-study-area">Map of population density in study area</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#extract-and-map-urban-clusters">Extract and map urban clusters</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#extract-and-map-high-density-urban-extents">Extract and map high-density urban extents</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#map-combined-extents-and-write-output">Map combined extents and write output</a></li>
+</ul>
+</li>
+</ul>
+
+            </nav>
         </div>
     </div>
 </div>
@@ -409,8 +430,9 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="run-simple-urban-extent-calculation-based-on-1km-gridded-population-data">
-<h1>Run simple urban extent calculation based on 1km gridded population data<a class="headerlink" href="#run-simple-urban-extent-calculation-based-on-1km-gridded-population-data" title="Permalink to this heading">#</a></h1>
+  <section class="tex2jax_ignore mathjax_ignore" id="degree-of-urbanization">
+<h1>Degree of Urbanization<a class="headerlink" href="#degree-of-urbanization" title="Permalink to this heading">#</a></h1>
+<p>The Degree of Urbanization (DoU) is a method for quantifying urbanization using thresholds applied to gridded population data. More information on the DoU can be <a class="reference external" href="https://ghsl.jrc.ec.europa.eu/degurbaDefinitions.php">found here</a>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
@@ -418,8 +440,10 @@ document.write(`
 <span class="kn">import</span> <span class="nn">rasterio</span>
 
 <span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
 <span class="kn">import</span> <span class="nn">GOSTurban.UrbanRaster</span> <span class="k">as</span> <span class="nn">urban</span>
+<span class="kn">import</span> <span class="nn">GOSTrocks.mapMisc</span> <span class="k">as</span> <span class="nn">mapMisc</span>
 </pre></div>
 </div>
 </div>
@@ -448,6 +472,8 @@ document.write(`
     <span class="n">rMisc</span><span class="o">.</span><span class="n">clipRaster</span><span class="p">(</span><span class="n">inR</span><span class="p">,</span> <span class="n">inAOI</span><span class="p">,</span> <span class="n">pop_file</span><span class="p">)</span>
 
 <span class="n">inR</span> <span class="o">=</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">pop_file</span><span class="p">)</span>
+<span class="c1"># Initiate the urban calculator</span>
+<span class="n">urban_calculator</span> <span class="o">=</span> <span class="n">urban</span><span class="o">.</span><span class="n">urbanGriddedPop</span><span class="p">(</span><span class="n">inR</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -457,25 +483,133 @@ document.write(`
 </div>
 </div>
 </div>
+<section id="map-of-population-density-in-study-area">
+<h2>Map of population density in study area<a class="headerlink" href="#map-of-population-density-in-study-area" title="Permalink to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Initiate the urban calculator</span>
-<span class="n">urban_calculator</span> <span class="o">=</span> <span class="n">urban</span><span class="o">.</span><span class="n">urbanGriddedPop</span><span class="p">(</span><span class="n">inR</span><span class="p">)</span>
-<span class="c1"># urban_calculator.calculateUrban?</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mapMisc</span><span class="o">.</span><span class="n">static_map_raster</span><span class="p">(</span><span class="n">inR</span><span class="p">,</span> <span class="n">thresh</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">50</span><span class="p">,</span><span class="mi">100</span><span class="p">,</span><span class="mi">300</span><span class="p">,</span><span class="mi">1000</span><span class="p">,</span><span class="mi">3000</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;module &#39;matplotlib.pyplot&#39; from &#39;C:\\wbg\\Anaconda3\\envs\\urban_test\\Lib\\site-packages\\matplotlib\\pyplot.py&#39;&gt;
+</pre></div>
 </div>
+<img alt="../../_images/e4c343f3969ac16129e46c1718a5b1dc8a41bfc26246c323566ddd67e2bcd409.png" src="../../_images/e4c343f3969ac16129e46c1718a5b1dc8a41bfc26246c323566ddd67e2bcd409.png" />
+</div>
+</div>
+</section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="extract-and-map-urban-clusters">
+<h1>Extract and map urban clusters<a class="headerlink" href="#extract-and-map-urban-clusters" title="Permalink to this heading">#</a></h1>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Extract the urban extents (minimum density 300/km2, minimum total population 5000)</span>
 <span class="n">urban_extents</span> <span class="o">=</span> <span class="n">urban_calculator</span><span class="o">.</span><span class="n">calculateUrban</span><span class="p">(</span>
     <span class="n">densVal</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">totalPopThresh</span><span class="o">=</span><span class="mi">5000</span><span class="p">,</span> <span class="n">smooth</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">queen</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span>
 <span class="p">)</span>
+<span class="n">urban_extents</span><span class="p">[</span><span class="s1">&#39;Type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">urban_extents</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>14:32:04	: Read in urban data
+14:32:05	: Creating Shape 0
+14:32:15	: Creating Shape 1000
+14:32:27	: Creating Shape 2000
+14:32:39	: Creating Shape 3000
+14:32:50	: Creating Shape 4000
+14:33:01	: Creating Shape 5000
+14:33:13	: Creating Shape 6000
+14:33:20	: Creating Shape 7000
+</pre></div>
 </div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>ID</th>
+      <th>Pop</th>
+      <th>geometry</th>
+      <th>Type</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>6044</td>
+      <td>18641.011719</td>
+      <td>POLYGON ((-78.75958 44.38292, -78.75958 44.349...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>6045</td>
+      <td>147162.718750</td>
+      <td>POLYGON ((-79.71792 44.42458, -79.71792 44.416...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>6046</td>
+      <td>8065.728516</td>
+      <td>POLYGON ((-79.90958 44.33292, -79.90958 44.324...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>6047</td>
+      <td>18561.923828</td>
+      <td>POLYGON ((-79.55125 44.36625, -79.55125 44.357...</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>6049</td>
+      <td>11521.957031</td>
+      <td>POLYGON ((-69.78458 44.34125, -69.78458 44.316...</td>
+      <td>1</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Map of urban extents</span>
+<span class="n">mapMisc</span><span class="o">.</span><span class="n">static_map_vector</span><span class="p">(</span><span class="n">urban_extents</span><span class="p">,</span> <span class="s2">&quot;Type&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\wbg\Anaconda3\envs\urban_test\Lib\site-packages\GOSTrocks\mapMisc.py:58: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
+  for label, mdata in v_data.groupby(&#39;tomap&#39;):
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;module &#39;matplotlib.pyplot&#39; from &#39;C:\\wbg\\Anaconda3\\envs\\urban_test\\Lib\\site-packages\\matplotlib\\pyplot.py&#39;&gt;
+</pre></div>
+</div>
+<img alt="../../_images/0938f4af7540113481e9f5491b874ffa8d3db371742db67e264b7c84d3b4babb.png" src="../../_images/0938f4af7540113481e9f5491b874ffa8d3db371742db67e264b7c84d3b4babb.png" />
+</div>
+</div>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="extract-and-map-high-density-urban-extents">
+<h1>Extract and map high-density urban extents<a class="headerlink" href="#extract-and-map-high-density-urban-extents" title="Permalink to this heading">#</a></h1>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Extract the high density urban extents (minimum density 1500/km2, minimum total population 50000)</span>
@@ -486,22 +620,130 @@ document.write(`
     <span class="n">queen</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>  <span class="c1"># high density extents use queen&#39;s case contiguity, and</span>
     <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
 <span class="p">)</span>  <span class="c1"># High density extents have hole smoothing applied.</span>
+<span class="n">hd_urban_extents</span><span class="p">[</span><span class="s1">&#39;Type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">hd_urban_extents</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>15:11:38	: Read in urban data
-15:11:38	: Creating Shape 0
-15:11:44	: Creating Shape 1000
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>14:33:28	: Read in urban data
+14:33:28	: Creating Shape 0
+14:33:38	: Creating Shape 1000
 </pre></div>
 </div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\wbg\Anaconda3\envs\test\Lib\site-packages\numpy\core\_methods.py:49: RuntimeWarning: overflow encountered in reduce
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\wbg\Anaconda3\envs\urban_test\Lib\site-packages\numpy\core\_methods.py:49: RuntimeWarning: overflow encountered in reduce
   return umr_sum(a, axis, dtype, out, keepdims, initial, where)
-C:\wbg\Anaconda3\envs\test\Lib\site-packages\GOST_Urban\UrbanRaster.py:322: UserWarning: Geometry is in a geographic CRS. Results from &#39;buffer&#39; are likely incorrect. Use &#39;GeoSeries.to_crs()&#39; to re-project geometries to a projected CRS before this operation.
+C:\wbg\Anaconda3\envs\urban_test\Lib\site-packages\GOSTurban\UrbanRaster.py:404: UserWarning: Geometry is in a geographic CRS. Results from &#39;buffer&#39; are likely incorrect. Use &#39;GeoSeries.to_crs()&#39; to re-project geometries to a projected CRS before this operation.
 
-  xxGeom[&#39;geometry&#39;] = xxGeom.buffer((popRaster.res[0] / 2))
+  xxGeom[&quot;geometry&quot;] = xxGeom.buffer((popRaster.res[0] / 2))
 </pre></div>
 </div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>geometry</th>
+      <th>ID</th>
+      <th>Pop</th>
+      <th>Type</th>
+    </tr>
+    <tr>
+      <th>group</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>POLYGON ((-79.47625 44.07875, -79.43458 44.078...</td>
+      <td>1920</td>
+      <td>8.631687e+04</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>POLYGON ((-78.87625 43.95375, -78.83458 43.953...</td>
+      <td>1921</td>
+      <td>2.058095e+05</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>POLYGON ((-79.04292 43.90375, -79.00958 43.903...</td>
+      <td>1922</td>
+      <td>1.838872e+05</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>POLYGON ((-79.45958 43.93708, -79.45125 43.937...</td>
+      <td>1924</td>
+      <td>4.903070e+06</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>POLYGON ((-79.87625 43.54542, -79.85958 43.545...</td>
+      <td>1925</td>
+      <td>8.413600e+04</td>
+      <td>2</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mapMisc</span><span class="o">.</span><span class="n">static_map_vector</span><span class="p">(</span><span class="n">hd_urban_extents</span><span class="p">,</span> <span class="s2">&quot;Type&quot;</span><span class="p">,</span> <span class="n">colormap</span><span class="o">=</span><span class="s2">&quot;Blues&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\wbg\Anaconda3\envs\urban_test\Lib\site-packages\GOSTrocks\mapMisc.py:58: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
+  for label, mdata in v_data.groupby(&#39;tomap&#39;):
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;module &#39;matplotlib.pyplot&#39; from &#39;C:\\wbg\\Anaconda3\\envs\\urban_test\\Lib\\site-packages\\matplotlib\\pyplot.py&#39;&gt;
+</pre></div>
+</div>
+<img alt="../../_images/ab2fda4bb233d30eadef7fc27ac0a65ee25fcc849b45c3a953eb6a8f25a9c60a.png" src="../../_images/ab2fda4bb233d30eadef7fc27ac0a65ee25fcc849b45c3a953eb6a8f25a9c60a.png" />
+</div>
+</div>
+<section id="map-combined-extents-and-write-output">
+<h2>Map combined extents and write output<a class="headerlink" href="#map-combined-extents-and-write-output" title="Permalink to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">combo_extents</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">urban_extents</span><span class="p">,</span> <span class="n">hd_urban_extents</span><span class="p">])</span>
+<span class="n">mapMisc</span><span class="o">.</span><span class="n">static_map_vector</span><span class="p">(</span><span class="n">combo_extents</span><span class="p">,</span> <span class="s2">&quot;Type&quot;</span><span class="p">,</span> <span class="n">colormap</span><span class="o">=</span><span class="s1">&#39;magma&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\wbg\Anaconda3\envs\urban_test\Lib\site-packages\GOSTrocks\mapMisc.py:58: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
+  for label, mdata in v_data.groupby(&#39;tomap&#39;):
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;module &#39;matplotlib.pyplot&#39; from &#39;C:\\wbg\\Anaconda3\\envs\\urban_test\\Lib\\site-packages\\matplotlib\\pyplot.py&#39;&gt;
+</pre></div>
+</div>
+<img alt="../../_images/97e8682d59af715eba193a3141fcec42ab1e8202dc5c7312f79d14bffb484450.png" src="../../_images/97e8682d59af715eba193a3141fcec42ab1e8202dc5c7312f79d14bffb484450.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -512,6 +754,7 @@ C:\wbg\Anaconda3\envs\test\Lib\site-packages\GOST_Urban\UrbanRaster.py:322: User
 </div>
 </div>
 </div>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -569,7 +812,29 @@ C:\wbg\Anaconda3\envs\test\Lib\site-packages\GOST_Urban\UrbanRaster.py:322: User
             
             
               
-                <div class="bd-sidebar-secondary bd-toc"></div>
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Degree of Urbanization</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#map-of-population-density-in-study-area">Map of population density in study area</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#extract-and-map-urban-clusters">Extract and map urban clusters</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#extract-and-map-high-density-urban-extents">Extract and map high-density urban extents</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#map-combined-extents-and-write-output">Map combined extents and write output</a></li>
+</ul>
+</li>
+</ul>
+
+  </nav></div>
+
+</div></div>
               
             
           </div>
