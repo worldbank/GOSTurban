@@ -7,13 +7,12 @@ parts:
   - caption: Documentation
     chapters:
       - file: api/GOSTurban.rst
-      - file: CONTRIBUTING
   - caption: Novel Urbanization
     chapters:
       - file: novel_context
       - file: urbanization_comparison
   - caption: Tutorials
     chapters:
-      - file: ../Notebooks/Tutorials/UrbanAreas_tutorials.ipynb
-      - file: ../Notebooks/Tutorials/LEI_Example.ipynb
+      - file: notebooks/Tutorials/UrbanAreas_tutorials.ipynb
+      - file: notebooks/Tutorials/LEI_Example.ipynb
 
