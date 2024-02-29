@@ -7,7 +7,6 @@ parts:
   - caption: Documentation
     chapters:
       - file: api/GOSTurban.rst
-      - file: CONTRIBUTING
   - caption: Novel Urbanization
     chapters:
       - file: novel_context
