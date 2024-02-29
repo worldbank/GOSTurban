@@ -25,3 +25,11 @@ repository:
 html:
   use_issues_button: false
   use_repository_button: true
+
+# specify sphinx extensions
+sphinx:
+  extra_extensions:
+    - sphinx.ext.napoleon
+    - sphinxcontrib.apidoc
+  config:
+    apidoc_module_dir: ../src

@@ -133,3 +133,7 @@ _build/
 docs/api/
 src/GOSTurban/_version.py
 docs/notebooks/
+
+# ignore the generated sphinx conf.py file
+# we generate it during the doc build using jupyter-book from _conf.py
+docs/conf.py

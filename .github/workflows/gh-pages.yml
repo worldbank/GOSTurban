@@ -19,6 +19,7 @@ jobs:
           if [ -f pyproject.toml ]; then pip install ".[docs]"; fi
       - name: Build Sphinx Documentation
         run: |
+          jupyter-book config sphinx docs/
           sphinx-build docs _build/html -b html
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
