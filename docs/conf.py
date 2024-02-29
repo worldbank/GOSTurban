@@ -24,7 +24,7 @@ extensions = [
     "sphinx_jupyterbook_latex",
     "sphinx.ext.napoleon",
     "sphinxcontrib.apidoc",
-    # "nbsphinx"
+    #"nbsphinx"
 ]
 external_toc_exclude_missing = True
 external_toc_path = "_toc.yml"
