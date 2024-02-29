@@ -1,4 +1,3 @@
-import sys
 import os
 import rasterio
 import elevation
