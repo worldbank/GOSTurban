@@ -13,8 +13,7 @@ import GOSTRocks.ntlMisc as ntl
 from GOSTRocks.misc import tPrint
 
 # Import GOST urban functions
-sys.path.append("../../../src")
-import GOST_Urban.UrbanRaster as urban
+import GOSTurban.UrbanRaster as urban
 
 
 class urban_country:
