@@ -10,9 +10,6 @@ logo: images/logo.png
 execute:
   execute_notebooks: force
   allow_errors: true
-  exclude_patterns:
-    - 'notebooks/Implementations'
-    - 'notebooks/Replications'
 
 # only build files in toc
 only_build_toc: true
