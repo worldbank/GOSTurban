@@ -10,5 +10,3 @@ elevation
 geojson
 hatch
 git
-
-
