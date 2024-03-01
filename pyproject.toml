@@ -42,6 +42,7 @@ docs = [
 	"jupyter-book>=1,<2",
 	"sphinxcontrib-apidoc>=0.4.0,<1",
 	"jupyter-cache>=0.6.0",
+	"nbconvert",
 ]
 
 [project.urls]
