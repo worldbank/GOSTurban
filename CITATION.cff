@@ -1,0 +1,14 @@
+cff-version: 1.2.0
+title: "GOSTurban"
+abstract: "Multiple functions, tools, and tutorials for calculating urbanization based on gridded population data"
+authors:
+  - affiliation: World Bank
+    family-names: Stewart
+    given-names: Benjamin P.
+  - affiliation: World Bank
+    family-names: Chamorro
+    given-names: Andres
+keywords:
+  - Urban Analysis
+repository-code: https://github.com/worldbank/GOSTurban
+type: software
