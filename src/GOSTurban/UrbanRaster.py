@@ -33,7 +33,16 @@ def tPrint(s):
 def geocode_cities(urban_extents):
     """Generate names for polygon urban extents
 
-    :param urban_extents: geopandas dataframe of polygons to be named. Need to be in epsg:4326
+    Parameters
+    ----------
+    urban_extents : gpd.GeoDataFrame
+        geopandas dataframe of polygons to be named. Need to be in epsg:4326
+
+    Returns
+    -------
+    gpd.GeoDataFrame
+        input geopandas dataframe with added columns for city, state, and country
+
     """
     geolocator = Nominatim(user_agent="new_app")
     all_res = []
@@ -71,7 +80,15 @@ class urbanGriddedPop(object):
         """
         Create urban definitions using gridded population data.
 
-        :param inRaster: string or rasterio object representing gridded population data
+        Parameters
+        ----------
+        inRaster : string or rasterio object
+            string or object representing gridded population data
+
+        Returns
+        -------
+        None.
+
         """
         if type(inRaster) == str:
             self.inR = rasterio.open(inRaster)
@@ -106,10 +123,30 @@ class urbanGriddedPop(object):
             (12) Rural, dispersed, low density - dens: >50,
             (11) Rural, dispersed, low density - the rest that are populated
 
-        :param urbDens: integer of the minimum density value to be counted as urban
-        :param hdDens: integer of the minimum density value to be counted as high density
-        :param urbThresh: integer minimum total settlement population to be considered urban
-        :param hdThresh: integer minimum total settlement population to be considered high density
+        Parameters
+        ----------
+        urbDens : integer
+            minimum density value to be counted as urban
+        hdDens : integer
+            minimum density value to be counted as high density
+        urbThresh : integer
+            minimum total settlement population to be considered urban
+        hdThresh : integer
+            minimum total settlement population to be considered high density
+        minPopThresh : integer
+            minimum population to be considered a settlement
+        out_raster : string, optional
+            path to save the output raster. The default is "".
+        print_message : string, optional
+            message to print with each step. The default is "".
+        verbose : boolean, optional
+            print messages. The default is False.
+
+        Returns
+        -------
+        dictionary
+            dictionary containing the final raster, the high density raster, the urban raster, and the shapes of the urban areas
+
         """
 
         popRaster = self.inR
@@ -291,17 +328,33 @@ class urbanGriddedPop(object):
         Generate urban extents from gridded population data through the application of a minimum
             density threshold and a minimum total population threshold
 
-        :param densVal: integer of the minimum density value to be counted as urban
-        :param totalPopThresh: integer minimum total settlement population to ne considered urban
-        :param smooth: boolean to run a single modal smoothing function (this should be run when running
-                        on WorldPop as the increased resolution often leads to small holes and funny shapes
-        :param verbose: boolean on what messages to receive
-        :param queen: boolean to determine whether to dissolve final shape to connect queen's contiguity
-        :param raster: string path to create a boolean raster of urban and not.
-                        Empty string is the default and will create no raster
-        :param raster_pop: string path to create a raster of the population layer only in the urban areas
-                            Empty string is the default and will create no raster
-        :returns: GeoPandasDataFrame of the urban extents
+        Parameters
+        ----------
+        densVal : integer, optional
+            minimum density value to be counted as urban
+        totalPopThresh : integer, optional
+            minimum total settlement population to ne considered urban
+        smooth : boolean, optional
+            toggle to run a single modal smoothing function (this should be run when running
+            on WorldPop as the increased resolution often leads to small holes and funny shapes
+        verbose : boolean
+            what messages to receive
+        queen : boolean
+            determine whether to dissolve final shape to connect queen's contiguity
+        raster : str
+            string path to create a boolean raster of urban and not.
+            Empty string is the default and will create no raster
+        raster_pop : str
+            string path to create a raster of the population layer only in the urban areas
+            Empty string is the default and will create no raster
+        print_message : str
+            message to print with each step. The default is "".
+
+        Returns
+        -------
+        gpd.GeoDataFrame
+            geopandas dataframe of urban extents
+
         """
 
         popRaster = self.inR
