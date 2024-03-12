@@ -143,7 +143,7 @@ class urban_data(object):
                 print(p)
 
         if len(sel_rasters) > 0:
-            # Open all the ratser files and covert to pixel-level summary numbers
+            # Open all the ratser files and convert to pixel-level summary numbers
             idx = 0
             for cur_raster in sel_rasters:
                 curR = rasterio.open(cur_raster)
