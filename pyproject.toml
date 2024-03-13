@@ -57,7 +57,7 @@ source = "vcs"
 version-file = "src/GOSTurban/_version.py"
 
 [tool.codespell]
-skip = 'docs/_build,docs/references.bib,__pycache__,*.png,*.gz,*.whl,pyproject.toml,*csv'
+skip = 'docs/_build,docs/references.bib,__pycache__,*.png,*.gz,*.whl,pyproject.toml,*csv,notebooks/Implementations/WSF_DECAT_B_ExploringIDCerrors.ipynb,notebooks/Implementations/URB_SEAU1_NovelUrbanization/MAP_Urbanization.ipynb'
 ignore-regex = '^\s*"image\/png":\s.*'
 ignore-words-list = "gost,GOST,ALOS,ans,NAM"
 

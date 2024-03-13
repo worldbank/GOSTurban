@@ -35,6 +35,7 @@ pip install GOSTurban
     ```shell
     pip install .
     ```
+
 ### Developer Installation
 
 Install the package **in editable** mode with all of the dependencies needed to run the tests and build the documentation locally:

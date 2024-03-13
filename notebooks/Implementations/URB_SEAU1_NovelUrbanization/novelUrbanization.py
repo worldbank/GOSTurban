@@ -441,7 +441,7 @@ def pp_point_urban_summaries(inD, urban_tiffs, out_file):
                 inD[os.path.basename(pFile).replace(".tif", "")] = [
                     x[0] for x in list(urb_res)
                 ]
-            except:
+            except Exception:
                 pass
     pd.DataFrame(inD.drop(["geometry"], axis=1)).to_csv(out_file)
 
@@ -465,7 +465,7 @@ def point_urban_summaries(inD, pop_tiffs, out_file):
                 inD[os.path.basename(curFile).replace(".tif", "")] = [
                     x[0] for x in list(urb_res)
                 ]
-            except:
+            except Exception:
                 pass
     pd.DataFrame(inD.drop(["geometry"], axis=1)).to_csv(out_file)
 
@@ -665,7 +665,7 @@ if __name__ == "__main__":
             cur_def = EA_DEFS[iso3]
             ea_file = os.path.join(cur_def[0], cur_def[1])
             pt_file = os.path.join(cur_def[0], cur_def[2])
-        except:
+        except Exception:
             ea_file = ""
             pt_file = ""
 
