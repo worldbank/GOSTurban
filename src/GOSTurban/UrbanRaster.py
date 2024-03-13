@@ -23,10 +23,21 @@ from rasterio.features import rasterize
 from shapely.geometry import shape, Polygon
 from geopy.geocoders import Nominatim
 
-"""prints the time along with the message"""
-
 
 def tPrint(s):
+    """
+    Print the time along with the message.
+
+    Parameters
+    ----------
+    s : string
+        message to print
+
+    Returns
+    -------
+    None.
+
+    """
     print("%s\t%s" % (time.strftime("%H:%M:%S"), s))
 
 

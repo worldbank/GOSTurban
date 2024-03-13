@@ -21,19 +21,14 @@ def mp_lei(
     ----------
     curRxx : numpy array
         raster data
-
     transformxx : rasterio.transform
         rasterio transformation object
-
     idx_xx : int
         index of the raster
-
     old_list : list of ints, optional
         Values in built area raster to consider old urban. The default is [4, 5, 6].
-
     new_list : list of ints, optional
         Values in built area raster to consider new urban. The default is [3].
-
     buffer_dist : int, optional
         distance to buffer new urban areas for comparison to old urban extents. The default is 300.
 
