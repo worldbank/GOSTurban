@@ -124,6 +124,20 @@ building_df["type"] = "unknown"
 
 
 def MLpred(df):
+    """
+    Perform machine learning prediction on the input dataframe.
+
+    Parameters
+    ----------
+    df : pandas.DataFrame
+        The input dataframe containing the data for prediction.
+
+    Returns
+    -------
+    pandas.DataFrame
+        The dataframe with the predicted values merged.
+
+    """
     df_input = df[predictors]
     # Extract predictor cols only (specified by the 'predictors' LIST)
     hf_temp = H2OFrame(df_input)
@@ -135,9 +149,9 @@ def MLpred(df):
     df.reset_index(inplace=True)
     pred_df_temp["PID"] = df.PID
 
-    ans = pd.merge(df, pred_df_temp, on="PID")
+    ans_var = pd.merge(df, pred_df_temp, on="PID")
 
-    return ans
+    return ans_var
 
 
 # Create an empty DF for append
