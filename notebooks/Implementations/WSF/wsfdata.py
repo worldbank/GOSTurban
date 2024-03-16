@@ -7,8 +7,15 @@ class wsf_dataset(object):
     def __init__(self, imageList):
         """Create object organizning and analyzing WSF data.
 
-        INPUT
-            imageList [array of strings] - list of paths to input images
+        Parameters
+        ----------
+        imageList : array of strings
+            list of paths to input images
+
+        Returns
+        -------
+        None
+
         """
         for img in imageList:
             if "AW3D30.tif" in img:
@@ -23,13 +30,20 @@ class wsf_dataset(object):
     def analyze_idc(self, outFile="", badThreshold=2):
         """Analyze the IDC (quality) image
 
-        INPUT
-            [optional] outfile [string] - path to create output file describing quality
-            [optional] badThreshold [number] - values above this will be considered low quality
-        RETURNS
-            [numpy array] - 2band np array of same size as the input IDC image.
-                Band 1 - Total number of years with bad data
-                Band 2 - Most recent year of bad data
+        Parameters
+        ----------
+        outfile : string, optional
+            path to create output file describing quality
+        badThreshold : float, optional
+            values above this will be considered low quality
+
+        Returns
+        -------
+        numpy array
+            2band np array of same size as the input IDC image.
+            Band 1 - Total number of years with bad data
+            Band 2 - Most recent year of bad data
+
         """
         idc = rasterio.open(self.evolution_idc)
         idcD = idc.read()
@@ -63,11 +77,18 @@ class wsf_dataset(object):
             the WSF built date if the quality flag is worse than badThreshold. If it is worse,
             the cell is assigned the next date in the WSF quality flag that is of acceptable quality.
 
-        INPUT
-            [optional] outfile [string] - path to create output file with corrected evolution dataset
-            [optional] badThreshold [number] - values above this will be considered low quality
-        RETURNS
-            [numpy array] - np array of same size as the input evolution image.
+        Parameters
+        ----------
+        outfile [string, optional
+            path to create output file with corrected evolution dataset
+        badThreshold : float, optional
+            values above this will be considered low quality
+
+        Returns
+        -------
+        numpy array
+            np array of same size as the input evolution image.
+
         """
         inEvolution = rasterio.open(self.evolution)
         inIDC = rasterio.open(self.evolution_idc)
@@ -97,24 +118,29 @@ class wsf_dataset(object):
     def generate_evolution_plot(self, dataset="normal"):
         """generate a dataframe for matplotlib plotting
 
-        INPUT
-        [optional] dataset [pandas dataframe] - provide a dataset to analyze,
-            if you don't want to read in the evolution dataset
+        Parameters
+        ----------
+        dataset : pandas dataframe, optional
+            provide a dataset to analyze, if you don't want to read in the evolution dataset
 
-        RETURNS
-        [geopandas dataframe]
+        Returns
+        -------
+        geopandas dataframe
+            dataframe with columns for built and cumBuilt
 
-        EXAMPLE
-        wsfD = wsfdata.wsf_dataset(images_list)
-        basePlot = wsfD.generate_evolution_plot()
-        # generate corrected data
-        correctedRes = wsfD.correct_evolution_idc(badThreshold=3)
-        correctedPlot = wsfD.generate_evolution_plot(dataset=correctedRes)
-        basePlot['corrected'] = correctedPlot['cumBuilt']
+        Examples
+        --------
+        >>> wsfD = wsfdata.wsf_dataset(images_list)
+        >>> basePlot = wsfD.generate_evolution_plot()
+        >>> # generate corrected data
+        >>> correctedRes = wsfD.correct_evolution_idc(badThreshold=3)
+        >>> correctedPlot = wsfD.generate_evolution_plot(dataset=correctedRes)
+        >>> basePlot['corrected'] = correctedPlot['cumBuilt']
+        >>>
+        >>> basePlot.drop('built', axis=1).plot()
+        >>>
+        >>> basePlot['cumBuilt'].plot()
 
-        basePlot.drop('built', axis=1).plot()
-
-        basePlot['cumBuilt'].plot()
         """
         if dataset == "normal":
             evolution = rasterio.open(self.evolution)
@@ -135,13 +161,18 @@ class wsf_dataset(object):
         """Summarize IDC by measuring what percentage of the built cells in every
             year are above the defined quality threshold
 
-        INPUT
-        thresh [number] - value from 1-6 defining the acceptable quality threshold, every value
+        Parameters
+        ----------
+        thresh : float
+            value from 1-6 defining the acceptable quality threshold, every value
             below or equal to that threshold (better than that value) are considered acceptable
 
-        RETURNS
-        [numpy array] - fraction of built cells that are of acceptable quality per year. HOPEFULLY
+        Returns
+        -------
+        numpy array
+            fraction of built cells that are of acceptable quality per year. HOPEFULLY
             the reutrning array should be 31 records long
+
         """
         idc = rasterio.open(self.evolution_idc).read()
         evolution = rasterio.open(self.evolution).read()

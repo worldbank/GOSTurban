@@ -47,6 +47,28 @@ KD_tree = KDTree(matrix)
 
 ###
 def Main(passed_dict):
+    """
+    This function will calculate the nearest neighbours and their attributes for each building in the passed DataFrame.
+
+    Parameters
+    ----------
+    passed_dict : dict
+        a dictionary containing the following elements:
+            df : DataFrame
+                a DataFrame of building footprints, with a unique identifier, a centroid, and an area
+            thread_no : int
+                an integer representing the thread number
+            print_thresh : int
+                an integer representing the number of rows to process before printing progress
+            save_thresh : int
+                an integer representing the number of rows to process before saving progress
+
+    Returns
+    -------
+    list
+        a list of dictionaries, each containing the attributes of the nearest neighbours for each building in the passed DataFrame
+
+    """
     # unpack passed dict into local variables for this thread.
     short = passed_dict["df"]
     # thread_no = passed_dict["thread_no"]

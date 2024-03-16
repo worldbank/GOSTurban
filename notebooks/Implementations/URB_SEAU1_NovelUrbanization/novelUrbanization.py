@@ -24,7 +24,23 @@ importlib.reload(rMisc)
 
 class urban_data(object):
     def __init__(self, iso3, base_folder, aapc_folder):
-        """Summarize completed urbanization layers; combine into single output"""
+        """
+        Summarize completed urbanization layers; combine into single output
+
+        Parameters
+        ----------
+        iso3 : string
+            3 letter country code
+        base_folder : string
+            location of dartboard urbanization
+        aapc_folder : string
+            location of aapc urbanization
+
+        Returns
+        -------
+        None
+
+        """
         self.iso3 = iso3
         self.in_folder = base_folder
         self.aapc_folder = aapc_folder
@@ -33,11 +49,16 @@ class urban_data(object):
     def get_urban_layers(self):
         """get a list of all urban deleniations
 
-        INPUT
-            aapc_folder [string] - folder containing dartboard deleniations
+        Parameters
+        ----------
+        aapc_folder : string
+            folder containing dartboard deleniations
 
-        RETURNS
-            [list of strings]
+        Returns
+        -------
+        list
+            list of dartboard urban deleniations
+
         """
         db_urban_files = []
         for root, dirs, files in os.walk(self.in_folder):
@@ -64,8 +85,30 @@ class urban_data(object):
         db_urb="_ur.tif",
         db_hd="_co.tif",
     ):
-        """Calculate the Jaccard index comparing urban and then hd urban layers
+        """
+        Calculate the Jaccard index comparing urban and then hd urban layers
         https://www.statisticshowto.com/jaccard-index/
+
+        Parameters
+        ----------
+        pop_type : string or tuple of strings
+            type of population data to compare
+        res : string
+            resolution of data to compare
+        dou_urb : string
+            string to identify urban layer from aapc
+        dou_hd : string
+            string to identify high density urban layer from aapc
+        db_urb : string
+            string to identify urban layer from dartboard
+        db_hd : string
+            string to identify high density urban layer from dartboard
+
+        Returns
+        -------
+        dict
+            dictionary containing the jaccard index for urban and hd urban layers
+
         """
         if pop_type.__class__ == str:
             sel_rasters = self.get_rasters(pop_type, pop_type, res)
@@ -94,6 +137,22 @@ class urban_data(object):
         db_hd_d = (db_hd_d > 0) * 1
 
         def calculate_jaccard(inD1, inD2):
+            """
+            Calculate the Jaccard index comparing urban and then hd urban layers
+
+            Parameters
+            ----------
+            inD1 : array
+                array of urban data
+            inD2 : array
+                array of urban data
+
+            Returns
+            -------
+            float
+                jaccard index
+
+            """
             # Calculate urban jaccard
             jaccardD = inD1 + inD2
             xx = np.unique(jaccardD, return_counts=True)
@@ -108,7 +167,24 @@ class urban_data(object):
         return {"urb_jaccard": urb_jaccard, "hd_jaccard": hd_jaccard}
 
     def get_rasters(self, pop_type_dou="gpo", pop_type_db="gpo", res=""):
-        """filter rasters based on pop_type and resolution"""
+        """
+        Filter rasters based on pop_type and resolution
+
+        Parameters
+        ----------
+        pop_type_dou : string
+            type of population data from aapc
+        pop_type_db : string
+            type of population data from dartboard
+        res : string
+            resolution of data to compare
+
+        Returns
+        -------
+        list
+            list of rasters that match the input parameters
+
+        """
         sel_rasters = []
         for f in self.dou_urban_files:
             if pop_type_dou in f:
@@ -130,8 +206,20 @@ class urban_data(object):
     def generate_combo_layer(self, pop_type="gpo", res="", debug=False):
         """open urban rasters and combine into a single dataset
 
-        INPUT
-            pop_type [string or tuple of strings]
+        Parameters
+        ----------
+        pop_type : string or tuple of strings, optional
+            type of population data to compare
+        res : string, optional
+            resolution of data to compare
+        debug : bool, optional
+            print out the selected rasters
+
+        Returns
+        -------
+        dict
+            dictionary containing the combined urban and hd urban layers
+
         """
         if pop_type.__class__ == str:
             sel_rasters = self.get_rasters(pop_type, pop_type, res)
@@ -168,11 +256,22 @@ class urban_data(object):
     def write_results(self, res, out_folder, reclass_bin=True, dbhd="co"):
         """Write the results from the function generate_combo_layer to file
 
-        INPUT
-            res [dictionary] - results from function generate_combo_layer
-            out_folder [string] - path to directory to create output tif files
-            [optional] reclass_bin [boolean: default True] - reclassify the binary map product into
-                4 classes: agree urban, agree rural, disagree on urban class, disagree on rurality
+        Parameters
+        ----------
+        res : dictionary
+            results from function generate_combo_layer
+        out_folder : string
+            path to directory to create output tif files
+        reclass_bin :boolean, optional
+            default True, reclassify the binary map product into
+            4 classes: agree urban, agree rural, disagree on urban class, disagree on rurality
+        dbhd : string, optional
+            default "co", type of population data from dartboard
+
+        Returns
+        -------
+        None
+
         """
         out_sum_file = os.path.join(out_folder, f"{self.iso3}_urban_sum_{dbhd}.tif")
         out_bin_file = os.path.join(out_folder, f"{self.iso3}_urban_binary_{dbhd}.tif")
@@ -240,6 +339,37 @@ def calculate_urban(
     include_ghsl_h20=True,
     evaluate=False,
 ):
+    """
+    Calculate urbanization for a country
+
+    Parameters
+    ----------
+    iso3 : string
+        3 letter country code
+    inG : geopandas dataframe
+        polygons to summarize urbanization
+    inG2 : geopandas dataframe
+        polygons to summarize urbanization
+    pop_files : list
+        list of population files
+    ea_file : string
+        location of admin boundary file
+    output_folder : string
+        location to save output files
+    km : boolean, optional
+        default True, process 1km data
+    small : boolean, optional
+        default True, process 250m data
+    include_ghsl_h20 : boolean, optional
+        default True, include ghsl water layer
+    evaluate : boolean, optional
+        default False, evaluate the output
+
+    Returns
+    -------
+    None
+
+    """
     global_landcover = "/home/public/Data/GLOBAL/LANDCOVER/GLOBCOVER/2015/ESACCI-LC-L4-LCCS-Map-300m-P1Y-2015-v2.0.7.tif"
     global_ghspop = "/home/public/Data/GLOBAL/Population/GHS/250/GHS_POP_E2015_GLOBE_R2019A_54009_250_V1_0.tif"
     global_ghspop_1k = "/home/public/Data/GLOBAL/Population/GHS/GHS_POP_E2015_GLOBE_R2019A_54009_1K_V1_0.tif"
@@ -343,12 +473,24 @@ def calculate_urban(
 def calc_pp_urban(in_folder, default_pop_file, admin_layer, output_folder, iso3=""):
     """Summarize urbanization from Pierre-Philippe's Dartboard methodology
 
-    INPUT
-        input_folder [string path] - location of dartboard urbanization
-        default_pop_file [string path] - default pop filename to use for urban population calculations
-        admin_layer [string path] - zones used to summarize population
-    RETURN
-        [geopandas dataframe] - contains total population and urban population for each shape
+    Parameters
+    ----------
+    input_folder : string path
+        location of dartboard urbanization
+    default_pop_file : string path
+        default pop filename to use for urban population calculations
+    admin_layer : string path
+        zones used to summarize population
+    output_folder : string path
+        location to save output files
+    iso3 : string, optional
+        default "", filter to only process a specific country
+
+    Returns
+    -------
+    geopandas dataframe
+        contains total population and urban population for each shape
+
     """
     urban_layers = [
         os.path.join(in_folder, x) for x in os.listdir(in_folder) if x[-4:] == ".tif"
@@ -413,7 +555,19 @@ def calc_pp_urban(in_folder, default_pop_file, admin_layer, output_folder, iso3=
 
 
 def check_no_data(in_folder):
-    """loop through all the tif files in the FINAL folders and calculate the number of no-data cells"""
+    """
+    Loop through all the tif files in the FINAL folders and calculate the number of no-data cells
+
+    Parameters
+    ----------
+    in_folder : string path
+        location of dartboard urbanization
+
+    Returns
+    -------
+    None
+
+    """
     for root, dirs, files in os.walk(in_folder):
         if "FINAL" in root:
             for f in files:
@@ -426,7 +580,23 @@ def check_no_data(in_folder):
 
 
 def pp_point_urban_summaries(inD, urban_tiffs, out_file):
-    """summarize urbanization for point locations (inD) for each urban definition file (urban_tiffs)"""
+    """
+    Summarize urbanization for point locations (inD) for each urban definition file (urban_tiffs)
+
+    Parameters
+    ----------
+    inD : geopandas dataframe
+        point locations to summarize urbanization
+    urban_tiffs : list
+        list of urban definition files
+    out_file : string path
+        location to save output file
+
+    Returns
+    -------
+    None
+
+    """
     for pFile in urban_tiffs:
         if pFile.endswith(".tif"):
             try:
@@ -447,7 +617,23 @@ def pp_point_urban_summaries(inD, urban_tiffs, out_file):
 
 
 def point_urban_summaries(inD, pop_tiffs, out_file):
-    """summarize urbanization for point locations (inD) for each population file (pop_tiffs)"""
+    """
+    Summarize urbanization for point locations (inD) for each population file (pop_tiffs)
+
+    Parameters
+    ----------
+    inD : geopandas dataframe
+        point locations to summarize urbanization
+    pop_tiffs : list
+        list of population files
+    out_file : string path
+        location to save output file
+
+    Returns
+    -------
+    None
+
+    """
     for pFile in pop_tiffs:
         urb_file = pFile.replace(".tif", "_urban.tif")
         hd_file = pFile.replace(".tif", "_urban_hd.tif")
@@ -478,7 +664,29 @@ def run_country(iso3):
 
 
 def run_zonal(iso3, output_folder, inG, pop_files, ea_file, pt_file):
-    """Summarize zonal statistics for urbanization numbers against polygons and points for both WB and PP urban calculations"""
+    """
+    Summarize zonal statistics for urbanization numbers against polygons and points for both WB and PP urban calculations
+
+    Parameters
+    ----------
+    iso3 : string
+        3 letter country code
+    output_folder : string
+        location to save output files
+    inG : geopandas dataframe
+        polygons to summarize urbanization
+    pop_files : list
+        list of population files
+    ea_file : string
+        location of admin boundary file
+    pt_file : string
+        location of point file
+
+    Returns
+    -------
+    None
+
+    """
     tPrint(f"Starting zonal calculations {iso3}")
     pp_deleniations_folder = (
         "/home/wb411133/data/Projects/MR_Novel_Urbanization/Data/AAPPC/Delineations"
