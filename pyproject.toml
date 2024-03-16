@@ -63,3 +63,23 @@ ignore-words-list = "gost,GOST,ALOS,ans,NAM"
 
 [tool.ruff.lint.pydocstyle]
 convention = "numpy"
+
+[tool.ruff]
+exclude = [
+	"WSF_DECAT_B_ExploringIDCerrors.ipynb",
+	"KAZ_Urbanization_Review.ipynb",
+	"Urban_metrics_Fullness.ipynb",
+	"Urban_metrics_Shape.ipynb",
+	"Urban_metrics_Sprawl.ipynb",
+	"Urban_metrics_Structure.ipynb",
+	"URB_DECAT_B_ExploringGHSSMODcode.ipynb",
+	"URB_SCAUR_UKR_B_I_urbanizationReview.ipynb",
+	"URB_SEAU1_B_A_Ka_ExtractDataUrban.ipynb",
+	"Zonal_statistics.ipynb",
+	"Data_Preparation.ipynb",
+	"URB_SEAU1_B_A_Ka_NovelUrbanizaton.ipynb",
+	"Create_Mosaick_Datasets.ipynb",
+	"GHSL_Standardize_To_Country.ipynb",
+	"MAP_Urbanization.ipynb",
+	"NGA_specific_results.ipynb",
+]

@@ -278,8 +278,8 @@ def calculate_urban(
             final_folder="FINAL_STANDARD_1KM",
             ghspop_suffix="1k",
         )
-        adm2_res = os.path.join(xx.final_folder, "URBAN_ADMIN2_STATS_COMPILED.csv")
-        ea_res = os.path.join(xx.final_folder, "URBAN_COMMUNE_STATS_COMPILED.csv")
+        # adm2_res = os.path.join(xx.final_folder, "URBAN_ADMIN2_STATS_COMPILED.csv")
+        # ea_res = os.path.join(xx.final_folder, "URBAN_COMMUNE_STATS_COMPILED.csv")
         tPrint(f"{iso3} ***1k Extracting Global Layers")
         xx.extract_layers(
             global_landcover,
@@ -358,9 +358,9 @@ def calc_pp_urban(in_folder, default_pop_file, admin_layer, output_folder, iso3=
 
     cur_layer = urban_layers[0]
     inD = gpd.read_file(admin_layer)
-    default_pop_1k = default_pop_file.replace(
-        default_pop_file[:3], "%s1k" % default_pop_file[:3]
-    )
+    # default_pop_1k = default_pop_file.replace(
+    #     default_pop_file[:3], "%s1k" % default_pop_file[:3]
+    # )
     for cur_layer in urban_layers:
         # tPrint(cur_layer)
         # Open and read in urban data
@@ -369,10 +369,10 @@ def calc_pp_urban(in_folder, default_pop_file, admin_layer, output_folder, iso3=
         urban_data = (urban_data > 0).astype(urban_r.meta["dtype"])
         # Extract population data
         urban_layer = os.path.basename(cur_layer)
-        default_pop = default_pop_file
+        # default_pop = default_pop_file
 
         if "1k" in urban_layer:
-            default_pop = default_pop_1k
+            # default_pop = default_pop_1k
             pop_layer = os.path.basename(cur_layer)[:11]
             pop_folder = os.path.join(output_folder, "FINAL_STANDARD_1KM")
         else:
@@ -382,7 +382,7 @@ def calc_pp_urban(in_folder, default_pop_file, admin_layer, output_folder, iso3=
 
         if not os.path.exists(pop_file):
             if "1k" in urban_layer:
-                default_pop = default_pop_1k
+                # default_pop = default_pop_1k
                 pop_layer = os.path.basename(cur_layer)[:9]
                 pop_folder = os.path.join(output_folder, "FINAL_STANDARD_1KM")
             else:
@@ -471,9 +471,10 @@ def point_urban_summaries(inD, pop_tiffs, out_file):
 
 
 def run_country(iso3):
-    local_path = "/home/public/Data/COUNTRY/{country}/POPULATION/WORLDPOP/".format(
-        country=iso3
-    )
+    # local_path = "/home/public/Data/COUNTRY/{country}/POPULATION/WORLDPOP/".format(
+    #     country=iso3
+    # )
+    pass
 
 
 def run_zonal(iso3, output_folder, inG, pop_files, ea_file, pt_file):
