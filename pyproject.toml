@@ -36,7 +36,7 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-dev = ["pytest", "pytest-cov", "GOSTurban[docs]"]
+dev = ["pytest", "pytest-cov", "GOSTurban[docs]", "coverage[toml]"]
 docs = [
 	"docutils==0.17.1",
 	"jupyter-book>=1,<2",
@@ -82,4 +82,13 @@ exclude = [
 	"GHSL_Standardize_To_Country.ipynb",
 	"MAP_Urbanization.ipynb",
 	"NGA_specific_results.ipynb",
+]
+
+[tool.coverage.run]
+omit = [
+	"tests/*",
+	"docs/*",
+	"notebooks/*",
+	"src/GOSTurban/_version.py",
+	"src/GOSTurban/__init__.py",
 ]

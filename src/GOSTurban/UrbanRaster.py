@@ -44,6 +44,9 @@ def tPrint(s):
 def geocode_cities(urban_extents):
     """Generate names for polygon urban extents
 
+    This function adds columns for city, state, and country to a geopandas dataframe.
+    Note that this modifies the input dataframe in place!
+
     Parameters
     ----------
     urban_extents : gpd.GeoDataFrame
