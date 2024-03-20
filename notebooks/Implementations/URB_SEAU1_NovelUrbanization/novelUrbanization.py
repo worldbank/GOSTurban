@@ -11,8 +11,8 @@ import numpy as np
 
 
 # Import raster helpers
-import GOSTRocks.rasterMisc as rMisc
-from GOSTRocks.misc import tPrint
+import GOSTrocks.rasterMisc as rMisc
+from GOSTrocks.misc import tPrint
 
 # Import GOST urban functions
 sys.path.append("../../../src")

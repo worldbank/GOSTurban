@@ -10,8 +10,8 @@ import pandas as pd
 import numpy as np
 
 
-import GOSTRocks.rasterMisc as rMisc
-from GOSTRocks.misc import tPrint
+import GOSTrocks.rasterMisc as rMisc
+from GOSTrocks.misc import tPrint
 
 
 class summarize_population(object):

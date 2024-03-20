@@ -7,9 +7,9 @@ import geopandas as gpd
 
 
 # Import raster helpers
-import GOSTRocks.rasterMisc as rMisc
-import GOSTRocks.ntlMisc as ntl
-from GOSTRocks.misc import tPrint
+import GOSTrocks.rasterMisc as rMisc
+import GOSTrocks.ntlMisc as ntl
+from GOSTrocks.misc import tPrint
 
 # Import GOST urban functions
 import GOSTurban.UrbanRaster as urban
