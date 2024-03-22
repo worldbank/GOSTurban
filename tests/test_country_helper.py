@@ -1,19 +1,73 @@
 """Unit tests for the country_helper.py module"""
 import pytest  # noqa: F401
 from GOSTurban import country_helper
+import GOSTurban.UrbanRaster as urban
+import GOSTrocks.ntlMisc as ntl
+import os
+from unittest.mock import MagicMock
 
 
-class TestCountryHelper:
-    """Tests for the CountryHelper class."""
+class TestUrbanHelper:
+    """Tests for the urban_county class."""
 
     # make some fake data to test with
     ch = country_helper.urban_country(
         iso3="USA", sel_country="United States", cur_folder="data", inP=[1, 2, 3]
     )
 
-    def test_country_helper(self):
+    def test_urban_helper(self):
         # assert things about the result
         assert self.ch.iso3 == "USA"
         assert self.ch.sel_country == "United States"
         assert self.ch.cur_folder == "data"
         assert self.ch.inP == [1, 2, 3]
+        assert self.ch.urban_extents_file == os.path.join(
+            "data", "USA_urban_extents.geojson"
+        )
+        assert self.ch.urban_ntl == os.path.join("data", "USA_urban_ntl.csv")
+
+    def test_calculate_urban_extents(self, tmp_path):
+        """Test the calculate_urban_extents method."""
+        # make a tmp location for output
+        out_folder = tmp_path / "output"
+        # mock the urban.urbanGriddedPop function
+        urban.urbanGriddedPop = MagicMock()
+        # make the class
+        ch = country_helper.urban_country(
+            iso3="USA", sel_country="placeholder", cur_folder=out_folder, inP=[1, 2, 3]
+        )
+        # try calling the method
+        ch.calculate_urban_extents()
+        # assert that the function was called
+        urban.urbanGriddedPop.assert_called_once_with(ch.inP)
+
+    def test_summarize_ntl(self, tmp_path):
+        """Test the summarize_ntl method."""
+        # make a tmp location for output
+        out_folder = tmp_path / "output"
+        # make the class
+        ch = country_helper.urban_country(
+            iso3="USA", sel_country="placeholder", cur_folder=out_folder, inP=[1, 2, 3]
+        )
+        # mock some of the methods called
+        ntl.aws_search_ntl = MagicMock()
+        # try calling the method
+        ch.summarize_ntl()
+        # assert that the mocked function was called
+        ntl.aws_search_ntl.assert_called_once()
+
+    # def test_summarize_ghsl(self, tmp_path):
+    #     """Test the summarize_ghsl method."""
+    #     # make a tmp location for output
+    #     out_folder = tmp_path / "output"
+    #     # make the class
+    #     ch = country_helper.urban_country(
+    #         iso3="USA",
+    #         sel_country="placeholder",
+    #         cur_folder=out_folder,
+    #         inP=[1, 2, 3]
+    #     )
+    #     # try calling the method
+    #     ch.summarize_ghsl(ghsl_files=['a', 'b', 'c'])
+    #     # assert that the mocked function was called
+    #     rMisc.zonalStats.assert_called_once()

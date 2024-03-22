@@ -158,6 +158,14 @@ class urban_country:
         None
 
         """
+        # make VIIRS folder if it doesn't exist
+        viirs_folder = os.path.join(self.cur_folder, "VIIRS")
+        if not os.path.exists(viirs_folder):
+            os.makedirs(viirs_folder)
+        # init urbanD and urbanHD
+        urbanD = None
+        urbanHD = None
+        # Run zonal analysis on NTL
         if (not os.path.exists(self.urban_ntl)) or (
             not os.path.exists(self.urban_hd_ntl)
         ):
@@ -168,14 +176,10 @@ class urban_country:
                 try:
                     inR = rasterio.open(ntl_file)
                     # tPrint("Processing %s" % name)
-                    viirs_folder = os.path.join(self.cur_folder, "VIIRS")
                     urban_res_file = os.path.join(viirs_folder, f"URBAN_{name}.csv")
                     urban_hd_res_file = os.path.join(
                         viirs_folder, f"HD_URBAN_{name}.csv"
                     )
-
-                    if not os.path.exists(viirs_folder):
-                        os.makedirs(viirs_folder)
 
                     try:
                         urbanD = self.urban_extents
@@ -218,8 +222,10 @@ class urban_country:
                 tempD = pd.read_csv(os.path.join(viirs_folder, x), index_col=0)
                 urbanHD[x[:-4]] = tempD.iloc[:, 0]
 
-            urbanD.drop(["geometry"], axis=1).to_csv(self.urban_ntl)
-            urbanHD.drop(["geometry"], axis=1).to_csv(self.urban_hd_ntl)
+            if urbanD is not None:
+                urbanD.drop(["geometry"], axis=1).to_csv(self.urban_ntl)
+            if urbanHD is not None:
+                urbanHD.drop(["geometry"], axis=1).to_csv(self.urban_hd_ntl)
 
     def summarize_ghsl(
         self, ghsl_files, binary_calc=False, binary_thresh=1000, clip_raster=False
