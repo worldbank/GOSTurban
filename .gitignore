@@ -137,3 +137,6 @@ docs/notebooks/
 # ignore the generated sphinx conf.py file
 # we generate it during the doc build using jupyter-book from _conf.py
 docs/conf.py
+
+# ignore any notebooks/implementations/output
+notebooks/Implementations/output
