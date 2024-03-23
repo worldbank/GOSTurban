@@ -36,13 +36,15 @@ pip install GOSTurban
     pip install .
     ```
 
-    Install the package **in editable** mode with dependencies:
+### Developer Installation
 
-    ```shell
-    pip install -e .
-    ```
+Install the package **in editable** mode with all of the dependencies needed to run the tests and build the documentation locally:
 
-    The `-e` flag stands for "editable," meaning changes to the source code will immediately affect the installed package.
+ ```shell
+ pip install -e .[dev]
+ ```
+
+The `-e` flag stands for "editable," meaning changes to the source code will immediately affect the installed package.
 
 ## License
 
