@@ -41,6 +41,8 @@ class urban_country:
         self.iso3 = iso3
         self.sel_country = sel_country
         self.cur_folder = cur_folder
+        if not os.path.exists(cur_folder):
+            os.makedirs(cur_folder)
         self.urban_extents_file = os.path.join(
             cur_folder, f"{iso3}_urban_extents.geojson"
         )
