@@ -31,14 +31,18 @@ dependencies = [
 	"pyproj",
 	"elevation",
 	"geojson",
+	"GOSTrocks",
+	"richdem"
 ]
 
 [project.optional-dependencies]
-dev = ["pytest", "pytest-cov"]
+dev = ["pytest", "pytest-cov", "GOSTurban[docs]", "coverage[toml]"]
 docs = [
 	"docutils==0.17.1",
 	"jupyter-book>=1,<2",
 	"sphinxcontrib-apidoc>=0.4.0,<1",
+	"jupyter-cache>=0.6.0",
+	"nbconvert",
 ]
 
 [project.urls]
@@ -53,9 +57,38 @@ source = "vcs"
 version-file = "src/GOSTurban/_version.py"
 
 [tool.codespell]
-skip = 'docs/_build,docs/references.bib,__pycache__,*.png,*.gz,*.whl'
+skip = 'docs/_build,docs/references.bib,__pycache__,*.png,*.gz,*.whl,pyproject.toml,*csv,notebooks/Implementations/WSF_DECAT_B_ExploringIDCerrors.ipynb,notebooks/Implementations/URB_SEAU1_NovelUrbanization/MAP_Urbanization.ipynb'
 ignore-regex = '^\s*"image\/png":\s.*'
-ignore-words-list = "gost,"
+ignore-words-list = "gost,GOST,ALOS,ans,NAM"
 
 [tool.ruff.lint.pydocstyle]
 convention = "numpy"
+
+[tool.ruff]
+exclude = [
+	"WSF_DECAT_B_ExploringIDCerrors.ipynb",
+	"KAZ_Urbanization_Review.ipynb",
+	"Urban_metrics_Fullness.ipynb",
+	"Urban_metrics_Shape.ipynb",
+	"Urban_metrics_Sprawl.ipynb",
+	"Urban_metrics_Structure.ipynb",
+	"URB_DECAT_B_ExploringGHSSMODcode.ipynb",
+	"URB_SCAUR_UKR_B_I_urbanizationReview.ipynb",
+	"URB_SEAU1_B_A_Ka_ExtractDataUrban.ipynb",
+	"Zonal_statistics.ipynb",
+	"Data_Preparation.ipynb",
+	"URB_SEAU1_B_A_Ka_NovelUrbanizaton.ipynb",
+	"Create_Mosaick_Datasets.ipynb",
+	"GHSL_Standardize_To_Country.ipynb",
+	"MAP_Urbanization.ipynb",
+	"NGA_specific_results.ipynb",
+]
+
+[tool.coverage.run]
+omit = [
+	"tests/*",
+	"docs/*",
+	"notebooks/*",
+	"src/GOSTurban/_version.py",
+	"src/GOSTurban/__init__.py",
+]
