@@ -244,7 +244,7 @@ def summarize_LEI(in_file, leap_val=0.05, exp_val=0.9):
         if "area" not in res.columns:
             res["area"] = res["geometry"].apply(lambda x: x.area)
 
-    def calculate_LEI(val, leap_val, exp_val):
+    def calculate_LEI_class(val, leap_val, exp_val):
         """
         Calculate the LEI class based on the input value
 
@@ -270,7 +270,7 @@ def summarize_LEI(in_file, leap_val=0.05, exp_val=0.9):
         else:
             return "Infill"
 
-    res["class"] = res["LEI"].apply(lambda x: calculate_LEI(x, leap_val, exp_val))
+    res["class"] = res["LEI"].apply(lambda x: calculate_LEI_class(x, leap_val, exp_val))
     xx = res.groupby("class")
 
     return xx["area"].sum()
