@@ -195,4 +195,4 @@ def summarize_LEI(in_file, leap_val=0.05, exp_val=0.9):
     res["class"] = res["LEI"].apply(lambda x: calculate_LEI(x, leap_val, exp_val))
     xx = res.groupby("class")
 
-    return xx['area'].sum()
+    return xx["area"].sum()
