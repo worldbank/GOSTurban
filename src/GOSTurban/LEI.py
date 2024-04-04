@@ -217,6 +217,33 @@ def calculate_LEI(inputGHSL, old_list, new_list, buffer_dist=300, transform=""):
     return allVals
 
 
+def calculate_LEI_class(val, leap_val, exp_val):
+    """
+    Calculate the LEI class based on the input value
+
+    Parameters
+    ----------
+    val : float
+        LEI value
+    leap_val : float
+        LEI value below which areas are considered to be leapfrog
+    exp_val : float
+        LEI value above which areas are considered to be infill
+
+    Returns
+    -------
+    string
+        LEI class
+
+    """
+    if val <= leap_val:
+        return "Leapfrog"
+    elif val < exp_val:
+        return "Expansion"
+    else:
+        return "Infill"
+
+
 def summarize_LEI(in_file, leap_val=0.05, exp_val=0.9):
     """
     Summarize the LEI results produced by self.calculate_LEI
@@ -243,32 +270,6 @@ def summarize_LEI(in_file, leap_val=0.05, exp_val=0.9):
         res = in_file
         if "area" not in res.columns:
             res["area"] = res["geometry"].apply(lambda x: x.area)
-
-    def calculate_LEI_class(val, leap_val, exp_val):
-        """
-        Calculate the LEI class based on the input value
-
-        Parameters
-        ----------
-        val : float
-            LEI value
-        leap_val : float
-            LEI value below which areas are considered to be leapfrog
-        exp_val : float
-            LEI value above which areas are considered to be infill
-
-        Returns
-        -------
-        string
-            LEI class
-
-        """
-        if val <= leap_val:
-            return "Leapfrog"
-        elif val < exp_val:
-            return "Expansion"
-        else:
-            return "Infill"
 
     res["class"] = res["LEI"].apply(lambda x: calculate_LEI_class(x, leap_val, exp_val))
     xx = res.groupby("class")

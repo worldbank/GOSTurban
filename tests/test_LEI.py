@@ -4,6 +4,28 @@ from GOSTurban import LEI
 import pandas as pd
 from shapely.geometry import Polygon
 from unittest.mock import MagicMock
+import numpy as np
+
+
+class TestCalculateLEI:
+    """Tests for the calculate_LEI() function."""
+
+    # make some fake data to test with
+    raster = np.zeros((10, 10))
+    raster[:5, :5] = 4
+    raster[5:, 5:] = 3
+
+    def test_calculate_lei(self):
+        # run the function
+        result = LEI.calculate_LEI(
+            self.raster,
+            old_list=[4],
+            new_list=[3],
+            buffer_dist=1,
+            transform=(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0),
+        )
+        # assert things about the result
+        assert isinstance(result, list)
 
 
 class TestSummarizeLEI:
@@ -55,3 +77,19 @@ class TestSummarizeLEI:
         # assert things about the result
         assert isinstance(result, pd.Series)
         assert result.name == "area"
+
+
+class TestCalculateLEIClass:
+    """Tests for the calculate_LEI_class() function."""
+
+    def test_calculate_lei_class_01(self):
+        val = LEI.calculate_LEI_class(0.1, 1.0, 2.0)
+        assert val == "Leapfrog"
+
+    def test_calculate_lei_class_02(self):
+        val = LEI.calculate_LEI_class(1.5, 1.0, 2.0)
+        assert val == "Expansion"
+
+    def test_calculate_lei_class_03(self):
+        val = LEI.calculate_LEI_class(2.5, 1.0, 2.0)
+        assert val == "Infill"
