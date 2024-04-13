@@ -7,6 +7,7 @@ import rasterio
 import os
 import GOSTrocks.rasterMisc as rMisc
 from unittest.mock import MagicMock
+from unittest.mock import patch
 
 
 class TestUrbanHelper:
@@ -76,6 +77,27 @@ class TestUrbanHelper:
         rasterio.open.assert_called()
         rMisc.zonalStats.assert_called()
 
+    def test_summarize_ghsl02(self, tmp_path):
+        """Test the summarize_ghsl method."""
+        # make a tmp location for output
+        out_folder = tmp_path / "output"
+        # make the class
+        ch = country_helper.urban_country(
+            iso3="USA", sel_country="placeholder", cur_folder=out_folder, inP=[1, 2, 3]
+        )
+        # mock rasterio.open
+        rasterio.open = MagicMock()
+        # mock zonalStats
+        rMisc.zonalStats = MagicMock()
+        # mock the clipraster function
+        rMisc.clipRaster = MagicMock()
+        # try calling the method
+        ch.summarize_ghsl(ghsl_files=["a_a_a_e", "b_b_b_f"], clip_raster=True)
+        # assert that the mocked functions were called
+        rasterio.open.assert_called()
+        rMisc.zonalStats.assert_called()
+        rMisc.clipRaster.assert_called()
+
     def test_delete_urban_data(self, tmp_path):
         """Test the delete_urban_data method."""
         # make a tmp location for output
@@ -105,3 +127,25 @@ class TestUrbanHelper:
         assert not os.path.exists(ch.urban_extents_raster_file)
         assert not os.path.exists(ch.urban_extents_hd_file)
         assert not os.path.exists(ch.urban_extents_hd_raster_file)
+
+    def test_delete_urban_data_exception(self, tmp_path):
+        """Test the delete_urban_data method's exception."""
+        # make a tmp location for output
+        out_folder = tmp_path / "output"
+        # make the class
+        ch = country_helper.urban_country(
+            iso3="USA", sel_country="placeholder", cur_folder=out_folder, inP=[1, 2, 3]
+        )
+        # don't make any files and call the method
+        ch.delete_urban_data()
+        # it should have used the exception and invoked "pass" for the loop
+
+    def test_urban_country_inP_str(self):
+        """Testing with string input for inP."""
+        with patch("rasterio.open") as mock_open:
+            mock_open = MagicMock()  # noqa
+            ch = country_helper.urban_country(
+                iso3="USA", sel_country="United States", cur_folder="data", inP="str"
+            )
+            # assert that the mocked open was used
+            assert isinstance(ch.inP, MagicMock)
