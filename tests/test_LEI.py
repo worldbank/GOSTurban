@@ -1,7 +1,9 @@
 """Unit tests for the LEI.py module"""
 import pytest  # noqa: F401
+from unittest import mock
 from GOSTurban import LEI
 import pandas as pd
+import geopandas as gpd
 from shapely.geometry import Polygon
 from unittest.mock import MagicMock
 import numpy as np
@@ -19,6 +21,35 @@ class TestCalculateLEI:
         # run the function
         result = LEI.calculate_LEI(
             self.raster,
+            old_list=[4],
+            new_list=[3],
+            buffer_dist=1,
+            transform=(1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0),
+        )
+        # assert things about the result
+        assert isinstance(result, list)
+
+    def mocked_rasterio_open(self):
+        """Mocked function for rasterio.open()"""
+
+        class tmpOutput:
+            def __init__(self):
+                self.transform = (1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0)
+
+            def read(self):
+                raster = np.zeros((10, 10))
+                raster[:5, :5] = 4
+                raster[5:, 5:] = 3
+                return raster
+
+        return_val = tmpOutput()
+        return return_val
+
+    @mock.patch("rasterio.open", mocked_rasterio_open)
+    def test_calculate_lei_rasterio(self):
+        # run the function
+        result = LEI.calculate_LEI(
+            "str input",
             old_list=[4],
             new_list=[3],
             buffer_dist=1,
@@ -46,6 +77,28 @@ class TestSummarizeLEI:
     def test_summarize_lei(self):
         # run the function
         result = LEI.summarize_LEI(self.df)
+        # assert things about the result
+        assert isinstance(result, pd.Series)
+        assert result.name == "area"
+
+    def mocked_pd_read_csv(self):
+        """Mock the pandas read_csv function."""
+        df = pd.DataFrame(
+            {
+                "geometry": [
+                    "Polygon((0 0, 1 0, 1 1, 0 0))",
+                    "Polygon((0 0, 1 0, 1 1, 0 0))",
+                    "Polygon((0 0, 1 0, 1 1, 0 0))",
+                ],
+                "LEI": [0.5, 0.6, 0.7],
+            }
+        )
+        return df
+
+    @mock.patch("pandas.read_csv", mocked_pd_read_csv)
+    def test_summarize_lei_str(self):
+        # testing the function with a string input
+        result = LEI.summarize_LEI("str")
         # assert things about the result
         assert isinstance(result, pd.Series)
         assert result.name == "area"
@@ -93,3 +146,52 @@ class TestCalculateLEIClass:
     def test_calculate_lei_class_03(self):
         val = LEI.calculate_LEI_class(2.5, 1.0, 2.0)
         assert val == "Infill"
+
+
+class TestLEIFromFeature:
+    """Tests for the lei_from_feature() function."""
+
+    # make some fake data to use for tests
+    df = pd.DataFrame(
+        {
+            "idx": ["a", "b", "c"],
+            "geometry": [
+                Polygon([(0, 0), (1, 0), (1, 1)]),
+                Polygon([(0, 0), (1, 0), (1, 1)]),
+                Polygon([(0, 0), (1, 0), (1, 1)]),
+            ],
+        }
+    )
+    gdf = gpd.GeoDataFrame(df, geometry=df.geometry, crs="EPSG:3857")
+
+    mocked_raster = MagicMock()
+    mocked_raster.crs = "EPSG:4326"
+
+    def mock_index(self, band):
+        return np.array([1, 2, 3])
+
+    mocked_raster.index = mock_index
+
+    def mock_read(self, window=None):
+        raster = np.zeros((10, 10))
+        raster[:5, :5] = 4
+        raster[5:, 5:] = 3
+        return raster
+
+    mocked_raster.read = mock_read
+
+    def test_function(self):
+        """Call function w/ default parameters."""
+        result = LEI.lei_from_feature(self.gdf, self.mocked_raster)
+        # assertions about output
+        assert isinstance(result, pd.DataFrame)
+        assert result.index.tolist() == result.idx.tolist()
+
+    def test_function_measure_crs(self):
+        """Call function defining measure_crs."""
+        result = LEI.lei_from_feature(
+            self.gdf, self.mocked_raster, measure_crs="ESRI:54009"
+        )
+        # assertions about output
+        assert isinstance(result, pd.DataFrame)
+        assert result.index.tolist() == result.idx.tolist()
