@@ -27,8 +27,8 @@ class summarize_population(object):
         ----------
         pop_layer : string
             Path to population layer
-        admin_layer : string
-            Path to admin layer
+        admin_layer : gpd.GeoDataFrame
+            geopandas dataframe of admin layer
         urban_layer : string, optional
             Path to urban layer. The default is ''.
         hd_urban_layer : string, optional
@@ -177,12 +177,12 @@ class urban_country(object):
 
         NAMING CONVENTION
         To save this renaming step on my side, which can also induce mistakes, would be possible for you Ben to rename the files in your code directly? This would be also helpful for all other countries we have to do, and for the 1km*1km rasters.
-        My conventions are pretty simple. All rasters starts with the three lettres of the country and then _ as you do, and then 3 lettres for the variable, and possibly two figures for the year. So for instance for Tanzania, this is:
+        My conventions are pretty simple. All rasters starts with the three letters of the country and then _ as you do, and then 3 letters for the variable, and possibly two figures for the year. So for instance for Tanzania, this is:
         tza_ele tza_slo tza_wat for elevation, slope and water
         tza_gpo tza_gbu for GHS population and built-up
         tza_upo15 and tza_upo18 for WorldPop population unconstrained
         tza_cpo15 and tza_cpo18 for WorldPop population constrained.
-        Then for 1km*1km raster, names are the same except that the three lettres of the country's name are followed by 1k, ie tza1k_slo, tza1k_ele and so on.
+        Then for 1km*1km raster, names are the same except that the three letters of the country's name are followed by 1k, ie tza1k_slo, tza1k_ele and so on.
 
         """
         self.iso3 = iso3
@@ -480,6 +480,7 @@ class urban_country(object):
             else:
                 print("Error summarizing population for %s" % pop_file)
         admin_layer = admin_layer.reset_index()
+        # final can be called here without having been defined
         final = final.filter(regex="_SUM")
         final = final.join(admin_layer)
         final = final.drop(["geometry"], axis=1)
