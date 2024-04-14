@@ -115,6 +115,14 @@ class urbanGriddedPop(object):
                 )
             )
 
+    def _burnValue(self, mask, val, final_raster, allFeatures, idx, pop, cShape):
+        """Private function to burn value into final mask."""
+        mask = (mask ^ 1) * val
+        yy = np.dstack([final_raster, mask])
+        final_raster = np.amax(yy, axis=2)
+        allFeatures.append([idx, pop, val, shape(geojson.loads(json.dumps(cShape)))])
+        return final_raster, allFeatures
+
     def calculateDegurba(
         self,
         urbDens=300,
@@ -218,11 +226,8 @@ class urbanGriddedPop(object):
                     val = 30
 
                 # Burn value into the final raster
-                mask = (mask ^ 1) * val
-                yy = np.dstack([final_raster, mask])
-                final_raster = np.amax(yy, axis=2)
-                allFeatures.append(
-                    [idx, pop, val, shape(geojson.loads(json.dumps(cShape)))]
+                final_raster, allFeatures = self._burnValue(
+                    mask, val, final_raster, allFeatures, idx, pop, cShape
                 )
 
         HD_raster = final_raster
@@ -257,12 +262,10 @@ class urbanGriddedPop(object):
                 if pop > urbThresh:
                     val = 21
                 # Burn value into the final raster
-                mask = (mask ^ 1) * val
-                yy = np.dstack([final_raster, mask])
-                final_raster = np.amax(yy, axis=2)
-                allFeatures.append(
-                    [idx, pop, val, shape(geojson.loads(json.dumps(cShape)))]
+                final_raster, allFeatures = self._burnValue(
+                    mask, val, final_raster, allFeatures, idx, pop, cShape
                 )
+
         URB_raster = final_raster
 
         # Combine the urban layers

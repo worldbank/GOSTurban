@@ -8,6 +8,8 @@ import os
 import GOSTrocks.rasterMisc as rMisc
 from unittest.mock import MagicMock
 from unittest.mock import patch
+from unittest import mock
+import numpy as np
 
 
 class TestUrbanHelper:
@@ -78,7 +80,7 @@ class TestUrbanHelper:
         rMisc.zonalStats.assert_called()
 
     def test_summarize_ghsl02(self, tmp_path):
-        """Test the summarize_ghsl method."""
+        """Test the summarize_ghsl method with clip_raster=True."""
         # make a tmp location for output
         out_folder = tmp_path / "output"
         # make the class
@@ -97,6 +99,39 @@ class TestUrbanHelper:
         rasterio.open.assert_called()
         rMisc.zonalStats.assert_called()
         rMisc.clipRaster.assert_called()
+
+    def mocked_rasterio_open(self, t="w"):
+        """Mocked function for rasterio.open()"""
+
+        class tmpOutput:
+            def __init__(self):
+                self.crs = "EPSG:4326"
+                self.meta = MagicMock()
+
+            def read(self):
+                raster = np.zeros((10, 10))
+                raster[:5, :5] = 1500
+                raster[5:, 5:] = 3
+                return raster
+
+        return_val = tmpOutput()
+        return return_val
+
+    @mock.patch("rasterio.open", mocked_rasterio_open)
+    def test_summarize_ghsl03(self, tmp_path):
+        """Test the summarize_ghsl method with binary_calc=True.
+        Have not clipped local ghsl data so will throw error."""
+        # make a tmp location for output
+        out_folder = tmp_path / "output"
+        # make the class
+        ch = country_helper.urban_country(
+            iso3="USA", sel_country="placeholder", cur_folder=out_folder, inP=[1, 2, 3]
+        )
+        # mock zonalStats
+        rMisc.zonalStats = MagicMock()
+        # try calling the method expecting the value error
+        with pytest.raises(ValueError):
+            ch.summarize_ghsl(ghsl_files=["a_a_a_e", "b_b_b_f"], binary_calc=True)
 
     def test_delete_urban_data(self, tmp_path):
         """Test the delete_urban_data method."""
