@@ -4,6 +4,7 @@ import geopandas as gpd
 from GOSTurban import UrbanRaster
 from unittest.mock import MagicMock
 from unittest import mock
+from unittest.mock import patch
 import numpy as np
 
 
@@ -66,13 +67,26 @@ class TestUrbanGriddedPop:
         with pytest.raises(ValueError):
             UrbanRaster.urbanGriddedPop(5)
 
-    # @mock.patch("rasterio.open", mocked_rasterio_open)
-    # def test_burn_value(self):
-    #     """Testing the private burn value function."""
-    #     # make the object
-    #     ugp = UrbanRaster.urbanGriddedPop('str')
-    #     with patch("shapely.geometry") as mock_shape:
-    #         mock_shape = MagicMock()
-    #         final_raster, allFeatures = ugp._burnValue(
-    #             np.ones((5, 5), dtype=bool), 1, np.zeros((5, 5)), [], 'a', 'pop', mock_shape
-    #         )
+    @mock.patch("rasterio.open", mocked_rasterio_open)
+    def test_burn_value(self):
+        """Testing the private burn value function."""
+        # make the object
+        ugp = UrbanRaster.urbanGriddedPop("str")
+        with patch("shapely.geometry") as mock_shape:
+            mock_shape = {"type": "Point", "coordinates": [0, 1]}
+            final_raster, allFeatures = ugp._burnValue(
+                np.ones((5, 5), dtype=bool),
+                1,
+                np.zeros((5, 5)),
+                [],
+                "a",
+                "pop",
+                mock_shape,
+            )
+        # assertions
+        assert final_raster.shape == (5, 5)
+        assert final_raster[0, 0] == 0.0
+        assert isinstance(allFeatures, list)
+        assert len(allFeatures) == 1
+        assert len(allFeatures[0]) == 4
+        assert allFeatures[0][0] == "a"

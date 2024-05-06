@@ -61,6 +61,40 @@ class TestUrbanHelper:
         # assert that the mocked function was called
         ntl.aws_search_ntl.assert_called_once()
 
+    def test_summarize_ntl_list_err(self, tmp_path, capfd):
+        """Test the summarize_ntl method with an ntl list, erroring."""
+        # make a tmp location for output
+        out_folder = tmp_path / "output"
+        # make the class
+        ch = country_helper.urban_country(
+            iso3="USA", sel_country="placeholder", cur_folder=out_folder, inP=[1, 2, 3]
+        )
+        # mock some of the methods called
+        ntl.aws_search_ntl = MagicMock()
+        # try calling the method
+        ch.summarize_ntl(ntl_files=["invalid01", "invalid02"])
+        # captured output
+        captured = capfd.readouterr()
+        assert captured.out.split("\t")[1][0] == "*"
+        assert captured.out.split("\t")[2][0] == "*"
+
+    def test_summarize_ntl_list(self, tmp_path, capfd):
+        """Test the summarize_ntl method with an ntl list, erroring."""
+        # make a tmp location for output
+        out_folder = tmp_path / "output"
+        # make the class
+        ch = country_helper.urban_country(
+            iso3="USA", sel_country="placeholder", cur_folder=out_folder, inP=[1, 2, 3]
+        )
+        # mock some of the methods called
+        ntl.aws_search_ntl = MagicMock()
+        rasterio.open = MagicMock()
+        # try calling the method
+        ch.summarize_ntl(ntl_files=["a_b_c"])
+        # captured output
+        captured = capfd.readouterr()
+        assert len(captured.out.split("\t")) > 1
+
     def test_summarize_ghsl(self, tmp_path):
         """Test the summarize_ghsl method."""
         # make a tmp location for output

@@ -174,8 +174,10 @@ class urban_country:
             if len(ntl_files) == 0:
                 ntl_files = ntl.aws_search_ntl()
             for ntl_file in ntl_files:
-                name = ntl_file.split("/")[-1].split("_")[2][:8]
+                name = ntl_file  # init a name
                 try:
+                    _, _fname = os.path.split(ntl_file)
+                    name = _fname.split("_")[2][:8]
                     inR = rasterio.open(ntl_file)
                     # tPrint("Processing %s" % name)
                     urban_res_file = os.path.join(viirs_folder, f"URBAN_{name}.csv")
