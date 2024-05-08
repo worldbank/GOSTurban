@@ -89,6 +89,38 @@ def geocode_cities(urban_extents):
     return urban_extents
 
 
+def _burnValue(mask, val, final_raster, allFeatures, idx, pop, cShape):
+    """Private function to burn value into final mask."""
+    mask = (mask ^ 1) * val
+    yy = np.dstack([final_raster, mask])
+    final_raster = np.amax(yy, axis=2)
+    allFeatures.append([idx, pop, val, shape(geojson.loads(json.dumps(cShape)))])
+    return final_raster, allFeatures
+
+
+def _create_urban_raster(data, comp_arr, comp_val):
+    """Private function to create urban_raster array."""
+    urban_raster = data * 0
+    urban_raster[np.where(data > comp_arr)] = comp_val
+    return urban_raster.astype("int16")
+
+
+def _smooth_urban_clusters(urban_raster):
+    """Private function to perform smoothing on an urban raster array."""
+
+    def modal(P):
+        mode = stats.mode(P)
+        if isinstance(mode.mode, float):
+            return mode.mode
+        else:
+            return mode.mode[0]
+
+    smooth_urban = generic_filter(urban_raster[0, :, :], modal, (3, 3))
+    yy = np.dstack([smooth_urban, urban_raster[0, :, :]])
+    urban_raster[0, :, :] = np.amax(yy, axis=2)
+    return urban_raster
+
+
 class urbanGriddedPop(object):
     def __init__(self, inRaster):
         """
@@ -114,14 +146,6 @@ class urbanGriddedPop(object):
                     "Input raster dataset must be a file path or a rasterio object"
                 )
             )
-
-    def _burnValue(self, mask, val, final_raster, allFeatures, idx, pop, cShape):
-        """Private function to burn value into final mask."""
-        mask = (mask ^ 1) * val
-        yy = np.dstack([final_raster, mask])
-        final_raster = np.amax(yy, axis=2)
-        allFeatures.append([idx, pop, val, shape(geojson.loads(json.dumps(cShape)))])
-        return final_raster, allFeatures
 
     def calculateDegurba(
         self,
@@ -170,31 +194,25 @@ class urbanGriddedPop(object):
             dictionary containing the final raster, the high density raster, the urban raster, and the shapes of the urban areas
 
         """
+        # read population data
         popRaster = self.inR
         data = popRaster.read()
-        urban_raster = data * 0
+
+        # create rasters to manipulate/populate
         final_raster = data[0, :, :] * 0 + 11
-
-        urban_raster[np.where(data > hdDens)] = 30
-        idx = 0
-        urban_raster = urban_raster.astype("int16")
-        allFeatures = []
-
-        if verbose:
-            tPrint(f"{print_message}: Smoothing Urban Clusters")
+        urban_raster = _create_urban_raster(data, hdDens, 30)
 
         # Smooth the HD urban clusters
-        def modal(P):
-            mode = stats.mode(P)
-            return mode.mode[0]
-
-        smooth_urban = generic_filter(urban_raster[0, :, :], modal, (3, 3))
-        yy = np.dstack([smooth_urban, urban_raster[0, :, :]])
-        urban_raster[0, :, :] = np.amax(yy, axis=2)
+        if verbose:
+            tPrint(f"{print_message}: Smoothing Urban Clusters")
+        urban_raster = _smooth_urban_clusters(urban_raster)
 
         # Analyze the high density shapes
         if verbose:
             tPrint(f"{print_message}: extracting HD clusters")
+
+        idx = 0  # init index at 0
+        allFeatures = []  # init empty list to hold features
 
         for cShape, value in features.shapes(
             urban_raster, transform=popRaster.transform
@@ -226,16 +244,14 @@ class urbanGriddedPop(object):
                     val = 30
 
                 # Burn value into the final raster
-                final_raster, allFeatures = self._burnValue(
+                final_raster, allFeatures = _burnValue(
                     mask, val, final_raster, allFeatures, idx, pop, cShape
                 )
 
         HD_raster = final_raster
-
-        urban_raster = data * 0
+        urban_raster = _create_urban_raster(data, urbDens, 22)
         final_raster = data[0, :, :] * 0 + 11
-        urban_raster[np.where(data > urbDens)] = 22
-        urban_raster = urban_raster.astype("int16")
+
         # Analyze the high density shapes
         if verbose:
             tPrint(f"{print_message}: extracting URBAN clusters")
@@ -262,7 +278,7 @@ class urbanGriddedPop(object):
                 if pop > urbThresh:
                     val = 21
                 # Burn value into the final raster
-                final_raster, allFeatures = self._burnValue(
+                final_raster, allFeatures = _burnValue(
                     mask, val, final_raster, allFeatures, idx, pop, cShape
                 )
 
@@ -372,6 +388,7 @@ class urbanGriddedPop(object):
             geopandas dataframe of urban extents
 
         """
+        # read in urban data from the class attribute
         popRaster = self.inR
         data = popRaster.read()
         urbanData = (data > densVal) * 1

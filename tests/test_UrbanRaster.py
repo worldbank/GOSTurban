@@ -71,10 +71,9 @@ class TestUrbanGriddedPop:
     def test_burn_value(self):
         """Testing the private burn value function."""
         # make the object
-        ugp = UrbanRaster.urbanGriddedPop("str")
         with patch("shapely.geometry") as mock_shape:
             mock_shape = {"type": "Point", "coordinates": [0, 1]}
-            final_raster, allFeatures = ugp._burnValue(
+            final_raster, allFeatures = UrbanRaster._burnValue(
                 np.ones((5, 5), dtype=bool),
                 1,
                 np.zeros((5, 5)),
@@ -90,3 +89,25 @@ class TestUrbanGriddedPop:
         assert len(allFeatures) == 1
         assert len(allFeatures[0]) == 4
         assert allFeatures[0][0] == "a"
+
+
+def test_create_urban_raster():
+    """Testing the _create_urban_raster function."""
+    data = np.ones((5, 5))
+    comp_arr = np.zeros((5, 5))
+    urban_raster = UrbanRaster._create_urban_raster(data, comp_arr, 10)
+    assert urban_raster.shape == (5, 5)
+    assert urban_raster[0, 0] == 10
+    assert urban_raster.dtype == "int16"
+
+
+def test_smooth_urban_clusters():
+    """Testing the _smooth_urban_clusters function."""
+    arr = np.zeros((1, 10, 10))
+    arr[0, 3:7, 3] = 10.0
+    arr[0, 3:7, 4] = 20.0
+    arr[0, 3:7, 5] = 30.0
+    arr[0, 3:7, 6] = -10.0
+    old_arr = arr.copy()
+    arr = UrbanRaster._smooth_urban_clusters(arr)
+    assert old_arr.sum() != arr.sum()
