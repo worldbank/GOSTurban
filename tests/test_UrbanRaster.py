@@ -21,10 +21,21 @@ class TestGeocodeCities:
     """Tests for the geocode_cities() function."""
 
     # read some of the tutorial data to test
-    gdf = gpd.read_file("data/tutorial_data/AOI.geojson")
+    geopath = "data/tutorial_data/AOI.geojson"
 
     def test_geocode_cities(self):
-        gdf = self.gdf
+        gdf = gpd.read_file(self.geopath)
+        # run the function - adding city/state/country info
+        result = UrbanRaster.geocode_cities(gdf)
+        # assert things about the result
+        # e.g., should have city/state/country columns
+        assert "City" in result.columns
+        assert "State" in result.columns
+        assert "Country" in result.columns
+
+    def test_geocode_cities_reversed(self):
+        gdf = gpd.read_file(self.geopath)
+        gdf["geometry"][0] = gdf["geometry"][0].reverse()
         # run the function - adding city/state/country info
         result = UrbanRaster.geocode_cities(gdf)
         # assert things about the result

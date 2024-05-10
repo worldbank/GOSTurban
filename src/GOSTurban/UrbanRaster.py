@@ -221,8 +221,7 @@ class urbanGriddedPop(object):
                 tPrint("%s: Creating Shape %s" % (print_message, idx))
             idx = idx + 1
             if value > 0:
-                # RRemove holes from urban shape
-                # origShape = cShape
+                # Remove holes from urban shape
                 xx = shape(cShape)
                 xx = Polygon(xx.exterior)
                 cShape = xx.__geo_interface__
@@ -252,7 +251,7 @@ class urbanGriddedPop(object):
         urban_raster = _create_urban_raster(data, urbDens, 22)
         final_raster = data[0, :, :] * 0 + 11
 
-        # Analyze the high density shapes
+        # Analyze the urban density shapes
         if verbose:
             tPrint(f"{print_message}: extracting URBAN clusters")
 

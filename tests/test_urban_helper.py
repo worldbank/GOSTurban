@@ -1,6 +1,7 @@
 """Unit tests for the urban_helper.py module"""
 import pytest  # noqa: F401
 from GOSTurban import urban_helper
+import os
 import numpy as np
 from unittest import mock
 import geopandas as gpd
@@ -96,3 +97,21 @@ class TestUrbanCountry:
         # process the dem
         uc.process_dem()
         # doesn't return anything or change any attributes so nothing to assert
+
+    def test_init_02(self, tmp_path):
+        outf = os.path.join(tmp_path, "fin_folder")
+        os.makedirs(outf)
+        os.makedirs(os.path.join(outf, "FINAL_STANDARD"))
+        admin_pth = os.path.join(outf, "FINAL_STANDARD", "usa_adm.shp")
+        with open(admin_pth, "w") as f:
+            f.write("fake shapefile")
+
+        uc = urban_helper.urban_country(
+            iso3="USA",
+            output_folder=outf,
+            country_bounds=[],
+            pop_files=[],
+        )
+        # minor assertions about class attributes
+        assert uc.admin_shp == admin_pth
+        assert isinstance(uc.pop_files, list)
