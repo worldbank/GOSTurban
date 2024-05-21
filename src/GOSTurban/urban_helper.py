@@ -21,7 +21,7 @@ class summarize_population(object):
         self, pop_layer, admin_layer, urban_layer="", hd_urban_layer="", temp_folder=""
     ):
         """
-        Summarize population into urban and rural based on GOST_Urban.UrbanRaster.calculateUrban
+        Summarize population into urban and rural based on GOSTurban.UrbanRaster.calculateUrban
 
         Parameters
         ----------

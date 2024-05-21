@@ -2,6 +2,7 @@
 import pytest  # noqa: F401
 from GOSTurban import urban_helper
 import os
+import shutil
 import numpy as np
 from unittest import mock
 import geopandas as gpd
@@ -35,7 +36,6 @@ class TestSummarizePopulation:
         return np.ones((1, 4))
 
     @mock.patch("rasterio.open", mocked_rasterio_open)
-    @mock.patch("GOSTrocks.rasterMisc.zonalStats", mocked_zonal_stats)
     def test_01(self, tmp_path):
         # make the admin layer gpd
         df = pd.DataFrame(
@@ -63,8 +63,61 @@ class TestSummarizePopulation:
         assert cv is False
         assert isinstance(sp.check_vals, dict)
 
-        # run the calculate method
-        # zs = sp.calculate_zonal()
+    @mock.patch("rasterio.open", mocked_rasterio_open)
+    def test_02(self, tmp_path):
+        # make the admin layer gpd
+        df = pd.DataFrame(
+            {
+                "idx": ["a", "b", "c"],
+                "geometry": [
+                    Polygon([(0, 0), (1, 0), (1, 1)]),
+                    Polygon([(0, 0), (1, 0), (1, 1)]),
+                    Polygon([(0, 0), (1, 0), (1, 1)]),
+                ],
+            }
+        )
+        admin_layer = gpd.GeoDataFrame(df, geometry=df.geometry, crs="EPSG:3857")
+        # try to initialize the class
+        sp = urban_helper.summarize_population("fake_dir/pop_path.tif", admin_layer)
+        assert sp.temp_folder == "fake_dir"
+
+    def test_03(self, tmp_path):
+        # make the admin layer gpd
+        df = pd.DataFrame(
+            {
+                "idx": ["a", "b", "c"],
+                "geometry": [
+                    Polygon([(0, 0), (1, 0), (1, 1)]),
+                    Polygon([(0, 0), (1, 0), (1, 1)]),
+                    Polygon([(0, 0), (1, 0), (1, 1)]),
+                ],
+            }
+        )
+        admin_layer = gpd.GeoDataFrame(df, geometry=df.geometry, crs="EPSG:3857")
+        # copy tutorial data over into the tmp folder
+        shutil.copyfile(
+            os.path.join(".", "data", "tutorial_data", "wp_2020_1k_AOI.tif"),
+            os.path.join(tmp_path, "pop_path.tif"),
+        )
+        shutil.copyfile(
+            os.path.join(".", "data", "tutorial_data", "wp_2020_1k_AOI.tif"),
+            os.path.join(tmp_path, "pop_path_urban.tif"),
+        )
+        shutil.copyfile(
+            os.path.join(".", "data", "tutorial_data", "wp_2020_1k_AOI.tif"),
+            os.path.join(tmp_path, "pop_path_urban_hd.tif"),
+        )
+
+        # try to initialize the class
+        sp = urban_helper.summarize_population(
+            os.path.join(tmp_path, "pop_path.tif"), admin_layer, temp_folder=tmp_path
+        )
+
+        # calculate zonal
+        zdf = sp.calculate_zonal()
+        # assertions
+        assert isinstance(zdf, pd.DataFrame)
+        assert zdf.shape[1] == 12
 
 
 class TestUrbanCountry:
