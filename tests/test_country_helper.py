@@ -78,6 +78,7 @@ class TestUrbanHelper:
         assert captured.out.split("\t")[1][0] == "*"
         assert captured.out.split("\t")[2][0] == "*"
 
+    @mock.patch("rasterio.open", MagicMock())
     def test_summarize_ntl_list(self, tmp_path, capfd):
         """Test the summarize_ntl method with an ntl list, erroring."""
         # make a tmp location for output
@@ -88,13 +89,13 @@ class TestUrbanHelper:
         )
         # mock some of the methods called
         ntl.aws_search_ntl = MagicMock()
-        rasterio.open = MagicMock()
         # try calling the method
         ch.summarize_ntl(ntl_files=["a_b_c"])
         # captured output
         captured = capfd.readouterr()
         assert len(captured.out.split("\t")) > 1
 
+    @mock.patch("rasterio.open", MagicMock())
     def test_summarize_ghsl(self, tmp_path):
         """Test the summarize_ghsl method."""
         # make a tmp location for output
@@ -103,8 +104,6 @@ class TestUrbanHelper:
         ch = country_helper.urban_country(
             iso3="USA", sel_country="placeholder", cur_folder=out_folder, inP=[1, 2, 3]
         )
-        # mock rasterio.open
-        rasterio.open = MagicMock()
         # mock zonalStats
         rMisc.zonalStats = MagicMock()
         # try calling the method
@@ -113,6 +112,7 @@ class TestUrbanHelper:
         rasterio.open.assert_called()
         rMisc.zonalStats.assert_called()
 
+    @mock.patch("rasterio.open", MagicMock())
     def test_summarize_ghsl02(self, tmp_path):
         """Test the summarize_ghsl method with clip_raster=True."""
         # make a tmp location for output
@@ -121,8 +121,6 @@ class TestUrbanHelper:
         ch = country_helper.urban_country(
             iso3="USA", sel_country="placeholder", cur_folder=out_folder, inP=[1, 2, 3]
         )
-        # mock rasterio.open
-        rasterio.open = MagicMock()
         # mock zonalStats
         rMisc.zonalStats = MagicMock()
         # mock the clipraster function

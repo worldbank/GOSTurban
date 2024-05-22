@@ -195,3 +195,10 @@ class TestLEIFromFeature:
         # assertions about output
         assert isinstance(result, pd.DataFrame)
         assert result.index.tolist() == result.idx.tolist()
+
+    def test_function_idx_col(self):
+        """Call function defining idx_col."""
+        result = LEI.lei_from_feature(self.gdf, self.mocked_raster, idx_col="idx")
+        # assertions about output
+        assert isinstance(result, pd.DataFrame)
+        assert result.index.tolist() == result.idx.tolist()
