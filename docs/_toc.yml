@@ -15,4 +15,3 @@ parts:
     chapters:
       - file: notebooks/Tutorials/UrbanAreas_tutorials.ipynb
       - file: notebooks/Tutorials/LEI_Example.ipynb
-
