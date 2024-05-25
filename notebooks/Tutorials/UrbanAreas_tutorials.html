@@ -35,7 +35,7 @@
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.5ea377869091fd0449014c60fc090103.min.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
@@ -68,7 +68,7 @@
     <link rel="prev" title="Comparing urban methods" href="../../urbanization_comparison.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-    <meta name="docbuild:last-update" content="Feb 28, 2024"/>
+    <meta name="docbuild:last-update" content="May 25, 2024"/>
   </head>
   
   
@@ -487,7 +487,7 @@ document.write(`
 <h2>Map of population density in study area<a class="headerlink" href="#map-of-population-density-in-study-area" title="Permalink to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mapMisc</span><span class="o">.</span><span class="n">static_map_raster</span><span class="p">(</span><span class="n">inR</span><span class="p">,</span> <span class="n">thresh</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">50</span><span class="p">,</span><span class="mi">100</span><span class="p">,</span><span class="mi">300</span><span class="p">,</span><span class="mi">1000</span><span class="p">,</span><span class="mi">3000</span><span class="p">])</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mapMisc</span><span class="o">.</span><span class="n">static_map_raster</span><span class="p">(</span><span class="n">inR</span><span class="p">,</span> <span class="n">thresh</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">300</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="mi">3000</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
@@ -508,7 +508,7 @@ document.write(`
 <span class="n">urban_extents</span> <span class="o">=</span> <span class="n">urban_calculator</span><span class="o">.</span><span class="n">calculateUrban</span><span class="p">(</span>
     <span class="n">densVal</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">totalPopThresh</span><span class="o">=</span><span class="mi">5000</span><span class="p">,</span> <span class="n">smooth</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">queen</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span>
 <span class="p">)</span>
-<span class="n">urban_extents</span><span class="p">[</span><span class="s1">&#39;Type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">urban_extents</span><span class="p">[</span><span class="s2">&quot;Type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
 <span class="n">urban_extents</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -620,7 +620,7 @@ document.write(`
     <span class="n">queen</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>  <span class="c1"># high density extents use queen&#39;s case contiguity, and</span>
     <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
 <span class="p">)</span>  <span class="c1"># High density extents have hole smoothing applied.</span>
-<span class="n">hd_urban_extents</span><span class="p">[</span><span class="s1">&#39;Type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">hd_urban_extents</span><span class="p">[</span><span class="s2">&quot;Type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span>
 <span class="n">hd_urban_extents</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -731,7 +731,7 @@ C:\wbg\Anaconda3\envs\urban_test\Lib\site-packages\GOSTurban\UrbanRaster.py:404:
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">combo_extents</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">urban_extents</span><span class="p">,</span> <span class="n">hd_urban_extents</span><span class="p">])</span>
-<span class="n">mapMisc</span><span class="o">.</span><span class="n">static_map_vector</span><span class="p">(</span><span class="n">combo_extents</span><span class="p">,</span> <span class="s2">&quot;Type&quot;</span><span class="p">,</span> <span class="n">colormap</span><span class="o">=</span><span class="s1">&#39;magma&#39;</span><span class="p">)</span>
+<span class="n">mapMisc</span><span class="o">.</span><span class="n">static_map_vector</span><span class="p">(</span><span class="n">combo_extents</span><span class="p">,</span> <span class="s2">&quot;Type&quot;</span><span class="p">,</span> <span class="n">colormap</span><span class="o">=</span><span class="s2">&quot;magma&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -857,7 +857,7 @@ By Benjamin P. Stewart
   
   <div class="footer-item">
     <p class="last-updated">
-  Last updated on Feb 28, 2024.
+  Last updated on May 25, 2024.
   <br/>
 </p>
   </div>
