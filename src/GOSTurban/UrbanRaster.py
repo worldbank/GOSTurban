@@ -23,17 +23,40 @@ from rasterio.features import rasterize
 from shapely.geometry import shape, Polygon
 from geopy.geocoders import Nominatim
 
-"""prints the time along with the message"""
-
 
 def tPrint(s):
+    """
+    Print the time along with the message.
+
+    Parameters
+    ----------
+    s : string
+        message to print
+
+    Returns
+    -------
+    None.
+
+    """
     print("%s\t%s" % (time.strftime("%H:%M:%S"), s))
 
 
 def geocode_cities(urban_extents):
     """Generate names for polygon urban extents
 
-    :param urban_extents: geopandas dataframe of polygons to be named. Need to be in epsg:4326
+    This function adds columns for city, state, and country to a geopandas dataframe.
+    Note that this modifies the input dataframe in place!
+
+    Parameters
+    ----------
+    urban_extents : gpd.GeoDataFrame
+        geopandas dataframe of polygons to be named. Need to be in epsg:4326
+
+    Returns
+    -------
+    gpd.GeoDataFrame
+        input geopandas dataframe with added columns for city, state, and country
+
     """
     geolocator = Nominatim(user_agent="new_app")
     all_res = []
@@ -53,17 +76,49 @@ def geocode_cities(urban_extents):
         res = all_res[idx]
         try:
             urban_extents.loc[idx, "City"] = res.raw["address"]["city"]
-        except:
+        except Exception:
             break
         try:
             urban_extents.loc[idx, "State"] = res.raw["address"]["state"]
-        except:
+        except Exception:
             pass
         try:
             urban_extents.loc[idx, "Country"] = res.raw["address"]["country"]
-        except:
+        except Exception:
             pass
     return urban_extents
+
+
+def _burnValue(mask, val, final_raster, allFeatures, idx, pop, cShape):
+    """Private function to burn value into final mask."""
+    mask = (mask ^ 1) * val
+    yy = np.dstack([final_raster, mask])
+    final_raster = np.amax(yy, axis=2)
+    allFeatures.append([idx, pop, val, shape(geojson.loads(json.dumps(cShape)))])
+    return final_raster, allFeatures
+
+
+def _create_urban_raster(data, comp_arr, comp_val):
+    """Private function to create urban_raster array."""
+    urban_raster = data * 0
+    urban_raster[np.where(data > comp_arr)] = comp_val
+    return urban_raster.astype("int16")
+
+
+def _smooth_urban_clusters(urban_raster):
+    """Private function to perform smoothing on an urban raster array."""
+
+    def modal(P):
+        mode = stats.mode(P)
+        if isinstance(mode.mode, float):
+            return mode.mode
+        else:
+            return mode.mode[0]
+
+    smooth_urban = generic_filter(urban_raster[0, :, :], modal, (3, 3))
+    yy = np.dstack([smooth_urban, urban_raster[0, :, :]])
+    urban_raster[0, :, :] = np.amax(yy, axis=2)
+    return urban_raster
 
 
 class urbanGriddedPop(object):
@@ -71,9 +126,17 @@ class urbanGriddedPop(object):
         """
         Create urban definitions using gridded population data.
 
-        :param inRaster: string or rasterio object representing gridded population data
+        Parameters
+        ----------
+        inRaster : string or rasterio object
+            string or object representing gridded population data
+
+        Returns
+        -------
+        None.
+
         """
-        if type(inRaster) == str:
+        if isinstance(inRaster, str):
             self.inR = rasterio.open(inRaster)
         elif isinstance(inRaster, rasterio.DatasetReader):
             self.inR = inRaster
@@ -106,37 +169,50 @@ class urbanGriddedPop(object):
             (12) Rural, dispersed, low density - dens: >50,
             (11) Rural, dispersed, low density - the rest that are populated
 
-        :param urbDens: integer of the minimum density value to be counted as urban
-        :param hdDens: integer of the minimum density value to be counted as high density
-        :param urbThresh: integer minimum total settlement population to be considered urban
-        :param hdThresh: integer minimum total settlement population to be considered high density
-        """
+        Parameters
+        ----------
+        urbDens : integer
+            minimum density value to be counted as urban
+        hdDens : integer
+            minimum density value to be counted as high density
+        urbThresh : integer
+            minimum total settlement population to be considered urban
+        hdThresh : integer
+            minimum total settlement population to be considered high density
+        minPopThresh : integer
+            minimum population to be considered a settlement
+        out_raster : string, optional
+            path to save the output raster. The default is "".
+        print_message : string, optional
+            message to print with each step. The default is "".
+        verbose : boolean, optional
+            print messages. The default is False.
 
+        Returns
+        -------
+        dictionary
+            dictionary containing the final raster, the high density raster, the urban raster, and the shapes of the urban areas
+
+        """
+        # read population data
         popRaster = self.inR
         data = popRaster.read()
-        urban_raster = data * 0
+
+        # create rasters to manipulate/populate
         final_raster = data[0, :, :] * 0 + 11
-
-        urban_raster[np.where(data > hdDens)] = 30
-        idx = 0
-        urban_raster = urban_raster.astype("int16")
-        allFeatures = []
-
-        if verbose:
-            tPrint(f"{print_message}: Smoothing Urban Clusters")
+        urban_raster = _create_urban_raster(data, hdDens, 30)
 
         # Smooth the HD urban clusters
-        def modal(P):
-            mode = stats.mode(P)
-            return mode.mode[0]
-
-        smooth_urban = generic_filter(urban_raster[0, :, :], modal, (3, 3))
-        yy = np.dstack([smooth_urban, urban_raster[0, :, :]])
-        urban_raster[0, :, :] = np.amax(yy, axis=2)
+        if verbose:
+            tPrint(f"{print_message}: Smoothing Urban Clusters")
+        urban_raster = _smooth_urban_clusters(urban_raster)
 
         # Analyze the high density shapes
         if verbose:
             tPrint(f"{print_message}: extracting HD clusters")
+
+        idx = 0  # init index at 0
+        allFeatures = []  # init empty list to hold features
 
         for cShape, value in features.shapes(
             urban_raster, transform=popRaster.transform
@@ -145,12 +221,11 @@ class urbanGriddedPop(object):
                 tPrint("%s: Creating Shape %s" % (print_message, idx))
             idx = idx + 1
             if value > 0:
-                # RRemove holes from urban shape
-                origShape = cShape
+                # Remove holes from urban shape
                 xx = shape(cShape)
                 xx = Polygon(xx.exterior)
                 cShape = xx.__geo_interface__
-                # If the shape is urban, claculate total pop
+                # If the shape is urban, calculate total pop
                 mask = rasterize(
                     [(cShape, 0)],
                     out_shape=data[0, :, :].shape,
@@ -168,20 +243,15 @@ class urbanGriddedPop(object):
                     val = 30
 
                 # Burn value into the final raster
-                mask = (mask ^ 1) * val
-                yy = np.dstack([final_raster, mask])
-                final_raster = np.amax(yy, axis=2)
-                allFeatures.append(
-                    [idx, pop, val, shape(geojson.loads(json.dumps(cShape)))]
+                final_raster, allFeatures = _burnValue(
+                    mask, val, final_raster, allFeatures, idx, pop, cShape
                 )
 
         HD_raster = final_raster
-
-        urban_raster = data * 0
+        urban_raster = _create_urban_raster(data, urbDens, 22)
         final_raster = data[0, :, :] * 0 + 11
-        urban_raster[np.where(data > urbDens)] = 22
-        urban_raster = urban_raster.astype("int16")
-        # Analyze the high density shapes
+
+        # Analyze the urban density shapes
         if verbose:
             tPrint(f"{print_message}: extracting URBAN clusters")
 
@@ -192,7 +262,7 @@ class urbanGriddedPop(object):
                 tPrint("%s: Creating Shape %s" % (print_message, idx))
             idx = idx + 1
             if value > 0:
-                # If the shape is urban, claculate total pop
+                # If the shape is urban, calculate total pop
                 mask = rasterize(
                     [(cShape, 0)],
                     out_shape=data[0, :, :].shape,
@@ -207,12 +277,10 @@ class urbanGriddedPop(object):
                 if pop > urbThresh:
                     val = 21
                 # Burn value into the final raster
-                mask = (mask ^ 1) * val
-                yy = np.dstack([final_raster, mask])
-                final_raster = np.amax(yy, axis=2)
-                allFeatures.append(
-                    [idx, pop, val, shape(geojson.loads(json.dumps(cShape)))]
+                final_raster, allFeatures = _burnValue(
+                    mask, val, final_raster, allFeatures, idx, pop, cShape
                 )
+
         URB_raster = final_raster
 
         # Combine the urban layers
@@ -241,7 +309,7 @@ class urbanGriddedPop(object):
             dists = xx["geometry"].apply(lambda y: y.distance(x))
             try:
                 return min(dists[dists > 0])
-            except:
+            except Exception:
                 return 0
 
         to_be["dist"] = to_be["geometry"].apply(
@@ -291,19 +359,35 @@ class urbanGriddedPop(object):
         Generate urban extents from gridded population data through the application of a minimum
             density threshold and a minimum total population threshold
 
-        :param densVal: integer of the minimum density value to be counted as urban
-        :param totalPopThresh: integer minimum total settlement population to ne considered urban
-        :param smooth: boolean to run a single modal smoothing function (this should be run when running
-                        on WorldPop as the increased resolution often leads to small holes and funny shapes
-        :param verbose: boolean on what messages to receive
-        :param queen: boolean to determine whether to dissolve final shape to connect queen's contiguity
-        :param raster: string path to create a boolean raster of urban and not.
-                        Empty string is the default and will create no raster
-        :param raster_pop: string path to create a raster of the population layer only in the urban areas
-                            Empty string is the default and will create no raster
-        :returns: GeoPandasDataFrame of the urban extents
-        """
+        Parameters
+        ----------
+        densVal : integer, optional
+            minimum density value to be counted as urban
+        totalPopThresh : integer, optional
+            minimum total settlement population to ne considered urban
+        smooth : boolean, optional
+            toggle to run a single modal smoothing function (this should be run when running
+            on WorldPop as the increased resolution often leads to small holes and funny shapes
+        verbose : boolean
+            what messages to receive
+        queen : boolean
+            determine whether to dissolve final shape to connect queen's contiguity
+        raster : str
+            string path to create a boolean raster of urban and not.
+            Empty string is the default and will create no raster
+        raster_pop : str
+            string path to create a raster of the population layer only in the urban areas
+            Empty string is the default and will create no raster
+        print_message : str
+            message to print with each step. The default is "".
 
+        Returns
+        -------
+        gpd.GeoDataFrame
+            geopandas dataframe of urban extents
+
+        """
+        # read in urban data from the class attribute
         popRaster = self.inR
         data = popRaster.read()
         urbanData = (data > densVal) * 1
@@ -319,7 +403,7 @@ class urbanGriddedPop(object):
             if idx % 1000 == 0 and verbose:
                 tPrint("%s: Creating Shape %s" % (print_message, idx))
             if value == 1:
-                # If the shape is urban, claculate total pop
+                # If the shape is urban, calculate total pop
                 mask = rasterize(
                     [(cShape, 0)],
                     out_shape=data[0, :, :].shape,
@@ -330,7 +414,7 @@ class urbanGriddedPop(object):
                 curPop = np.nansum(inData)
                 if (
                     curPop < 0
-                ):  # when smoothed, sometimes the pop withh be < 0 because of no data
+                ):  # when smoothed, sometimes the pop width is < 0 because of no data
                     inData = np.ma.array(data=inData, mask=(inData < 0).astype(bool))
                     curPop = np.nansum(inData)
                 if curPop > totalPopThresh:
@@ -355,14 +439,14 @@ class urbanGriddedPop(object):
             urban_raster[0, :, :] = urban_res
 
         allFeatures = []
-        badFeatures = []
+        # badFeatures = []
         for cShape, value in features.shapes(
             urban_raster, transform=popRaster.transform
         ):
             if idx % 1000 == 0 and verbose:
                 tPrint("%s: Creating Shape %s" % (print_message, idx))
             if value == 1:
-                # If the shape is urban, claculate total pop
+                # If the shape is urban, calculate total pop
                 mask = rasterize(
                     [(cShape, 0)],
                     out_shape=data[0, :, :].shape,
@@ -373,7 +457,7 @@ class urbanGriddedPop(object):
                 curPop = np.nansum(inData)
                 if (
                     curPop < 0
-                ):  # when smoothed, sometimes the pop withh be < 0 because of no data
+                ):  # when smoothed, sometimes the pop width is < 0 because of no data
                     inData = np.ma.array(data=inData, mask=(inData < 0).astype(bool))
                     curPop = np.nansum(inData)
                 if curPop > totalPopThresh:

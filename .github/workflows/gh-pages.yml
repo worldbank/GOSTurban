@@ -1,8 +1,7 @@
 name: docs
 on:
   push:
-    branches:
-      - main
+  pull_request:
 
 jobs:
   build:
@@ -17,12 +16,16 @@ jobs:
       - name: Dependencies
         run: |
           if [ -f pyproject.toml ]; then pip install ".[docs]"; fi
+      - name: Clear notebooks and create conf.py file
+        run: |
+          jupyter-book config sphinx docs/
+          jupyter nbconvert --ClearOutputPreprocessor.enabled=True --ClearMetadataPreprocessor.enabled=True --clear-output --inplace $(find . -type f -name '*.ipynb')
       - name: Build Sphinx Documentation
         run: |
           sphinx-build docs _build/html -b html
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
-        if: job.status == 'success'
+        if: github.ref == 'refs/heads/main' && job.status == 'success'
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./_build/html

@@ -1,4 +1,3 @@
-import sys
 import os
 import rasterio
 import rasterio.warp
@@ -8,30 +7,42 @@ import geopandas as gpd
 
 
 # Import raster helpers
-import GOSTRocks.rasterMisc as rMisc
-import GOSTRocks.ntlMisc as ntl
-from GOSTRocks.misc import tPrint
+import GOSTrocks.rasterMisc as rMisc
+import GOSTrocks.ntlMisc as ntl
+from GOSTrocks.misc import tPrint
 
 # Import GOST urban functions
-sys.path.append("../../../src")
-import GOST_Urban.UrbanRaster as urban
+import GOSTurban.UrbanRaster as urban
 
 
 class urban_country:
-    """helper function to centralize urban calculations for a single country"""
+    """Helper function to centralize urban calculations for a single country"""
 
     def __init__(self, iso3, sel_country, cur_folder, inP):
-        """calculate urban extents for selected country and population raster
+        """
+        Calculate urban extents for selected country and population raster.
 
-        INPUT
-            iso3 [string] - ISO 3 of selected country
-            sel_country [geopandas dataframe] - selected country bounds
-            cur_folder [string path] - path to output folder
-            inP [rasterio read] - opened population raster dataset
+        Parameters
+        ----------
+        iso3 : string
+            ISO 3 of selected country
+        sel_country : geopandas dataframe
+            selected country bounds
+        cur_folder : string path
+            path to output folder
+        inP : rasterio read
+            opened population raster dataset
+
+        Returns
+        -------
+        None
+
         """
         self.iso3 = iso3
         self.sel_country = sel_country
         self.cur_folder = cur_folder
+        if not os.path.exists(cur_folder):
+            os.makedirs(cur_folder)
         self.urban_extents_file = os.path.join(
             cur_folder, f"{iso3}_urban_extents.geojson"
         )
@@ -54,12 +65,26 @@ class urban_country:
         self.urban_ghsl = os.path.join(cur_folder, f"{iso3}_urban_ghsl.csv")
         self.urban_hd_ghsl = os.path.join(cur_folder, f"{iso3}_urban_hd_ghsl.csv")
 
-        if type(inP) == str:
+        if isinstance(inP, str):
             inP = rasterio.open(inP)
         self.inP = inP
 
     def calculate_urban_extents(self, calculate_area=True, area_crs=3857):
-        """Run EC urban extent analysis"""
+        """
+        Run EC urban extent analysis
+
+        Parameters
+        ----------
+        calculate_area : boolean
+            if True, calculate area of urban extents
+        area_crs : int
+            EPSG code for area calculation
+
+        Returns
+        -------
+        None
+
+        """
         urban_calculator = urban.urbanGriddedPop(self.inP)
         if not os.path.exists(self.urban_extents_file):
             tPrint(f"Running urbanization for {self.iso3}")
@@ -84,7 +109,7 @@ class urban_country:
                 urban_extents = urban_extents.to_crs(4326)
                 try:
                     urban_extents = urban.geocode_cities(urban_extents)
-                except:
+                except Exception:
                     pass
 
             urban_extents.to_file(self.urban_extents_file, driver="GeoJSON")
@@ -114,7 +139,7 @@ class urban_country:
                 urban_extents_hd = urban_extents_hd.to_crs(4326)
                 try:
                     urban_extents_hd = urban.geocode_cities(urban_extents_hd)
-                except:
+                except Exception:
                     pass
             urban_extents_hd.to_file(self.urban_extents_hd_file, driver="GeoJSON")
             self.urban_extents_hd = urban_extents_hd
@@ -122,30 +147,48 @@ class urban_country:
             self.urban_extents_hd = gpd.read_file(self.urban_extents_hd_file)
 
     def summarize_ntl(self, ntl_files=[]):
-        """run zonal analysis on nighttime lights using urban extents"""
+        """
+        Run zonal analysis on nighttime lights using urban extents
+
+        Parameters
+        ----------
+        ntl_files : list of paths
+            path to individual nighttime lights raster files
+
+        Returns
+        -------
+        None
+
+        """
+        # make VIIRS folder if it doesn't exist
+        viirs_folder = os.path.join(self.cur_folder, "VIIRS")
+        if not os.path.exists(viirs_folder):
+            os.makedirs(viirs_folder)
+        # init urbanD and urbanHD
+        urbanD = None
+        urbanHD = None
+        # Run zonal analysis on NTL
         if (not os.path.exists(self.urban_ntl)) or (
             not os.path.exists(self.urban_hd_ntl)
         ):
             if len(ntl_files) == 0:
                 ntl_files = ntl.aws_search_ntl()
             for ntl_file in ntl_files:
-                name = ntl_file.split("/")[-1].split("_")[2][:8]
+                name = ntl_file  # init a name
                 try:
+                    _, _fname = os.path.split(ntl_file)
+                    name = _fname.split("_")[2][:8]
                     inR = rasterio.open(ntl_file)
                     # tPrint("Processing %s" % name)
-                    viirs_folder = os.path.join(self.cur_folder, "VIIRS")
                     urban_res_file = os.path.join(viirs_folder, f"URBAN_{name}.csv")
                     urban_hd_res_file = os.path.join(
                         viirs_folder, f"HD_URBAN_{name}.csv"
                     )
 
-                    if not os.path.exists(viirs_folder):
-                        os.makedirs(viirs_folder)
-
                     try:
                         urbanD = self.urban_extents
                         urbanHD = self.urban_extents_hd
-                    except:
+                    except Exception:
                         self.calculate_urban_extents()
                         urbanD = self.urban_extents
                         urbanHD = self.urban_extents_hd
@@ -167,8 +210,8 @@ class urban_country:
                         ]
                         hd_urban_df = pd.DataFrame(hd_urban_res, columns=col_names)
                         hd_urban_df.to_csv(urban_hd_res_file)
-                except:
-                    tPrint(f"***********ERROR with {iso3} and {name}")
+                except Exception:
+                    tPrint(f"***********ERROR with {name}")
 
             # Compile VIIRS results
             urb_files = [x for x in os.listdir(viirs_folder) if x.startswith("URBAN")]
@@ -183,19 +226,32 @@ class urban_country:
                 tempD = pd.read_csv(os.path.join(viirs_folder, x), index_col=0)
                 urbanHD[x[:-4]] = tempD.iloc[:, 0]
 
-            urbanD.drop(["geometry"], axis=1).to_csv(self.urban_ntl)
-            urbanHD.drop(["geometry"], axis=1).to_csv(self.urban_hd_ntl)
+            if urbanD is not None:
+                urbanD.drop(["geometry"], axis=1).to_csv(self.urban_ntl)
+            if urbanHD is not None:
+                urbanHD.drop(["geometry"], axis=1).to_csv(self.urban_hd_ntl)
 
     def summarize_ghsl(
         self, ghsl_files, binary_calc=False, binary_thresh=1000, clip_raster=False
     ):
-        """Summarize GHSL data
+        """
+        Summarize GHSL data
 
-        INPUT
-            ghsl_files [list of paths] - path to individual built area raster files
-            [optional] binary_calc [binary, default=False] - if True, additionally calculate zonal stats on a binary built raster
-            [optional] binary_thresh [int, default=1000] - if binary_calc is True, all cells above threshold will be considered built
-            [optional] clip_raster [binary, default=False] - if True, clip the GHSL datasets for the calculations
+        Parameters
+        ----------
+        ghsl_files : list of paths
+            path to individual built area raster files
+        binary_calc : binary, optional
+            if True, additionally calculate zonal stats on a binary built raster, default=False
+        binary_thresh : int, optional
+            if binary_calc is True, all cells above threshold will be considered built, default=1000
+        clip_raster : binary, optional
+            if True, clip the GHSL datasets for the calculations, default=False
+
+        Returns
+        -------
+        None
+
         """
         if (not os.path.exists(self.urban_ghsl)) or (
             not os.path.exists(self.urban_hd_ghsl)
@@ -203,7 +259,7 @@ class urban_country:
             try:
                 urbanD = self.urban_extents
                 urbanHD = self.urban_extents_hd
-            except:
+            except Exception:
                 self.calculate_urban_extents()
                 urbanD = self.urban_extents
                 urbanHD = self.urban_extents_hd
@@ -240,7 +296,7 @@ class urban_country:
                         localR = rasterio.open(local_file)
                         inD = localR.read()
                         inD[inD == localR.meta["nodata"]] = 0
-                    except:
+                    except Exception:
                         raise (
                             ValueError(
                                 "In order to calculate binary zonal, you need to clip out local ghsl data"
@@ -265,7 +321,18 @@ class urban_country:
             pd.DataFrame(urbanHD.drop(["geometry"], axis=1)).to_csv(self.urban_hd_ghsl)
 
     def delete_urban_data(self):
-        """delete urban extents"""
+        """
+        Delete urban extents.
+
+        Parameters
+        ----------
+        None
+
+        Returns
+        -------
+        None
+
+        """
         for cFile in [
             self.urban_extents_file,
             self.urban_extents_raster_file,
@@ -274,5 +341,5 @@ class urban_country:
         ]:
             try:
                 os.remove(cFile)
-            except:
+            except Exception:
                 pass
