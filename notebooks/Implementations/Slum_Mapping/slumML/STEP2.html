@@ -1,0 +1,1350 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>STEP-2 &#8212; GOST Urbanization</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../../_static/styles/theme.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+<link href="../../../../_static/styles/bootstrap.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+<link href="../../../../_static/styles/pydata-sphinx-theme.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+
+  
+  <link href="../../../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/styles/sphinx-book-theme.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/sphinx-design.5ea377869091fd0449014c60fc090103.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../../_static/scripts/bootstrap.js?digest=3ee479438cf8b5e0d341" />
+<link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341" />
+  <script src="../../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=3ee479438cf8b5e0d341"></script>
+
+    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <script src="../../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../../_static/clipboard.min.js"></script>
+    <script src="../../../../_static/copybutton.js"></script>
+    <script src="../../../../_static/scripts/sphinx-book-theme.js"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../../../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../../../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../../../../_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/Implementations/Slum_Mapping/slumML/STEP2';</script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+
+<a class="navbar-brand logo" href="../../../../README.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../../../_static/logo.png" class="logo__image only-light" alt="GOST Urbanization - Home"/>
+    <script>document.write(`<img src="../../../../_static/logo.png" class="logo__image only-dark" alt="GOST Urbanization - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../../../README.html">
+                    Quantifying urbanization
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/GOSTurban.html">GOSTurban package</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Novel Urbanization</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../novel_context.html">Novel Urbanization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../urbanization_comparison.html">Comparing urban methods</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../Tutorials/UrbanAreas_tutorials.html">Degree of Urbanization</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="../../../Tutorials/LEI_Example.html">Landscape Expansion Index</a></li>
+
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/worldbank/GOST_Urban" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../../../_sources/notebooks/Implementations/Slum_Mapping/slumML/STEP2.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>STEP-2</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#"><strong>STEP-2</strong></a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#initial-file-setting">Initial file setting</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#h2o-pipeline"><strong>h2o Pipeline</strong></a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#supervised-ml-classification-based-on-the-selected-model"><strong>Supervised ML classification based on the selected model</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#post-analytical-process"><strong>Post-analytical process</strong></a></li>
+</ul>
+</li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="step-2">
+<h1><strong>STEP-2</strong><a class="headerlink" href="#step-2" title="Permalink to this heading">#</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">google.colab</span> <span class="kn">import</span> <span class="n">drive</span>
+
+<span class="n">drive</span><span class="o">.</span><span class="n">mount</span><span class="p">(</span><span class="s2">&quot;/content/drive&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="kn">from</span> <span class="nn">google.colab</span> <span class="kn">import</span> <span class="n">drive</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="n">drive</span><span class="o">.</span><span class="n">mount</span><span class="p">(</span><span class="s2">&quot;/content/drive&quot;</span><span class="p">)</span>
+
+<span class="ne">ModuleNotFoundError</span>: No module named &#39;google&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>OPTIONAL:</strong> Install required modules (geopandas, pyproj, h2o) if not yet installed.
+Create ‘modules’ directory under ‘Colab\ Notebooks’ (or specify a directory you like).</p>
+<p><a class="reference external" href="https://ggcs.io/2020/06/22/google-colab-pip-install/">https://ggcs.io/2020/06/22/google-colab-pip-install/</a> (Japanese)</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>pip<span class="w"> </span>install<span class="w"> </span>--target<span class="w"> </span>/content/drive/MyDrive/Colab<span class="se">\ </span>Notebooks/modules<span class="w"> </span>geopandas<span class="w"> </span>pyproj<span class="w"> </span>h2o
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Collecting geopandas
+  Using cached geopandas-0.14.4-py3-none-any.whl.metadata (1.5 kB)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Collecting pyproj
+  Using cached pyproj-3.6.1-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (31 kB)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Collecting h2o
+  Downloading h2o-3.46.0.3.tar.gz (265.3 MB)
+?25l     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ <span class=" -Color -Color-Green">0.0/265.3 MB</span> <span class=" -Color -Color-Red">?</span> eta <span class=" -Color -Color-Cyan">-:--:--</span>
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ <span class=" -Color -Color-Green">3.3/265.3 MB</span> <span class=" -Color -Color-Red">99.3 MB/s</span> eta <span class=" -Color -Color-Cyan">0:00:03</span>
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>     ━╺━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ <span class=" -Color -Color-Green">9.7/265.3 MB</span> <span class=" -Color -Color-Red">142.2 MB/s</span> eta <span class=" -Color -Color-Cyan">0:00:02</span>
+     ━━╺━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ <span class=" -Color -Color-Green">16.4/265.3 MB</span> <span class=" -Color -Color-Red">190.2 MB/s</span> eta <span class=" -Color -Color-Cyan">0:00:02</span>
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>     ━━━╺━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ <span class=" -Color -Color-Green">23.1/265.3 MB</span> <span class=" -Color -Color-Red">193.1 MB/s</span> eta <span class=" -Color -Color-Cyan">0:00:02</span>
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>     ━━━━╺━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ <span class=" -Color -Color-Green">29.7/265.3 MB</span> <span class=" -Color -Color-Red">193.7 MB/s</span> eta <span class=" -Color -Color-Cyan">0:00:02</span>
+     ━━━━━╺━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ <span class=" -Color -Color-Green">36.5/265.3 MB</span> <span class=" -Color -Color-Red">195.0 MB/s</span> eta <span class=" -Color -Color-Cyan">0:00:02</span>
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>     ━━━━━━╺━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ <span class=" -Color -Color-Green">43.1/265.3 MB</span> <span class=" -Color -Color-Red">192.2 MB/s</span> eta <span class=" -Color -Color-Cyan">0:00:02</span>
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>     ━━━━━━━╺━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ <span class=" -Color -Color-Green">49.6/265.3 MB</span> <span class=" -Color -Color-Red">188.4 MB/s</span> eta <span class=" -Color -Color-Cyan">0:00:02</span>
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>     ━━━━━━━━╺━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ <span class=" -Color -Color-Green">56.3/265.3 MB</span> <span class=" -Color -Color-Red">190.9 MB/s</span> eta <span class=" -Color -Color-Cyan">0:00:02</span>
+     ━━━━━━━━━╺━━━━━━━━━━━━━━━━━━━━━━━━━━━━ <span class=" -Color -Color-Green">63.0/265.3 MB</span> <span class=" -Color -Color-Red">195.4 MB/s</span> eta <span class=" -Color -Color-Cyan">0:00:02</span>
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>     ━━━━━━━━━╸━━━━━━━━━━━━━━━━━━━━━━━━━━━━ <span class=" -Color -Color-Green">69.3/265.3 MB</span> <span class=" -Color -Color-Red">188.7 MB/s</span> eta <span class=" -Color -Color-Cyan">0:00:02</span>
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>     ━━━━━━━━━━╸━━━━━━━━━━━━━━━━━━━━━━━━━━━ <span class=" -Color -Color-Green">75.7/265.3 MB</span> <span class=" -Color -Color-Red">182.1 MB/s</span> eta <span class=" -Color -Color-Cyan">0:00:02</span>
+     ━━━━━━━━━━━╸━━━━━━━━━━━━━━━━━━━━━━━━━━ <span class=" -Color -Color-Green">82.3/265.3 MB</span> <span class=" -Color -Color-Red">189.3 MB/s</span> eta <span class=" -Color -Color-Cyan">0:00:01</span>
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>     ━━━━━━━━━━━━╸━━━━━━━━━━━━━━━━━━━━━━━━━ <span class=" -Color -Color-Green">88.9/265.3 MB</span> <span class=" -Color -Color-Red">191.2 MB/s</span> eta <span class=" -Color -Color-Cyan">0:00:01</span>
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>     ━━━━━━━━━━━━━╸━━━━━━━━━━━━━━━━━━━━━━━━ <span class=" -Color -Color-Green">95.5/265.3 MB</span> <span class=" -Color -Color-Red">193.5 MB/s</span> eta <span class=" -Color -Color-Cyan">0:00:01</span>
+     ━━━━━━━━━━━━━━╺━━━━━━━━━━━━━━━━━━━━━━ <span class=" -Color -Color-Green">100.5/265.3 MB</span> <span class=" -Color -Color-Red">168.0 MB/s</span> eta <span class=" -Color -Color-Cyan">0:00:01</span>
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>     ━━━━━━━━━━━━━━╸━━━━━━━━━━━━━━━━━━━━━━ <span class=" -Color -Color-Green">105.6/265.3 MB</span> <span class=" -Color -Color-Red">144.2 MB/s</span> eta <span class=" -Color -Color-Cyan">0:00:02</span>
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>     ━━━━━━━━━━━━━━━╺━━━━━━━━━━━━━━━━━━━━━ <span class=" -Color -Color-Green">110.7/265.3 MB</span> <span class=" -Color -Color-Red">143.9 MB/s</span> eta <span class=" -Color -Color-Cyan">0:00:02</span>
+     ━━━━━━━━━━━━━━━━╺━━━━━━━━━━━━━━━━━━━━ <span class=" -Color -Color-Green">116.1/265.3 MB</span> <span class=" -Color -Color-Red">153.9 MB/s</span> eta <span class=" -Color -Color-Cyan">0:00:01</span>
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>     ━━━━━━━━━━━━━━━━╸━━━━━━━━━━━━━━━━━━━━ <span class=" -Color -Color-Green">121.2/265.3 MB</span> <span class=" -Color -Color-Red">154.1 MB/s</span> eta <span class=" -Color -Color-Cyan">0:00:01</span>
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>     ━━━━━━━━━━━━━━━━━╸━━━━━━━━━━━━━━━━━━━ <span class=" -Color -Color-Green">126.2/265.3 MB</span> <span class=" -Color -Color-Red">144.1 MB/s</span> eta <span class=" -Color -Color-Cyan">0:00:01</span>
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>     ━━━━━━━━━━━━━━━━━━╺━━━━━━━━━━━━━━━━━━ <span class=" -Color -Color-Green">131.5/265.3 MB</span> <span class=" -Color -Color-Red">150.8 MB/s</span> eta <span class=" -Color -Color-Cyan">0:00:01</span>
+     ━━━━━━━━━━━━━━━━━━━╺━━━━━━━━━━━━━━━━━ <span class=" -Color -Color-Green">136.4/265.3 MB</span> <span class=" -Color -Color-Red">145.7 MB/s</span> eta <span class=" -Color -Color-Cyan">0:00:01</span>
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>     ━━━━━━━━━━━━━━━━━━━╸━━━━━━━━━━━━━━━━━ <span class=" -Color -Color-Green">141.4/265.3 MB</span> <span class=" -Color -Color-Red">140.0 MB/s</span> eta <span class=" -Color -Color-Cyan">0:00:01</span>
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>     ━━━━━━━━━━━━━━━━━━━━╺━━━━━━━━━━━━━━━━ <span class=" -Color -Color-Green">146.5/265.3 MB</span> <span class=" -Color -Color-Red">143.6 MB/s</span> eta <span class=" -Color -Color-Cyan">0:00:01</span>
+     ━━━━━━━━━━━━━━━━━━━━━╺━━━━━━━━━━━━━━━ <span class=" -Color -Color-Green">151.5/265.3 MB</span> <span class=" -Color -Color-Red">145.5 MB/s</span> eta <span class=" -Color -Color-Cyan">0:00:01</span>
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>     ━━━━━━━━━━━━━━━━━━━━━╸━━━━━━━━━━━━━━━ <span class=" -Color -Color-Green">156.8/265.3 MB</span> <span class=" -Color -Color-Red">150.5 MB/s</span> eta <span class=" -Color -Color-Cyan">0:00:01</span>
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>     ━━━━━━━━━━━━━━━━━━━━━━╸━━━━━━━━━━━━━━ <span class=" -Color -Color-Green">162.3/265.3 MB</span> <span class=" -Color -Color-Red">157.4 MB/s</span> eta <span class=" -Color -Color-Cyan">0:00:01</span>
+     ━━━━━━━━━━━━━━━━━━━━━━━╺━━━━━━━━━━━━━ <span class=" -Color -Color-Green">167.9/265.3 MB</span> <span class=" -Color -Color-Red">162.6 MB/s</span> eta <span class=" -Color -Color-Cyan">0:00:01</span>
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>     ━━━━━━━━━━━━━━━━━━━━━━━━╺━━━━━━━━━━━━ <span class=" -Color -Color-Green">173.3/265.3 MB</span> <span class=" -Color -Color-Red">159.5 MB/s</span> eta <span class=" -Color -Color-Cyan">0:00:01</span>
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>     ━━━━━━━━━━━━━━━━━━━━━━━━╸━━━━━━━━━━━━ <span class=" -Color -Color-Green">178.8/265.3 MB</span> <span class=" -Color -Color-Red">158.1 MB/s</span> eta <span class=" -Color -Color-Cyan">0:00:01</span>
+     ━━━━━━━━━━━━━━━━━━━━━━━━━╸━━━━━━━━━━━ <span class=" -Color -Color-Green">184.5/265.3 MB</span> <span class=" -Color -Color-Red">162.4 MB/s</span> eta <span class=" -Color -Color-Cyan">0:00:01</span>
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>     ━━━━━━━━━━━━━━━━━━━━━━━━━━╺━━━━━━━━━━ <span class=" -Color -Color-Green">189.9/265.3 MB</span> <span class=" -Color -Color-Red">162.4 MB/s</span> eta <span class=" -Color -Color-Cyan">0:00:01</span>
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>     ━━━━━━━━━━━━━━━━━━━━━━━━━━━╺━━━━━━━━━ <span class=" -Color -Color-Green">195.3/265.3 MB</span> <span class=" -Color -Color-Red">157.4 MB/s</span> eta <span class=" -Color -Color-Cyan">0:00:01</span>
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━╺━━━━━━━━ <span class=" -Color -Color-Green">200.9/265.3 MB</span> <span class=" -Color -Color-Red">160.7 MB/s</span> eta <span class=" -Color -Color-Cyan">0:00:01</span>
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━╸━━━━━━━━ <span class=" -Color -Color-Green">206.2/265.3 MB</span> <span class=" -Color -Color-Red">158.4 MB/s</span> eta <span class=" -Color -Color-Cyan">0:00:01</span>
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╺━━━━━━━ <span class=" -Color -Color-Green">211.4/265.3 MB</span> <span class=" -Color -Color-Red">154.1 MB/s</span> eta <span class=" -Color -Color-Cyan">0:00:01</span>
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╺━━━━━━ <span class=" -Color -Color-Green">216.9/265.3 MB</span> <span class=" -Color -Color-Red">156.4 MB/s</span> eta <span class=" -Color -Color-Cyan">0:00:01</span>
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╸━━━━━━ <span class=" -Color -Color-Green">222.2/265.3 MB</span> <span class=" -Color -Color-Red">157.1 MB/s</span> eta <span class=" -Color -Color-Cyan">0:00:01</span>
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╸━━━━━ <span class=" -Color -Color-Green">227.7/265.3 MB</span> <span class=" -Color -Color-Red">157.5 MB/s</span> eta <span class=" -Color -Color-Cyan">0:00:01</span>
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╸━━━━ <span class=" -Color -Color-Green">233.0/265.3 MB</span> <span class=" -Color -Color-Red">157.6 MB/s</span> eta <span class=" -Color -Color-Cyan">0:00:01</span>
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╺━━━ <span class=" -Color -Color-Green">238.3/265.3 MB</span> <span class=" -Color -Color-Red">155.5 MB/s</span> eta <span class=" -Color -Color-Cyan">0:00:01</span>
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╺━━ <span class=" -Color -Color-Green">244.2/265.3 MB</span> <span class=" -Color -Color-Red">162.6 MB/s</span> eta <span class=" -Color -Color-Cyan">0:00:01</span>
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╸━━ <span class=" -Color -Color-Green">249.8/265.3 MB</span> <span class=" -Color -Color-Red">165.7 MB/s</span> eta <span class=" -Color -Color-Cyan">0:00:01</span>
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╸━ <span class=" -Color -Color-Green">255.1/265.3 MB</span> <span class=" -Color -Color-Red">160.0 MB/s</span> eta <span class=" -Color -Color-Cyan">0:00:01</span>
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╺ <span class=" -Color -Color-Green">260.5/265.3 MB</span> <span class=" -Color -Color-Red">156.7 MB/s</span> eta <span class=" -Color -Color-Cyan">0:00:01</span>
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╸ <span class=" -Color -Color-Green">265.3/265.3 MB</span> <span class=" -Color -Color-Red">165.6 MB/s</span> eta <span class=" -Color -Color-Cyan">0:00:01</span>
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╸ <span class=" -Color -Color-Green">265.3/265.3 MB</span> <span class=" -Color -Color-Red">165.6 MB/s</span> eta <span class=" -Color -Color-Cyan">0:00:01</span>
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╸ <span class=" -Color -Color-Green">265.3/265.3 MB</span> <span class=" -Color -Color-Red">165.6 MB/s</span> eta <span class=" -Color -Color-Cyan">0:00:01</span>
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╸ <span class=" -Color -Color-Green">265.3/265.3 MB</span> <span class=" -Color -Color-Red">165.6 MB/s</span> eta <span class=" -Color -Color-Cyan">0:00:01</span>
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╸ <span class=" -Color -Color-Green">265.3/265.3 MB</span> <span class=" -Color -Color-Red">165.6 MB/s</span> eta <span class=" -Color -Color-Cyan">0:00:01</span>
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╸ <span class=" -Color -Color-Green">265.3/265.3 MB</span> <span class=" -Color -Color-Red">165.6 MB/s</span> eta <span class=" -Color -Color-Cyan">0:00:01</span>
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╸ <span class=" -Color -Color-Green">265.3/265.3 MB</span> <span class=" -Color -Color-Red">165.6 MB/s</span> eta <span class=" -Color -Color-Cyan">0:00:01</span>
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╸ <span class=" -Color -Color-Green">265.3/265.3 MB</span> <span class=" -Color -Color-Red">165.6 MB/s</span> eta <span class=" -Color -Color-Cyan">0:00:01</span>
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╸ <span class=" -Color -Color-Green">265.3/265.3 MB</span> <span class=" -Color -Color-Red">165.6 MB/s</span> eta <span class=" -Color -Color-Cyan">0:00:01</span>
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╸ <span class=" -Color -Color-Green">265.3/265.3 MB</span> <span class=" -Color -Color-Red">165.6 MB/s</span> eta <span class=" -Color -Color-Cyan">0:00:01</span>
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╸ <span class=" -Color -Color-Green">265.3/265.3 MB</span> <span class=" -Color -Color-Red">165.6 MB/s</span> eta <span class=" -Color -Color-Cyan">0:00:01</span>
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╸ <span class=" -Color -Color-Green">265.3/265.3 MB</span> <span class=" -Color -Color-Red">165.6 MB/s</span> eta <span class=" -Color -Color-Cyan">0:00:01</span>
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╸ <span class=" -Color -Color-Green">265.3/265.3 MB</span> <span class=" -Color -Color-Red">165.6 MB/s</span> eta <span class=" -Color -Color-Cyan">0:00:01</span>
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╸ <span class=" -Color -Color-Green">265.3/265.3 MB</span> <span class=" -Color -Color-Red">165.6 MB/s</span> eta <span class=" -Color -Color-Cyan">0:00:01</span>
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╸ <span class=" -Color -Color-Green">265.3/265.3 MB</span> <span class=" -Color -Color-Red">165.6 MB/s</span> eta <span class=" -Color -Color-Cyan">0:00:01</span>
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╸ <span class=" -Color -Color-Green">265.3/265.3 MB</span> <span class=" -Color -Color-Red">165.6 MB/s</span> eta <span class=" -Color -Color-Cyan">0:00:01</span>
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╸ <span class=" -Color -Color-Green">265.3/265.3 MB</span> <span class=" -Color -Color-Red">165.6 MB/s</span> eta <span class=" -Color -Color-Cyan">0:00:01</span>
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╸ <span class=" -Color -Color-Green">265.3/265.3 MB</span> <span class=" -Color -Color-Red">165.6 MB/s</span> eta <span class=" -Color -Color-Cyan">0:00:01</span>
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╸ <span class=" -Color -Color-Green">265.3/265.3 MB</span> <span class=" -Color -Color-Red">165.6 MB/s</span> eta <span class=" -Color -Color-Cyan">0:00:01</span>
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╸ <span class=" -Color -Color-Green">265.3/265.3 MB</span> <span class=" -Color -Color-Red">165.6 MB/s</span> eta <span class=" -Color -Color-Cyan">0:00:01</span>
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ <span class=" -Color -Color-Green">265.3/265.3 MB</span> <span class=" -Color -Color-Red">13.6 MB/s</span> eta <span class=" -Color -Color-Cyan">0:00:00</span>
+?25h
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  Preparing metadata (setup.py) ... ?25l-
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> done
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>?25hCollecting fiona&gt;=1.8.21 (from geopandas)
+  Using cached fiona-1.9.6-cp310-cp310-manylinux2014_x86_64.whl.metadata (50 kB)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Collecting numpy&gt;=1.22 (from geopandas)
+  Using cached numpy-2.0.0-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (60 kB)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Collecting packaging (from geopandas)
+  Using cached packaging-24.1-py3-none-any.whl.metadata (3.2 kB)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Collecting pandas&gt;=1.4.0 (from geopandas)
+  Using cached pandas-2.2.2-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (19 kB)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Collecting shapely&gt;=1.8.0 (from geopandas)
+  Using cached shapely-2.0.4-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (7.0 kB)
+Collecting certifi (from pyproj)
+  Using cached certifi-2024.6.2-py3-none-any.whl.metadata (2.2 kB)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Collecting requests (from h2o)
+  Using cached requests-2.32.3-py3-none-any.whl.metadata (4.6 kB)
+Collecting tabulate (from h2o)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  Using cached tabulate-0.9.0-py3-none-any.whl.metadata (34 kB)
+Collecting attrs&gt;=19.2.0 (from fiona&gt;=1.8.21-&gt;geopandas)
+  Using cached attrs-23.2.0-py3-none-any.whl.metadata (9.5 kB)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Collecting click~=8.0 (from fiona&gt;=1.8.21-&gt;geopandas)
+  Using cached click-8.1.7-py3-none-any.whl.metadata (3.0 kB)
+Collecting click-plugins&gt;=1.0 (from fiona&gt;=1.8.21-&gt;geopandas)
+  Using cached click_plugins-1.1.1-py2.py3-none-any.whl.metadata (6.4 kB)
+Collecting cligj&gt;=0.5 (from fiona&gt;=1.8.21-&gt;geopandas)
+  Using cached cligj-0.7.2-py3-none-any.whl.metadata (5.0 kB)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Collecting six (from fiona&gt;=1.8.21-&gt;geopandas)
+  Using cached six-1.16.0-py2.py3-none-any.whl.metadata (1.8 kB)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Collecting python-dateutil&gt;=2.8.2 (from pandas&gt;=1.4.0-&gt;geopandas)
+  Using cached python_dateutil-2.9.0.post0-py2.py3-none-any.whl.metadata (8.4 kB)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Collecting pytz&gt;=2020.1 (from pandas&gt;=1.4.0-&gt;geopandas)
+  Using cached pytz-2024.1-py2.py3-none-any.whl.metadata (22 kB)
+Collecting tzdata&gt;=2022.7 (from pandas&gt;=1.4.0-&gt;geopandas)
+  Using cached tzdata-2024.1-py2.py3-none-any.whl.metadata (1.4 kB)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Collecting charset-normalizer&lt;4,&gt;=2 (from requests-&gt;h2o)
+  Using cached charset_normalizer-3.3.2-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (33 kB)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Collecting idna&lt;4,&gt;=2.5 (from requests-&gt;h2o)
+  Using cached idna-3.7-py3-none-any.whl.metadata (9.9 kB)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Collecting urllib3&lt;3,&gt;=1.21.1 (from requests-&gt;h2o)
+  Using cached urllib3-2.2.2-py3-none-any.whl.metadata (6.4 kB)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Using cached geopandas-0.14.4-py3-none-any.whl (1.1 MB)
+Using cached pyproj-3.6.1-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (8.3 MB)
+Using cached fiona-1.9.6-cp310-cp310-manylinux2014_x86_64.whl (15.7 MB)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Downloading numpy-2.0.0-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (19.3 MB)
+?25l   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ <span class=" -Color -Color-Green">0.0/19.3 MB</span> <span class=" -Color -Color-Red">?</span> eta <span class=" -Color -Color-Cyan">-:--:--</span>
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>   ━━━━━━━━━━━━━╺━━━━━━━━━━━━━━━━━━━━━━━━━━ <span class=" -Color -Color-Green">6.4/19.3 MB</span> <span class=" -Color -Color-Red">191.7 MB/s</span> eta <span class=" -Color -Color-Cyan">0:00:01</span>
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━╸━━━━━━━━━━━━━ <span class=" -Color -Color-Green">12.9/19.3 MB</span> <span class=" -Color -Color-Red">187.5 MB/s</span> eta <span class=" -Color -Color-Cyan">0:00:01</span>
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╸ <span class=" -Color -Color-Green">19.3/19.3 MB</span> <span class=" -Color -Color-Red">189.5 MB/s</span> eta <span class=" -Color -Color-Cyan">0:00:01</span>
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╸ <span class=" -Color -Color-Green">19.3/19.3 MB</span> <span class=" -Color -Color-Red">189.5 MB/s</span> eta <span class=" -Color -Color-Cyan">0:00:01</span>
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ <span class=" -Color -Color-Green">19.3/19.3 MB</span> <span class=" -Color -Color-Red">103.7 MB/s</span> eta <span class=" -Color -Color-Cyan">0:00:00</span>
+?25hUsing cached pandas-2.2.2-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (13.0 MB)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Using cached shapely-2.0.4-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (2.5 MB)
+Using cached certifi-2024.6.2-py3-none-any.whl (164 kB)
+Using cached packaging-24.1-py3-none-any.whl (53 kB)
+Using cached requests-2.32.3-py3-none-any.whl (64 kB)
+Using cached tabulate-0.9.0-py3-none-any.whl (35 kB)
+Using cached attrs-23.2.0-py3-none-any.whl (60 kB)
+Using cached charset_normalizer-3.3.2-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (142 kB)
+Using cached click-8.1.7-py3-none-any.whl (97 kB)
+Using cached click_plugins-1.1.1-py2.py3-none-any.whl (7.5 kB)
+Using cached cligj-0.7.2-py3-none-any.whl (7.1 kB)
+Using cached idna-3.7-py3-none-any.whl (66 kB)
+Using cached python_dateutil-2.9.0.post0-py2.py3-none-any.whl (229 kB)
+Using cached pytz-2024.1-py2.py3-none-any.whl (505 kB)
+Using cached six-1.16.0-py2.py3-none-any.whl (11 kB)
+Using cached tzdata-2024.1-py2.py3-none-any.whl (345 kB)
+Using cached urllib3-2.2.2-py3-none-any.whl (121 kB)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Building wheels for collected packages: h2o
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  Building wheel for h2o (setup.py) ... ?25l-
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> \
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> |
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> /
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> -
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> \
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> |
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> done
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>?25h  Created wheel for h2o: filename=h2o-3.46.0.3-py2.py3-none-any.whl size=265365897 sha256=1a23582bbf02fce337176a85ca37617edc52e2080e7355502795e6d11515593e
+  Stored in directory: /home/runner/.cache/pip/wheels/c4/63/41/baa115b5255e1db3e2383bce4e2e6181746aac0b42264c242f
+Successfully built h2o
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Installing collected packages: pytz, urllib3, tzdata, tabulate, six, packaging, numpy, idna, click, charset-normalizer, certifi, attrs, shapely, requests, python-dateutil, pyproj, cligj, click-plugins, pandas, h2o, fiona, geopandas
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Red">ERROR: pip&#39;s dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.</span>
+<span class=" -Color -Color-Red">richdem 0.3.4 requires numpy&lt;2,&gt;=1.7; python_version &gt; &quot;3.4&quot; or python_version &lt; &quot;3.0&quot;, but you have numpy 2.0.0 which is incompatible.</span>
+Successfully installed attrs-23.2.0 certifi-2024.6.2 charset-normalizer-3.3.2 click-8.1.7 click-plugins-1.1.1 cligj-0.7.2 fiona-1.9.6 geopandas-0.14.4 h2o-3.46.0.3 idna-3.7 numpy-2.0.0 packaging-24.1 pandas-2.2.2 pyproj-3.6.1 python-dateutil-2.9.0.post0 pytz-2024.1 requests-2.32.3 shapely-2.0.4 six-1.16.0 tabulate-0.9.0 tzdata-2024.1 urllib3-2.2.2
+<span class=" -Color -Color-Red">ERROR: Exception:</span>
+<span class=" -Color -Color-Red">Traceback (most recent call last):</span>
+<span class=" -Color -Color-Red">  File &quot;/opt/hostedtoolcache/Python/3.10.14/x64/lib/python3.10/site-packages/pip/_internal/cli/base_command.py&quot;, line 180, in exc_logging_wrapper</span>
+<span class=" -Color -Color-Red">    status = run_func(*args)</span>
+<span class=" -Color -Color-Red">  File &quot;/opt/hostedtoolcache/Python/3.10.14/x64/lib/python3.10/site-packages/pip/_internal/cli/req_command.py&quot;, line 245, in wrapper</span>
+<span class=" -Color -Color-Red">    return func(self, options, args)</span>
+<span class=" -Color -Color-Red">  File &quot;/opt/hostedtoolcache/Python/3.10.14/x64/lib/python3.10/site-packages/pip/_internal/commands/install.py&quot;, line 510, in run</span>
+<span class=" -Color -Color-Red">    self._handle_target_dir(</span>
+<span class=" -Color -Color-Red">  File &quot;/opt/hostedtoolcache/Python/3.10.14/x64/lib/python3.10/site-packages/pip/_internal/commands/install.py&quot;, line 520, in _handle_target_dir</span>
+<span class=" -Color -Color-Red">    ensure_dir(target_dir)</span>
+<span class=" -Color -Color-Red">  File &quot;/opt/hostedtoolcache/Python/3.10.14/x64/lib/python3.10/site-packages/pip/_internal/utils/misc.py&quot;, line 105, in ensure_dir</span>
+<span class=" -Color -Color-Red">    os.makedirs(path)</span>
+<span class=" -Color -Color-Red">  File &quot;/opt/hostedtoolcache/Python/3.10.14/x64/lib/python3.10/os.py&quot;, line 215, in makedirs</span>
+<span class=" -Color -Color-Red">    makedirs(head, exist_ok=exist_ok)</span>
+<span class=" -Color -Color-Red">  File &quot;/opt/hostedtoolcache/Python/3.10.14/x64/lib/python3.10/os.py&quot;, line 215, in makedirs</span>
+<span class=" -Color -Color-Red">    makedirs(head, exist_ok=exist_ok)</span>
+<span class=" -Color -Color-Red">  File &quot;/opt/hostedtoolcache/Python/3.10.14/x64/lib/python3.10/os.py&quot;, line 215, in makedirs</span>
+<span class=" -Color -Color-Red">    makedirs(head, exist_ok=exist_ok)</span>
+<span class=" -Color -Color-Red">  [Previous line repeated 1 more time]</span>
+<span class=" -Color -Color-Red">  File &quot;/opt/hostedtoolcache/Python/3.10.14/x64/lib/python3.10/os.py&quot;, line 225, in makedirs</span>
+<span class=" -Color -Color-Red">    mkdir(name, mode)</span>
+<span class=" -Color -Color-Red">PermissionError: [Errno 13] Permission denied: &#39;/content&#39;</span>
+
+</pre></div>
+</div>
+</div>
+</div>
+<p>Import modules</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;/content/drive/MyDrive/Colab Notebooks/modules&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">pyproj</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
+<span class="kn">import</span> <span class="nn">h2o</span>
+<span class="kn">from</span> <span class="nn">h2o.automl</span> <span class="kn">import</span> <span class="n">H2OAutoML</span>
+<span class="kn">from</span> <span class="nn">h2o.frame</span> <span class="kn">import</span> <span class="n">H2OFrame</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="n">line</span> <span class="mi">6</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
+<span class="ne">----&gt; </span><span class="mi">6</span> <span class="kn">import</span> <span class="nn">h2o</span>
+<span class="g g-Whitespace">      </span><span class="mi">7</span> <span class="kn">from</span> <span class="nn">h2o.automl</span> <span class="kn">import</span> <span class="n">H2OAutoML</span>
+<span class="g g-Whitespace">      </span><span class="mi">8</span> <span class="kn">from</span> <span class="nn">h2o.frame</span> <span class="kn">import</span> <span class="n">H2OFrame</span>
+
+<span class="ne">ModuleNotFoundError</span>: No module named &#39;h2o&#39;
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<hr class="docutils" />
+<section class="tex2jax_ignore mathjax_ignore" id="initial-file-setting">
+<h1>Initial file setting<a class="headerlink" href="#initial-file-setting" title="Permalink to this heading">#</a></h1>
+<p>Do not forget to mount your GoogleDrive! All necessary files need to be uploaded in directories on your GoogleDrive. You can easily mount your GoogleDrive from the left pane, click the folder icon and select mount drive. Also see: <a class="reference external" href="https://colab.research.google.com/notebooks/io.ipynb">https://colab.research.google.com/notebooks/io.ipynb</a></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pth</span> <span class="o">=</span> <span class="s2">&quot;/content/drive/MyDrive/Colab Notebooks/slumML/data/Yaounde/&quot;</span>  <span class="c1"># Directory to save model, ouputs</span>
+<span class="n">building_file</span> <span class="o">=</span> <span class="s2">&quot;/content/drive/MyDrive/Colab Notebooks/slumML/data/Yaounde/Yaounde_DA_morphology.shp&quot;</span>  <span class="c1"># Specify the processed building footprint data</span>
+<span class="n">sample_file</span> <span class="o">=</span> <span class="s2">&quot;/content/drive/MyDrive/Colab Notebooks/slumML/data/Yaounde/Yaounde_sample_data.shp&quot;</span>  <span class="c1"># Specify the sample data</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Read a Building Footprint layer processed at STEP-1</span>
+<span class="n">proj_4326</span> <span class="o">=</span> <span class="n">pyproj</span><span class="o">.</span><span class="n">Proj</span><span class="p">(</span><span class="mi">4326</span><span class="p">)</span>
+
+<span class="n">building_df</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">building_file</span><span class="p">)</span>
+<span class="n">building_df</span> <span class="o">=</span> <span class="n">building_df</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="mi">4326</span><span class="p">)</span>
+
+<span class="c1"># Read a Sample Area layer</span>
+<span class="n">sample_area</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">sample_file</span><span class="p">)</span>
+<span class="n">sample_area</span> <span class="o">=</span> <span class="n">sample_area</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="mi">4326</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">CPLE_OpenFailedError</span><span class="g g-Whitespace">                      </span>Traceback (most recent call last)
+<span class="nn">File fiona/ogrext.pyx:136,</span> in <span class="ni">fiona.ogrext.gdal_open_vector</span><span class="nt">()</span>
+
+<span class="nn">File fiona/_err.pyx:291,</span> in <span class="ni">fiona._err.exc_wrap_pointer</span><span class="nt">()</span>
+
+<span class="ne">CPLE_OpenFailedError</span>: /content/drive/MyDrive/Colab Notebooks/slumML/data/Yaounde/Yaounde_DA_morphology.shp: No such file or directory
+
+<span class="n">During</span> <span class="n">handling</span> <span class="n">of</span> <span class="n">the</span> <span class="n">above</span> <span class="n">exception</span><span class="p">,</span> <span class="n">another</span> <span class="n">exception</span> <span class="n">occurred</span><span class="p">:</span>
+
+<span class="ne">DriverError</span><span class="g g-Whitespace">                               </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span> <span class="n">line</span> <span class="mi">4</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="c1"># Read a Building Footprint layer processed at STEP-1</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="n">proj_4326</span> <span class="o">=</span> <span class="n">pyproj</span><span class="o">.</span><span class="n">Proj</span><span class="p">(</span><span class="mi">4326</span><span class="p">)</span>
+<span class="ne">----&gt; </span><span class="mi">4</span> <span class="n">building_df</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">building_file</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="n">building_df</span> <span class="o">=</span> <span class="n">building_df</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="mi">4326</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">7</span> <span class="c1"># Read a Sample Area layer</span>
+
+<span class="nn">File /opt/hostedtoolcache/Python/3.10.14/x64/lib/python3.10/site-packages/geopandas/io/file.py:289,</span> in <span class="ni">_read_file</span><span class="nt">(filename, bbox, mask, rows, engine, **kwargs)</span>
+<span class="g g-Whitespace">    </span><span class="mi">286</span>     <span class="k">else</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">287</span>         <span class="n">path_or_bytes</span> <span class="o">=</span> <span class="n">filename</span>
+<span class="ne">--&gt; </span><span class="mi">289</span>     <span class="k">return</span> <span class="n">_read_file_fiona</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">290</span>         <span class="n">path_or_bytes</span><span class="p">,</span> <span class="n">from_bytes</span><span class="p">,</span> <span class="n">bbox</span><span class="o">=</span><span class="n">bbox</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">mask</span><span class="p">,</span> <span class="n">rows</span><span class="o">=</span><span class="n">rows</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+<span class="g g-Whitespace">    </span><span class="mi">291</span>     <span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">293</span> <span class="k">else</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">294</span>     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;unknown engine &#39;</span><span class="si">{</span><span class="n">engine</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
+
+<span class="nn">File /opt/hostedtoolcache/Python/3.10.14/x64/lib/python3.10/site-packages/geopandas/io/file.py:315,</span> in <span class="ni">_read_file_fiona</span><span class="nt">(path_or_bytes, from_bytes, bbox, mask, rows, where, **kwargs)</span>
+<span class="g g-Whitespace">    </span><span class="mi">312</span>     <span class="n">reader</span> <span class="o">=</span> <span class="n">fiona</span><span class="o">.</span><span class="n">open</span>
+<span class="g g-Whitespace">    </span><span class="mi">314</span> <span class="k">with</span> <span class="n">fiona_env</span><span class="p">():</span>
+<span class="ne">--&gt; </span><span class="mi">315</span>     <span class="k">with</span> <span class="n">reader</span><span class="p">(</span><span class="n">path_or_bytes</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="k">as</span> <span class="n">features</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">316</span>         <span class="n">crs</span> <span class="o">=</span> <span class="n">features</span><span class="o">.</span><span class="n">crs_wkt</span>
+<span class="g g-Whitespace">    </span><span class="mi">317</span>         <span class="c1"># attempt to get EPSG code</span>
+
+<span class="nn">File /opt/hostedtoolcache/Python/3.10.14/x64/lib/python3.10/site-packages/fiona/env.py:457,</span> in <span class="ni">ensure_env_with_credentials.&lt;locals&gt;.wrapper</span><span class="nt">(*args, **kwds)</span>
+<span class="g g-Whitespace">    </span><span class="mi">454</span>     <span class="n">session</span> <span class="o">=</span> <span class="n">DummySession</span><span class="p">()</span>
+<span class="g g-Whitespace">    </span><span class="mi">456</span> <span class="k">with</span> <span class="n">env_ctor</span><span class="p">(</span><span class="n">session</span><span class="o">=</span><span class="n">session</span><span class="p">):</span>
+<span class="ne">--&gt; </span><span class="mi">457</span>     <span class="k">return</span> <span class="n">f</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">)</span>
+
+<span class="nn">File /opt/hostedtoolcache/Python/3.10.14/x64/lib/python3.10/site-packages/fiona/__init__.py:292,</span> in <span class="ni">open</span><span class="nt">(fp, mode, driver, schema, crs, encoding, layer, vfs, enabled_drivers, crs_wkt, allow_unsupported_drivers, **kwargs)</span>
+<span class="g g-Whitespace">    </span><span class="mi">289</span>     <span class="n">path</span> <span class="o">=</span> <span class="n">parse_path</span><span class="p">(</span><span class="n">fp</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">291</span> <span class="k">if</span> <span class="n">mode</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">):</span>
+<span class="ne">--&gt; </span><span class="mi">292</span>     <span class="n">colxn</span> <span class="o">=</span> <span class="n">Collection</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">293</span>         <span class="n">path</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">294</span>         <span class="n">mode</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">295</span>         <span class="n">driver</span><span class="o">=</span><span class="n">driver</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">296</span>         <span class="n">encoding</span><span class="o">=</span><span class="n">encoding</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">297</span>         <span class="n">layer</span><span class="o">=</span><span class="n">layer</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">298</span>         <span class="n">enabled_drivers</span><span class="o">=</span><span class="n">enabled_drivers</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">299</span>         <span class="n">allow_unsupported_drivers</span><span class="o">=</span><span class="n">allow_unsupported_drivers</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">300</span>         <span class="o">**</span><span class="n">kwargs</span>
+<span class="g g-Whitespace">    </span><span class="mi">301</span>     <span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">302</span> <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;w&quot;</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">303</span>     <span class="n">colxn</span> <span class="o">=</span> <span class="n">Collection</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">304</span>         <span class="n">path</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">305</span>         <span class="n">mode</span><span class="p">,</span>
+   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">314</span>         <span class="o">**</span><span class="n">kwargs</span>
+<span class="g g-Whitespace">    </span><span class="mi">315</span>     <span class="p">)</span>
+
+<span class="nn">File /opt/hostedtoolcache/Python/3.10.14/x64/lib/python3.10/site-packages/fiona/collection.py:243,</span> in <span class="ni">Collection.__init__</span><span class="nt">(self, path, mode, driver, schema, crs, encoding, layer, vsi, archive, enabled_drivers, crs_wkt, ignore_fields, ignore_geometry, include_fields, wkt_version, allow_unsupported_drivers, **kwargs)</span>
+<span class="g g-Whitespace">    </span><span class="mi">241</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;r&quot;</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">242</span>     <span class="bp">self</span><span class="o">.</span><span class="n">session</span> <span class="o">=</span> <span class="n">Session</span><span class="p">()</span>
+<span class="ne">--&gt; </span><span class="mi">243</span>     <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">244</span> <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">mode</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">):</span>
+<span class="g g-Whitespace">    </span><span class="mi">245</span>     <span class="bp">self</span><span class="o">.</span><span class="n">session</span> <span class="o">=</span> <span class="n">WritingSession</span><span class="p">()</span>
+
+<span class="nn">File fiona/ogrext.pyx:588,</span> in <span class="ni">fiona.ogrext.Session.start</span><span class="nt">()</span>
+
+<span class="nn">File fiona/ogrext.pyx:143,</span> in <span class="ni">fiona.ogrext.gdal_open_vector</span><span class="nt">()</span>
+
+<span class="ne">DriverError</span>: /content/drive/MyDrive/Colab Notebooks/slumML/data/Yaounde/Yaounde_DA_morphology.shp: No such file or directory
+</pre></div>
+</div>
+</div>
+</div>
+<p>Here, adjust your prediction and response variables.
+Modify the code below to satisfy your needs.Current setting is very basic: Apply all variables in the building_df.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Urban classes to be used in the sample layer and for classification</span>
+<span class="c1"># Assign unique integer for each class by yourself here.</span>
+<span class="c1"># class_map = {&#39;High Income&#39;:1,&#39;Middle income&#39;:2,&#39;Industrial&#39;:5, &#39;Informal&#39;:3, &#39;Commercial&#39;:4}</span>
+<span class="c1"># class_map = {&#39;High income&#39;:1,&#39;Middle income&#39;:2,&#39;Informal&#39;:3, &#39;Commercial&#39;:4}</span>
+<span class="c1"># class_map = {&#39;commercial&#39;:1,&#39;industrial&#39;:2,&#39;ins_admin&#39;:3, &#39;res&#39;:4, &#39;res_detached&#39;:5, &#39;slum&#39;:6}#Nairobi</span>
+<span class="c1"># class_map = {&#39;Commercial zone&#39;:1,&#39;Formal&#39;:2,&#39;Informal&#39;:3, &#39;middle income&#39;:4}#Bangui</span>
+<span class="c1"># class_map = {&#39;High Income&#39;:1,&#39;Middle Income&#39;:2,&#39;Low Income&#39;:3, &#39;Slum&#39;:4, &#39;Com Admin&#39;:5, &#39;Industrial&#39;:6}#Libreville, Brazzaville, &amp; PointeNoire</span>
+<span class="c1"># class_map = {&#39;commercial&#39;:1,&#39;informal&#39;:2,&#39;mid/low income&#39;:3}#Bambari</span>
+<span class="n">class_map</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;Administrative&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="s2">&quot;Bidonville&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="s2">&quot;Commercial&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+    <span class="s2">&quot;High income&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+    <span class="s2">&quot;Industrial&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
+    <span class="s2">&quot;Middle/Low income&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+<span class="p">}</span>  <span class="c1"># Douala, Yaounde</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Here, adjust your prediction and response variables. Modify the code below to satisfy your needs.</span>
+<span class="c1"># Current setting is very basic: Apply all variables in the building_df.</span>
+<span class="n">col</span> <span class="o">=</span> <span class="n">building_df</span><span class="o">.</span><span class="n">columns</span>
+<span class="n">predictors</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">col</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">22</span><span class="p">])</span>
+<span class="n">response</span> <span class="o">=</span> <span class="s2">&quot;type&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">8</span><span class="p">],</span> <span class="n">line</span> <span class="mi">3</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="c1"># Here, adjust your prediction and response variables. Modify the code below to satisfy your needs.</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="c1"># Current setting is very basic: Apply all variables in the building_df.</span>
+<span class="ne">----&gt; </span><span class="mi">3</span> <span class="n">col</span> <span class="o">=</span> <span class="n">building_df</span><span class="o">.</span><span class="n">columns</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="n">predictors</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">col</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">22</span><span class="p">])</span>
+<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="n">response</span> <span class="o">=</span> <span class="s2">&quot;type&quot;</span>
+
+<span class="ne">NameError</span>: name &#39;building_df&#39; is not defined
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">### OPTIONAL ###</span>
+<span class="c1"># The col defining the urban space type should have &#39;type&#39; name. So, if not, rename it here.</span>
+<span class="n">sample_area</span> <span class="o">=</span> <span class="n">sample_area</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;class&quot;</span><span class="p">:</span> <span class="s2">&quot;type&quot;</span><span class="p">})</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">9</span><span class="p">],</span> <span class="n">line</span> <span class="mi">3</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="c1">### OPTIONAL ###</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="c1"># The col defining the urban space type should have &#39;type&#39; name. So, if not, rename it here.</span>
+<span class="ne">----&gt; </span><span class="mi">3</span> <span class="n">sample_area</span> <span class="o">=</span> <span class="n">sample_area</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;class&quot;</span><span class="p">:</span> <span class="s2">&quot;type&quot;</span><span class="p">})</span>
+
+<span class="ne">NameError</span>: name &#39;sample_area&#39; is not defined
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">### Generate a training data by intersecting &#39;building_df&#39; and &#39;sample_area&#39;</span>
+<span class="c1"># Set urban class default as &#39;unknown&#39;</span>
+
+<span class="n">source_df</span> <span class="o">=</span> <span class="n">building_df</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+<span class="n">source_df</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;unknown&quot;</span>
+
+<span class="c1"># Create an empty DF for append</span>
+<span class="n">training_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+
+<span class="c1"># &#39;training_data&#39; is now our official &#39;training data&#39; for the ML model.</span>
+<span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">sample_area</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">geometry</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">type</span>
+
+    <span class="n">df_temp</span> <span class="o">=</span> <span class="n">source_df</span><span class="p">[</span><span class="n">source_df</span><span class="o">.</span><span class="n">intersects</span><span class="p">(</span><span class="n">x</span><span class="p">)]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">df_temp</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">y</span>
+
+    <span class="n">training_data</span> <span class="o">=</span> <span class="n">training_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">df_temp</span><span class="p">)</span>
+
+<span class="n">training_data</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">training_data</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">class_map</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">10</span><span class="p">],</span> <span class="n">line</span> <span class="mi">4</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="c1">### Generate a training data by intersecting &#39;building_df&#39; and &#39;sample_area&#39;</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="c1"># Set urban class default as &#39;unknown&#39;</span>
+<span class="ne">----&gt; </span><span class="mi">4</span> <span class="n">source_df</span> <span class="o">=</span> <span class="n">building_df</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="g g-Whitespace">      </span><span class="mi">6</span> <span class="n">source_df</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;unknown&quot;</span>
+<span class="g g-Whitespace">      </span><span class="mi">8</span> <span class="c1"># Create an empty DF for append</span>
+
+<span class="ne">NameError</span>: name &#39;building_df&#39; is not defined
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<hr class="docutils" />
+<section class="tex2jax_ignore mathjax_ignore" id="h2o-pipeline">
+<h1><strong>h2o Pipeline</strong><a class="headerlink" href="#h2o-pipeline" title="Permalink to this heading">#</a></h1>
+<p>Initialize h2o</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">h2o</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">11</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">h2o</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
+
+<span class="ne">NameError</span>: name &#39;h2o&#39; is not defined
+</pre></div>
+</div>
+</div>
+</div>
+<p>Data prep for the h2o pipeline, autoML model selection.
+The best-performed model will be saved in the directory specified by ‘pth.’</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Convert the training data to an h2o frame.</span>
+<span class="c1"># NOTE that this process will be inefficien if the original data has many NaNs.</span>
+<span class="n">hf</span> <span class="o">=</span> <span class="n">H2OFrame</span><span class="p">(</span><span class="n">training_data</span><span class="p">)</span>
+
+
+<span class="c1"># This block of code is fairly h2o standard. It trains 20 models on this data,</span>
+<span class="c1"># limiting the runtime to 1 hour. At the end of an hour or training 20 models,</span>
+<span class="c1"># whichever is first, it returns a DataFrame of predictions as preds, ordered by the quality of their predictions.</span>
+
+<span class="c1"># Split &#39;hf&#39; into a taraining frame and validation frame.</span>
+<span class="n">train</span><span class="p">,</span> <span class="n">valid</span> <span class="o">=</span> <span class="n">hf</span><span class="o">.</span><span class="n">split_frame</span><span class="p">(</span><span class="n">ratios</span><span class="o">=</span><span class="p">[</span><span class="mf">0.8</span><span class="p">],</span> <span class="n">seed</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="c1"># Identify predictors and response</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">predictors</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">response</span>
+
+<span class="c1">## For binary classification, response should be a factor</span>
+<span class="n">train</span><span class="p">[</span><span class="n">y</span><span class="p">]</span> <span class="o">=</span> <span class="n">train</span><span class="p">[</span><span class="n">y</span><span class="p">]</span><span class="o">.</span><span class="n">asfactor</span><span class="p">()</span>
+<span class="n">valid</span><span class="p">[</span><span class="n">y</span><span class="p">]</span> <span class="o">=</span> <span class="n">valid</span><span class="p">[</span><span class="n">y</span><span class="p">]</span><span class="o">.</span><span class="n">asfactor</span><span class="p">()</span>
+
+<span class="c1"># Run AutoML for 20 base models (limited to 1 hour max runtime by default)</span>
+<span class="n">aml</span> <span class="o">=</span> <span class="n">H2OAutoML</span><span class="p">(</span><span class="n">max_models</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">aml</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">training_frame</span><span class="o">=</span><span class="n">train</span><span class="p">)</span>
+
+<span class="c1"># View the AutoML Leaderboard</span>
+<span class="n">lb</span> <span class="o">=</span> <span class="n">aml</span><span class="o">.</span><span class="n">leaderboard</span>
+
+
+<span class="c1"># Print all rows instead of default (10 rows)</span>
+<span class="n">lb</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="n">rows</span><span class="o">=</span><span class="n">lb</span><span class="o">.</span><span class="n">nrows</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;** Model validation with &#39;valid&#39; hf **&quot;</span><span class="p">)</span>
+<span class="n">preds</span> <span class="o">=</span> <span class="n">aml</span><span class="o">.</span><span class="n">leader</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">valid</span><span class="p">)</span>
+
+<span class="c1"># Here, we print out the performance of our top performing model.</span>
+<span class="n">res</span> <span class="o">=</span> <span class="n">aml</span><span class="o">.</span><span class="n">leader</span><span class="o">.</span><span class="n">model_performance</span><span class="p">(</span><span class="n">valid</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+
+<span class="c1"># We save the model down to its own save location.</span>
+<span class="n">model_path</span> <span class="o">=</span> <span class="n">h2o</span><span class="o">.</span><span class="n">save_model</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">aml</span><span class="o">.</span><span class="n">leader</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="n">pth</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">12</span><span class="p">],</span> <span class="n">line</span> <span class="mi">3</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="c1"># Convert the training data to an h2o frame.</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="c1"># NOTE that this process will be inefficien if the original data has many NaNs.</span>
+<span class="ne">----&gt; </span><span class="mi">3</span> <span class="n">hf</span> <span class="o">=</span> <span class="n">H2OFrame</span><span class="p">(</span><span class="n">training_data</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">6</span> <span class="c1"># This block of code is fairly h2o standard. It trains 20 models on this data,</span>
+<span class="g g-Whitespace">      </span><span class="mi">7</span> <span class="c1"># limiting the runtime to 1 hour. At the end of an hour or training 20 models,</span>
+<span class="g g-Whitespace">      </span><span class="mi">8</span> <span class="c1"># whichever is first, it returns a DataFrame of predictions as preds, ordered by the quality of their predictions.</span>
+<span class="g g-Whitespace">      </span><span class="mi">9</span> 
+<span class="g g-Whitespace">     </span><span class="mi">10</span> <span class="c1"># Split &#39;hf&#39; into a taraining frame and validation frame.</span>
+<span class="g g-Whitespace">     </span><span class="mi">11</span> <span class="n">train</span><span class="p">,</span> <span class="n">valid</span> <span class="o">=</span> <span class="n">hf</span><span class="o">.</span><span class="n">split_frame</span><span class="p">(</span><span class="n">ratios</span><span class="o">=</span><span class="p">[</span><span class="mf">0.8</span><span class="p">],</span> <span class="n">seed</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="ne">NameError</span>: name &#39;H2OFrame&#39; is not defined
+</pre></div>
+</div>
+</div>
+</div>
+<section id="supervised-ml-classification-based-on-the-selected-model">
+<h2><strong>Supervised ML classification based on the selected model</strong><a class="headerlink" href="#supervised-ml-classification-based-on-the-selected-model" title="Permalink to this heading">#</a></h2>
+<p>h2o struggled to generate predictions for more than 100,000 rows at a time.Thus, we split the original DataFrame into 100,000 row chunks, run the predictions on the h2o version of the frame, then send these to file.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">max_row_size</span> <span class="o">=</span> <span class="mi">100000</span>
+
+<span class="n">chunk_num</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">building_df</span><span class="p">)</span> <span class="o">/</span> <span class="n">max_row_size</span><span class="p">)</span>
+<span class="n">chunk_mod</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">building_df</span><span class="p">)</span> <span class="o">%</span> <span class="n">max_row_size</span>
+
+<span class="n">building_df</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;unknown&quot;</span>
+
+
+<span class="k">def</span> <span class="nf">MLpred</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
+    <span class="n">df_input</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">predictors</span><span class="p">]</span>
+    <span class="c1"># Extract predictor cols only (specified by the &#39;predictors&#39; LIST)</span>
+    <span class="n">hf_temp</span> <span class="o">=</span> <span class="n">H2OFrame</span><span class="p">(</span><span class="n">df_input</span><span class="p">)</span>
+
+    <span class="n">preds_temp</span> <span class="o">=</span> <span class="n">aml</span><span class="o">.</span><span class="n">leader</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">hf_temp</span><span class="p">)</span>
+    <span class="n">pred_df_temp</span> <span class="o">=</span> <span class="n">preds_temp</span><span class="o">.</span><span class="n">as_data_frame</span><span class="p">()</span>
+
+    <span class="c1"># add &#39;PID&#39; to &#39;pred_df_temp&#39; so that it will be merged to the original &#39;df.&#39;</span>
+    <span class="n">df</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">pred_df_temp</span><span class="p">[</span><span class="s2">&quot;PID&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">PID</span>
+
+    <span class="n">ans</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">pred_df_temp</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s2">&quot;PID&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">ans</span>
+
+
+<span class="c1"># Create an empty DF for append</span>
+<span class="n">prediction_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+
+<span class="c1"># If the total number of building footprints is smaller than 100,000:</span>
+<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">building_df</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">100000</span><span class="p">:</span>
+    <span class="c1"># Prediction process here</span>
+    <span class="n">pred_x</span> <span class="o">=</span> <span class="n">MLpred</span><span class="p">(</span><span class="n">building_df</span><span class="p">)</span>
+    <span class="n">prediction_df</span> <span class="o">=</span> <span class="n">prediction_df</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pred_x</span><span class="p">)</span>
+
+<span class="k">else</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">chunk_num</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Processing Chunk No. </span><span class="si">{}</span><span class="s2"> ----&gt; row 0–</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">max_row_size</span><span class="p">))</span>
+            <span class="n">df_temp2</span> <span class="o">=</span> <span class="n">building_df</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">max_row_size</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+            <span class="c1"># Prediction process here</span>
+            <span class="n">pred_x</span> <span class="o">=</span> <span class="n">MLpred</span><span class="p">(</span><span class="n">df_temp2</span><span class="p">)</span>
+
+            <span class="n">prediction_df</span> <span class="o">=</span> <span class="n">prediction_df</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pred_x</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">start</span> <span class="o">=</span> <span class="n">i</span> <span class="o">*</span> <span class="n">max_row_size</span>
+            <span class="n">stop</span> <span class="o">=</span> <span class="p">(</span><span class="n">i</span> <span class="o">*</span> <span class="n">max_row_size</span><span class="p">)</span> <span class="o">+</span> <span class="n">max_row_size</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Processing Chunk No. </span><span class="si">{}</span><span class="s2"> ----&gt; row </span><span class="si">{}</span><span class="s2">–</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">stop</span><span class="p">))</span>
+            <span class="n">df_temp2</span> <span class="o">=</span> <span class="n">building_df</span><span class="p">[</span><span class="n">start</span><span class="p">:</span><span class="n">stop</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+            <span class="c1"># Prediction process here</span>
+            <span class="n">pred_x</span> <span class="o">=</span> <span class="n">MLpred</span><span class="p">(</span><span class="n">df_temp2</span><span class="p">)</span>
+
+            <span class="n">prediction_df</span> <span class="o">=</span> <span class="n">prediction_df</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pred_x</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">chunk_mod</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">start</span> <span class="o">=</span> <span class="n">chunk_num</span> <span class="o">*</span> <span class="n">max_row_size</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Processing Chunk No. </span><span class="si">{}</span><span class="s2"> ----&gt; row </span><span class="si">{}</span><span class="s2"> till the end&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">start</span><span class="p">))</span>
+        <span class="n">df_temp2</span> <span class="o">=</span> <span class="n">building_df</span><span class="p">[</span><span class="n">start</span><span class="p">:]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+        <span class="c1"># Prediction process here</span>
+        <span class="n">pred_x</span> <span class="o">=</span> <span class="n">MLpred</span><span class="p">(</span><span class="n">df_temp2</span><span class="p">)</span>
+
+        <span class="n">prediction_df</span> <span class="o">=</span> <span class="n">prediction_df</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pred_x</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">13</span><span class="p">],</span> <span class="n">line</span> <span class="mi">3</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="n">max_row_size</span> <span class="o">=</span> <span class="mi">100000</span>
+<span class="ne">----&gt; </span><span class="mi">3</span> <span class="n">chunk_num</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">building_df</span><span class="p">)</span> <span class="o">/</span> <span class="n">max_row_size</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="n">chunk_mod</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">building_df</span><span class="p">)</span> <span class="o">%</span> <span class="n">max_row_size</span>
+<span class="g g-Whitespace">      </span><span class="mi">6</span> <span class="n">building_df</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;unknown&quot;</span>
+
+<span class="ne">NameError</span>: name &#39;building_df&#39; is not defined
+</pre></div>
+</div>
+</div>
+</div>
+<hr class="docutils" />
+</section>
+<section id="post-analytical-process">
+<h2><strong>Post-analytical process</strong><a class="headerlink" href="#post-analytical-process" title="Permalink to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">### Exporting</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Exporting reulst to shapefile...&quot;</span><span class="p">)</span>
+<span class="n">output_path</span> <span class="o">=</span> <span class="n">pth</span> <span class="o">+</span> <span class="s2">&quot;\prediction_result.shp&quot;</span>
+<span class="n">prediction_df</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="n">output_path</span><span class="p">,</span> <span class="n">driver</span><span class="o">=</span><span class="s2">&quot;ESRI Shapefile&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Exporting reulst to shapefile...
+</pre></div>
+</div>
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">14</span><span class="p">],</span> <span class="n">line</span> <span class="mi">4</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Exporting reulst to shapefile...&quot;</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="n">output_path</span> <span class="o">=</span> <span class="n">pth</span> <span class="o">+</span> <span class="s2">&quot;\prediction_result.shp&quot;</span>
+<span class="ne">----&gt; </span><span class="mi">4</span> <span class="n">prediction_df</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="n">output_path</span><span class="p">,</span> <span class="n">driver</span><span class="o">=</span><span class="s2">&quot;ESRI Shapefile&quot;</span><span class="p">)</span>
+
+<span class="ne">NameError</span>: name &#39;prediction_df&#39; is not defined
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">### Refreshing H2O cluster (if necessary)</span>
+<span class="n">h2o</span><span class="o">.</span><span class="n">shutdown</span><span class="p">(</span><span class="n">prompt</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">15</span><span class="p">],</span> <span class="n">line</span> <span class="mi">2</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="c1">### Refreshing H2O cluster (if necessary)</span>
+<span class="ne">----&gt; </span><span class="mi">2</span> <span class="n">h2o</span><span class="o">.</span><span class="n">shutdown</span><span class="p">(</span><span class="n">prompt</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="ne">NameError</span>: name &#39;h2o&#39; is not defined
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./notebooks/Implementations/Slum_Mapping/slumML"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#"><strong>STEP-2</strong></a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#initial-file-setting">Initial file setting</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#h2o-pipeline"><strong>h2o Pipeline</strong></a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#supervised-ml-classification-based-on-the-selected-model"><strong>Supervised ML classification based on the selected model</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#post-analytical-process"><strong>Post-analytical process</strong></a></li>
+</ul>
+</li>
+</ul>
+
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Benjamin P. Stewart
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../../_static/scripts/bootstrap.js?digest=3ee479438cf8b5e0d341"></script>
+<script src="../../../../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

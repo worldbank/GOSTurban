@@ -9,25 +9,25 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Landscape Expansion Index</title>
+    <title>Landscape Expansion Index &#8212; GOST Urbanization</title>
   
   
   
   <script data-cfasync="false">
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
-    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
-<link href="../../_static/styles/bootstrap.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+  <link href="../../_static/styles/theme.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
 
   
-  <link href="../../_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.1/webfonts/fa-solid-900.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
+  <link href="../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css" />
@@ -38,9 +38,9 @@
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.5ea377869091fd0449014c60fc090103.min.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
-  <script src="../../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=3ee479438cf8b5e0d341" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341" />
+  <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=3ee479438cf8b5e0d341"></script>
 
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
@@ -60,14 +60,11 @@
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
     <script async="async" src="../../_static/sphinx-thebe.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/Tutorials/LEI_Example';</script>
-    <link rel="canonical" href="https://worldbank.github.io/GOSTurban/notebooks/Tutorials/LEI_Example.html" />
-    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="prev" title="Degree of Urbanization" href="UrbanAreas_tutorials.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-    <meta name="docbuild:last-update" content="May 25, 2024"/>
   </head>
   
   
@@ -75,27 +72,23 @@
 
   
   
-  <a id="pst-skip-link" class="skip-link" href="#main-content">Skip to main content</a>
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
   
   <div id="pst-scroll-pixel-helper"></div>
   
   <button type="button" class="btn rounded-pill" id="pst-back-to-top">
-    <i class="fa-solid fa-arrow-up"></i>
-    Back to top
-  </button>
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
 
   
   <input type="checkbox"
           class="sidebar-toggle"
-          name="__primary"
-          id="__primary"/>
-  <label class="overlay overlay-primary" for="__primary"></label>
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
   
   <input type="checkbox"
           class="sidebar-toggle"
-          name="__secondary"
-          id="__secondary"/>
-  <label class="overlay overlay-secondary" for="__secondary"></label>
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
   
   <div class="search-button__wrapper">
     <div class="search-button__overlay"></div>
@@ -117,8 +110,13 @@
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
 </form></div>
   </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
   
-    <header class="bd-header navbar navbar-expand-lg bd-navbar">
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
     </header>
   
 
@@ -154,8 +152,8 @@
       
     
     
-    <img src="../../_static/logo.png" class="logo__image only-light" alt=" - Home"/>
-    <script>document.write(`<img src="../../_static/logo.png" class="logo__image only-dark" alt=" - Home"/>`);</script>
+    <img src="../../_static/logo.png" class="logo__image only-light" alt="GOST Urbanization - Home"/>
+    <script>document.write(`<img src="../../_static/logo.png" class="logo__image only-dark" alt="GOST Urbanization - Home"/>`);</script>
   
   
 </a></div>
@@ -211,7 +209,7 @@
 
       </div>
       
-      <main id="main-content" class="bd-main">
+      <main id="main-content" class="bd-main" role="main">
         
         
 
@@ -220,14 +218,14 @@
           <div class="bd-content">
             <div class="bd-article-container">
               
-              <div class="bd-header-article">
+              <div class="bd-header-article d-print-none">
 <div class="header-article-items header-article__inner">
   
     <div class="header-article-items__start">
       
-        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
   <span class="fa-solid fa-bars"></span>
-</label></div>
+</button></div>
       
     </div>
   
@@ -239,67 +237,18 @@
 <div class="article-header-buttons">
 
 
-
-
-
-<div class="dropdown dropdown-source-buttons">
-  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
-    <i class="fab fa-github"></i>
-  </button>
-  <ul class="dropdown-menu">
-      
-      
-      
-      <li><a href="https://github.com/worldbank/GOSTurban" target="_blank"
-   class="btn btn-sm btn-source-repository-button dropdown-item"
+<a href="https://github.com/worldbank/GOST_Urban" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
    title="Source repository"
-   data-bs-placement="left" data-bs-toggle="tooltip"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
 >
   
 
 <span class="btn__icon-container">
   <i class="fab fa-github"></i>
   </span>
-<span class="btn__text-container">Repository</span>
-</a>
-</li>
-      
-      
-      
-      
-      <li><a href="https://github.com/worldbank/GOSTurban/edit/main/notebooks/Tutorials/LEI_Example.ipynb" target="_blank"
-   class="btn btn-sm btn-source-edit-button dropdown-item"
-   title="Suggest edit"
-   data-bs-placement="left" data-bs-toggle="tooltip"
->
-  
 
-<span class="btn__icon-container">
-  <i class="fas fa-pencil-alt"></i>
-  </span>
-<span class="btn__text-container">Suggest edit</span>
 </a>
-</li>
-      
-      
-      
-      
-      <li><a href="https://github.com/worldbank/GOSTurban/issues/new?title=Issue%20on%20page%20%2Fnotebooks/Tutorials/LEI_Example.html&body=Your%20issue%20content%20here." target="_blank"
-   class="btn btn-sm btn-source-issues-button dropdown-item"
-   title="Open an issue"
-   data-bs-placement="left" data-bs-toggle="tooltip"
->
-  
-
-<span class="btn__icon-container">
-  <i class="fas fa-lightbulb"></i>
-  </span>
-<span class="btn__text-container">Open issue</span>
-</a>
-</li>
-      
-  </ul>
-</div>
 
 
 
@@ -385,9 +334,9 @@ document.write(`
   </button>
 `);
 </script>
-<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <span class="fa-solid fa-list"></span>
-</label>
+</button>
 </div></div>
       
     </div>
@@ -429,8 +378,8 @@ document.write(`
   <section class="tex2jax_ignore mathjax_ignore" id="landscape-expansion-index">
 <h1>Landscape Expansion Index<a class="headerlink" href="#landscape-expansion-index" title="Permalink to this heading">#</a></h1>
 <p>More details on the wiki - <a class="github reference external" href="https://github.com/worldbank/GOST_Urban/wiki/Landscape-Expansion-Index">worldbank/GOST_Urban</a></p>
-<p>The Landscape Expansion Index measures the nature of urbanization, quantifying the new urban landscape as one of the following three categories. The process works by isolating the areas of new urban footprint in your study area, buffering those by a set amount (300 m) and intersecting the buffer donut with the original urban area. LEI is calculated as the ratio of the area of the buffer to the area of the old built area within the buffer (the threshold for each class is customizeable).</p>
-<table class="colwidths-auto table">
+<p>The Landscape Expansion Index measures the nature of urbanization, quantifying the new urban landscape as one of the following three categories. The process works by isolating the areas of new urban footprint in your study area, buffering those by a set amount (300 m) and intersecting the buffer donut with the original urban area. LEI is calculated as the ratio of the area of the buffer to the area of the old built area within the buffer (the threshold for each class is customizable).</p>
+<div class="pst-scrollable-table-container"><table class="colwidths-auto table">
 <thead>
 <tr class="row-odd"><th class="head"><p>Expansion Type</p></th>
 <th class="head"><p>Description</p></th>
@@ -448,6 +397,7 @@ document.write(`
 </tr>
 </tbody>
 </table>
+</div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
@@ -457,13 +407,27 @@ document.write(`
 <span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
-<span class="kn">import</span> <span class="nn">GOSTrocks.rasterMisc</span> <span class="k">as</span> <span class="nn">rMisc</span>
-<span class="kn">import</span> <span class="nn">GOSTrocks.ghslMisc</span> <span class="k">as</span> <span class="nn">ghslMisc</span>
+<span class="kn">import</span> <span class="nn">GOSTRocks.rasterMisc</span> <span class="k">as</span> <span class="nn">rMisc</span>
+<span class="kn">import</span> <span class="nn">GOSTRocks.ghslMisc</span> <span class="k">as</span> <span class="nn">ghslMisc</span>
 <span class="kn">import</span> <span class="nn">GOSTurban.LEI</span> <span class="k">as</span> <span class="nn">lei</span>
-<span class="kn">import</span> <span class="nn">GOSTrocks.mapMisc</span> <span class="k">as</span> <span class="nn">mapMisc</span>
+<span class="kn">import</span> <span class="nn">GOSTRocks.mapMisc</span> <span class="k">as</span> <span class="nn">mapMisc</span>
 
 <span class="o">%</span><span class="k">load_ext</span> autoreload
 <span class="o">%</span><span class="k">autoreload</span> 2
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">line</span> <span class="mi">8</span>
+<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
+<span class="g g-Whitespace">      </span><span class="mi">6</span> <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="ne">----&gt; </span><span class="mi">8</span> <span class="kn">import</span> <span class="nn">GOSTRocks.rasterMisc</span> <span class="k">as</span> <span class="nn">rMisc</span>
+<span class="g g-Whitespace">      </span><span class="mi">9</span> <span class="kn">import</span> <span class="nn">GOSTRocks.ghslMisc</span> <span class="k">as</span> <span class="nn">ghslMisc</span>
+<span class="g g-Whitespace">     </span><span class="mi">10</span> <span class="kn">import</span> <span class="nn">GOSTurban.LEI</span> <span class="k">as</span> <span class="nn">lei</span>
+
+<span class="ne">ModuleNotFoundError</span>: No module named &#39;GOSTRocks&#39;
 </pre></div>
 </div>
 </div>
@@ -525,7 +489,17 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/202a17e65c7cec5d7d469008e2203432a76e38965e288933c7fa89992e1b24bd.png" src="../../_images/202a17e65c7cec5d7d469008e2203432a76e38965e288933c7fa89992e1b24bd.png" />
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="n">line</span> <span class="mi">6</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="n">ghsl_d</span><span class="p">[</span><span class="n">ghsl_d</span> <span class="o">==</span> <span class="n">ghsl_r</span><span class="o">.</span><span class="n">meta</span><span class="p">[</span><span class="s2">&quot;nodata&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="n">thresh</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1975</span><span class="p">,</span> <span class="mi">2031</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="ne">----&gt; </span><span class="mi">6</span> <span class="k">with</span> <span class="n">rMisc</span><span class="o">.</span><span class="n">create_rasterio_inmemory</span><span class="p">(</span><span class="n">ghsl_r</span><span class="o">.</span><span class="n">profile</span><span class="p">,</span> <span class="n">ghsl_d</span><span class="p">)</span> <span class="k">as</span> <span class="n">temp_ghsl</span><span class="p">:</span>
+<span class="g g-Whitespace">      </span><span class="mi">7</span>     <span class="n">mapMisc</span><span class="o">.</span><span class="n">static_map_raster</span><span class="p">(</span><span class="n">temp_ghsl</span><span class="p">,</span> <span class="n">thresh</span><span class="o">=</span><span class="n">thresh</span><span class="p">)</span>
+
+<span class="ne">NameError</span>: name &#39;rMisc&#39; is not defined
+</pre></div>
+</div>
 </div>
 </div>
 <section id="calculate-lei-between-1990-and-2000">
@@ -548,69 +522,24 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_html"><div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span> <span class="n">line</span> <span class="mi">2</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="c1"># This calculates the change from 1990 and 2000</span>
+<span class="ne">----&gt; </span><span class="mi">2</span> <span class="n">lei_raw</span> <span class="o">=</span> <span class="n">lei</span><span class="o">.</span><span class="n">calculate_LEI</span><span class="p">(</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span>     <span class="n">input_ghsl</span><span class="p">,</span> <span class="n">old_list</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1975</span><span class="p">,</span> <span class="mi">1991</span><span class="p">,</span> <span class="mi">5</span><span class="p">)),</span> <span class="n">new_list</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1995</span><span class="p">,</span> <span class="mi">2001</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="n">lei_90_00</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">(</span>
+<span class="g g-Whitespace">      </span><span class="mi">6</span>     <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">lei_raw</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;geometry&quot;</span><span class="p">,</span> <span class="s2">&quot;old&quot;</span><span class="p">,</span> <span class="s2">&quot;total&quot;</span><span class="p">]),</span>
+<span class="g g-Whitespace">      </span><span class="mi">7</span>     <span class="n">geometry</span><span class="o">=</span><span class="s2">&quot;geometry&quot;</span><span class="p">,</span>
+<span class="g g-Whitespace">      </span><span class="mi">8</span>     <span class="n">crs</span><span class="o">=</span><span class="n">ghsl_r</span><span class="o">.</span><span class="n">crs</span><span class="p">,</span>
+<span class="g g-Whitespace">      </span><span class="mi">9</span> <span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">10</span> <span class="n">lei_90_00</span><span class="p">[</span><span class="s2">&quot;LEI&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">lei_90_00</span><span class="p">[</span><span class="s2">&quot;old&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="n">lei_90_00</span><span class="p">[</span><span class="s2">&quot;total&quot;</span><span class="p">]</span>
 
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>geometry</th>
-      <th>old</th>
-      <th>total</th>
-      <th>LEI</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>POLYGON ((-6568500.000 4707300.000, -6568500.0...</td>
-      <td>23</td>
-      <td>25</td>
-      <td>0.92</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>POLYGON ((-6568200.000 4707300.000, -6568200.0...</td>
-      <td>23</td>
-      <td>25</td>
-      <td>0.92</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>POLYGON ((-6565700.000 4707300.000, -6565700.0...</td>
-      <td>22</td>
-      <td>25</td>
-      <td>0.88</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>POLYGON ((-6563800.000 4707300.000, -6563800.0...</td>
-      <td>16</td>
-      <td>25</td>
-      <td>0.64</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>POLYGON ((-6560800.000 4707300.000, -6560800.0...</td>
-      <td>23</td>
-      <td>25</td>
-      <td>0.92</td>
-    </tr>
-  </tbody>
-</table>
-</div></div></div>
+<span class="ne">NameError</span>: name &#39;lei&#39; is not defined
+</pre></div>
+</div>
+</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -639,14 +568,18 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\wbg\Anaconda3\envs\urban_test\Lib\site-packages\GOSTrocks\mapMisc.py:58: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
-  for label, mdata in v_data.groupby(&#39;tomap&#39;):
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span> <span class="n">line</span> <span class="mi">4</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="n">leap_val</span> <span class="o">=</span> <span class="mf">0.30</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="n">exp_val</span> <span class="o">=</span> <span class="mf">0.70</span>
+<span class="ne">----&gt; </span><span class="mi">4</span> <span class="n">lei_90_00</span><span class="p">[</span><span class="s2">&quot;area&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">lei_90_00</span><span class="p">[</span><span class="s2">&quot;geometry&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">area</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">7</span> <span class="k">def</span> <span class="nf">calculate_LEI</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="n">leap_val</span><span class="p">,</span> <span class="n">exp_val</span><span class="p">):</span>
+<span class="g g-Whitespace">      </span><span class="mi">8</span>     <span class="k">if</span> <span class="n">val</span> <span class="o">&lt;=</span> <span class="n">leap_val</span><span class="p">:</span>
+
+<span class="ne">NameError</span>: name &#39;lei_90_00&#39; is not defined
 </pre></div>
 </div>
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;module &#39;matplotlib.pyplot&#39; from &#39;C:\\wbg\\Anaconda3\\envs\\urban_test\\Lib\\site-packages\\matplotlib\\pyplot.py&#39;&gt;
-</pre></div>
-</div>
-<img alt="../../_images/6d83ea7c17366b3e8e4109fabcdd1a3e6ecdca7a1b02bf65db8b48c349effe22.png" src="../../_images/6d83ea7c17366b3e8e4109fabcdd1a3e6ecdca7a1b02bf65db8b48c349effe22.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -657,11 +590,13 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>class
-Expansion    242.40
-Infill        75.35
-Leapfrog       0.38
-Name: area, dtype: float64
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">7</span><span class="p">],</span> <span class="n">line</span> <span class="mi">2</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="c1"># Calculate summaries of lei as area (km2) in each class</span>
+<span class="ne">----&gt; </span><span class="mi">2</span> <span class="n">lei</span><span class="o">.</span><span class="n">summarize_LEI</span><span class="p">(</span><span class="n">lei_90_00</span><span class="p">,</span> <span class="n">leap_val</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">exp_val</span><span class="o">=</span><span class="mf">0.75</span><span class="p">)</span> <span class="o">/</span> <span class="mi">1000000</span>
+
+<span class="ne">NameError</span>: name &#39;lei&#39; is not defined
 </pre></div>
 </div>
 </div>
@@ -682,69 +617,20 @@ Name: area, dtype: float64
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_html"><div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">8</span><span class="p">],</span> <span class="n">line</span> <span class="mi">2</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="c1"># This calculates the change from 2000 and 2014</span>
+<span class="ne">----&gt; </span><span class="mi">2</span> <span class="n">lei_raw</span> <span class="o">=</span> <span class="n">lei</span><span class="o">.</span><span class="n">calculate_LEI</span><span class="p">(</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span>     <span class="n">input_ghsl</span><span class="p">,</span> <span class="n">old_list</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1975</span><span class="p">,</span> <span class="mi">2011</span><span class="p">,</span> <span class="mi">5</span><span class="p">)),</span> <span class="n">new_list</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">2015</span><span class="p">,</span> <span class="mi">2030</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="n">lei_00_14</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">lei_raw</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;geometry&quot;</span><span class="p">,</span> <span class="s2">&quot;old&quot;</span><span class="p">,</span> <span class="s2">&quot;total&quot;</span><span class="p">])</span>
+<span class="g g-Whitespace">      </span><span class="mi">6</span> <span class="n">lei_00_14</span><span class="p">[</span><span class="s2">&quot;LEI&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">lei_00_14</span><span class="p">[</span><span class="s2">&quot;old&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="n">lei_00_14</span><span class="p">[</span><span class="s2">&quot;total&quot;</span><span class="p">]</span>
 
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>geometry</th>
-      <th>old</th>
-      <th>total</th>
-      <th>LEI</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>POLYGON ((-6566200 4707300, -6566200 4707200, ...</td>
-      <td>16</td>
-      <td>25</td>
-      <td>0.640000</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>POLYGON ((-6564500 4707300, -6564500 4707200, ...</td>
-      <td>16</td>
-      <td>28</td>
-      <td>0.571429</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>POLYGON ((-6564100 4707300, -6564100 4707200, ...</td>
-      <td>22</td>
-      <td>25</td>
-      <td>0.880000</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>POLYGON ((-6558000 4707300, -6558000 4707200, ...</td>
-      <td>17</td>
-      <td>18</td>
-      <td>0.944444</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>POLYGON ((-6599900 4707200, -6599900 4707100, ...</td>
-      <td>17</td>
-      <td>32</td>
-      <td>0.531250</td>
-    </tr>
-  </tbody>
-</table>
-</div></div></div>
+<span class="ne">NameError</span>: name &#39;lei&#39; is not defined
+</pre></div>
+</div>
+</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -754,13 +640,13 @@ Name: area, dtype: float64
 <span class="n">lei_90_00</span><span class="p">[</span><span class="s2">&quot;area&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">lei_90_00</span><span class="p">[</span><span class="s2">&quot;geometry&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">area</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">calculate_LEI</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="n">leap_val</span><span class="p">,</span> <span class="n">exp_val</span><span class="p">):</span>
-    <span class="k">if</span> <span class="n">val</span> <span class="o">&lt;=</span> <span class="n">leap_val</span><span class="p">:</span>
-        <span class="k">return</span> <span class="mi">3</span>
-    <span class="k">elif</span> <span class="n">val</span> <span class="o">&lt;</span> <span class="n">exp_val</span><span class="p">:</span>
-        <span class="k">return</span> <span class="mi">2</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="mi">1</span>
+<span class="c1"># def calculate_LEI(val, leap_val, exp_val):</span>
+<span class="c1">#     if val &lt;= leap_val:</span>
+<span class="c1">#         return 3</span>
+<span class="c1">#     elif val &lt; exp_val:</span>
+<span class="c1">#         return 2</span>
+<span class="c1">#     else:</span>
+<span class="c1">#         return 1</span>
 
 
 <span class="n">lei_90_00</span><span class="p">[</span><span class="s2">&quot;class&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">lei_90_00</span><span class="p">[</span><span class="s2">&quot;LEI&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
@@ -773,14 +659,25 @@ Name: area, dtype: float64
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\wbg\Anaconda3\envs\urban_test\Lib\site-packages\GOSTrocks\mapMisc.py:58: FutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.
-  for label, mdata in v_data.groupby(&#39;tomap&#39;):
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">9</span><span class="p">],</span> <span class="n">line</span> <span class="mi">4</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="n">leap_val</span> <span class="o">=</span> <span class="mf">0.30</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="n">exp_val</span> <span class="o">=</span> <span class="mf">0.70</span>
+<span class="ne">----&gt; </span><span class="mi">4</span> <span class="n">lei_90_00</span><span class="p">[</span><span class="s2">&quot;area&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">lei_90_00</span><span class="p">[</span><span class="s2">&quot;geometry&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">area</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">7</span> <span class="c1"># def calculate_LEI(val, leap_val, exp_val):</span>
+<span class="g g-Whitespace">      </span><span class="mi">8</span> <span class="c1">#     if val &lt;= leap_val:</span>
+<span class="g g-Whitespace">      </span><span class="mi">9</span> <span class="c1">#         return 3</span>
+   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">12</span> <span class="c1">#     else:</span>
+<span class="g g-Whitespace">     </span><span class="mi">13</span> <span class="c1">#         return 1</span>
+<span class="g g-Whitespace">     </span><span class="mi">16</span> <span class="n">lei_90_00</span><span class="p">[</span><span class="s2">&quot;class&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">lei_90_00</span><span class="p">[</span><span class="s2">&quot;LEI&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
+<span class="g g-Whitespace">     </span><span class="mi">17</span>     <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">calculate_LEI</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">leap_val</span><span class="p">,</span> <span class="n">exp_val</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">18</span> <span class="p">)</span>
+
+<span class="ne">NameError</span>: name &#39;lei_90_00&#39; is not defined
 </pre></div>
 </div>
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;module &#39;matplotlib.pyplot&#39; from &#39;C:\\wbg\\Anaconda3\\envs\\urban_test\\Lib\\site-packages\\matplotlib\\pyplot.py&#39;&gt;
-</pre></div>
-</div>
-<img alt="../../_images/6d83ea7c17366b3e8e4109fabcdd1a3e6ecdca7a1b02bf65db8b48c349effe22.png" src="../../_images/6d83ea7c17366b3e8e4109fabcdd1a3e6ecdca7a1b02bf65db8b48c349effe22.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -791,11 +688,13 @@ Name: area, dtype: float64
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>class
-Expansion    284.73
-Infill       143.53
-Leapfrog       0.85
-Name: area, dtype: float64
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">10</span><span class="p">],</span> <span class="n">line</span> <span class="mi">2</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="c1"># Calculate summaries of lei</span>
+<span class="ne">----&gt; </span><span class="mi">2</span> <span class="n">lei</span><span class="o">.</span><span class="n">summarize_LEI</span><span class="p">(</span><span class="n">lei_00_14</span><span class="p">,</span> <span class="n">leap_val</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">exp_val</span><span class="o">=</span><span class="mf">0.75</span><span class="p">)</span> <span class="o">/</span> <span class="mi">1000000</span>
+
+<span class="ne">NameError</span>: name &#39;lei&#39; is not defined
 </pre></div>
 </div>
 </div>
@@ -803,6 +702,7 @@ Name: area, dtype: float64
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># write raw LEI results to file</span>
+<span class="n">input_folder</span> <span class="o">=</span> <span class="s2">&quot;.&quot;</span>
 <span class="n">lei_90_00</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">input_folder</span><span class="p">,</span> <span class="s2">&quot;GHSL_LEI_90_00.csv&quot;</span><span class="p">))</span>
 <span class="n">lei_00_14</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">input_folder</span><span class="p">,</span> <span class="s2">&quot;GHSL_LEI_00_14.csv&quot;</span><span class="p">))</span>
 </pre></div>
@@ -811,12 +711,13 @@ Name: area, dtype: float64
 <div class="cell_output docutils container">
 <div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
 <span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">11</span><span class="p">],</span> <span class="n">line</span> <span class="mi">2</span>
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">11</span><span class="p">],</span> <span class="n">line</span> <span class="mi">3</span>
 <span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="c1"># write raw LEI results to file</span>
-<span class="ne">----&gt; </span><span class="mi">2</span> <span class="n">lei_90_00</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">input_folder</span><span class="p">,</span> <span class="s2">&quot;GHSL_LEI_90_00.csv&quot;</span><span class="p">))</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="n">lei_00_14</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">input_folder</span><span class="p">,</span> <span class="s2">&quot;GHSL_LEI_00_14.csv&quot;</span><span class="p">))</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="n">input_folder</span> <span class="o">=</span> <span class="s2">&quot;.&quot;</span>
+<span class="ne">----&gt; </span><span class="mi">3</span> <span class="n">lei_90_00</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">input_folder</span><span class="p">,</span> <span class="s2">&quot;GHSL_LEI_90_00.csv&quot;</span><span class="p">))</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="n">lei_00_14</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">input_folder</span><span class="p">,</span> <span class="s2">&quot;GHSL_LEI_00_14.csv&quot;</span><span class="p">))</span>
 
-<span class="ne">NameError</span>: name &#39;input_folder&#39; is not defined
+<span class="ne">NameError</span>: name &#39;lei_90_00&#39; is not defined
 </pre></div>
 </div>
 </div>
@@ -833,16 +734,16 @@ Name: area, dtype: float64
         },
         codeMirrorConfig: {
             theme: "abcdef",
-            mode: "urban_test"
+            mode: "python"
         },
         kernelOptions: {
-            name: "urban_test",
+            name: "python3",
             path: "./notebooks/Tutorials"
         },
         predefinedOutput: true
     }
     </script>
-    <script>kernelName = 'urban_test'</script>
+    <script>kernelName = 'python3'</script>
 
                 </article>
               
@@ -851,7 +752,7 @@ Name: area, dtype: float64
               
               
               
-                <footer class="prev-next-footer">
+                <footer class="prev-next-footer d-print-none">
                   
 <div class="prev-next-area">
     <a class="left-prev"
@@ -908,13 +809,17 @@ By Benjamin P. Stewart
   <div class="footer-item">
     
 
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
   </div>
   
   <div class="footer-item">
-    <p class="last-updated">
-  Last updated on May 25, 2024.
-  <br/>
-</p>
+    
   </div>
   
   <div class="footer-item">
@@ -930,8 +835,8 @@ By Benjamin P. Stewart
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae"></script>
-<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae"></script>
+  <script src="../../_static/scripts/bootstrap.js?digest=3ee479438cf8b5e0d341"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341"></script>
 
   <footer class="bd-footer">
   </footer>

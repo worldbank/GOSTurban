@@ -1,0 +1,946 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Calculate Urban Metrics: Sprawl &#8212; GOST Urbanization</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+<link href="../../../_static/styles/bootstrap.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+
+  
+  <link href="../../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.5ea377869091fd0449014c60fc090103.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=3ee479438cf8b5e0d341" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341" />
+  <script src="../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=3ee479438cf8b5e0d341"></script>
+
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../_static/clipboard.min.js"></script>
+    <script src="../../../_static/copybutton.js"></script>
+    <script src="../../../_static/scripts/sphinx-book-theme.js"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../../../_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/Implementations/KAZ_SCADR_UrbanizationReview/Urban_metrics_Sprawl';</script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+
+<a class="navbar-brand logo" href="../../../README.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../../_static/logo.png" class="logo__image only-light" alt="GOST Urbanization - Home"/>
+    <script>document.write(`<img src="../../../_static/logo.png" class="logo__image only-dark" alt="GOST Urbanization - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../../README.html">
+                    Quantifying urbanization
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../api/GOSTurban.html">GOSTurban package</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Novel Urbanization</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../novel_context.html">Novel Urbanization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../urbanization_comparison.html">Comparing urban methods</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../Tutorials/UrbanAreas_tutorials.html">Degree of Urbanization</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="../../Tutorials/LEI_Example.html">Landscape Expansion Index</a></li>
+
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/worldbank/GOST_Urban" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../../_sources/notebooks/Implementations/KAZ_SCADR_UrbanizationReview/Urban_metrics_Sprawl.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Calculate Urban Metrics: Sprawl</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inputs-are-ghs-pop-and-the-urban-extents">Inputs are GHS pop and the urban extents</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#first-find-overall-grid-cell-group-median">First find overall grid cell group median</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#second-calculate-the-sprawl-metric-for-each-shape">Second calculate the Sprawl metric for each shape</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="calculate-urban-metrics-sprawl">
+<h1>Calculate Urban Metrics: Sprawl<a class="headerlink" href="#calculate-urban-metrics-sprawl" title="Permalink to this heading">#</a></h1>
+<p>Normalized difference between the share of areas with population density below the regional average density and the share of areas with population density above the regional average density (Fallah et al., 2011).</p>
+<p>Sprawl L H = ((L%−H%)+1)*0.5</p>
+<p>Where L% is the share of metropolitan population living in a grid cell with density below the overall grid cell group median and H% is the share of metropolitan population living in a grid cell with density above the overall grid cell group median. The sprawl measure in Equation (8) is an index that ranges between 0 and 1; values closer to 1 represent greater sprawl.</p>
+<p>To account for ‘rural clusters’ in metropolitan areas, grid cells with density below 200 persons per square mile are excluded (or 77 per square km).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">load_ext</span> autoreload
+<span class="o">%</span><span class="k">autoreload</span> 2
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">time</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">shapely.geometry</span> <span class="kn">import</span> <span class="n">mapping</span>
+<span class="kn">from</span> <span class="nn">shapely.geometry</span> <span class="kn">import</span> <span class="n">Point</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Get reference to GOSTNets</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;C:\repos\INFRA_SAP&quot;</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">infrasap.urban_metrics</span> <span class="kn">import</span> <span class="o">*</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span> <span class="n">line</span> <span class="mi">3</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="c1"># Get reference to GOSTNets</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;C:\repos\INFRA_SAP&quot;</span><span class="p">)</span>
+<span class="ne">----&gt; </span><span class="mi">3</span> <span class="kn">from</span> <span class="nn">infrasap.urban_metrics</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="ne">ModuleNotFoundError</span>: No module named &#39;infrasap&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">rasterio</span>
+<span class="kn">from</span> <span class="nn">rasterio.mask</span> <span class="kn">import</span> <span class="n">mask</span>
+<span class="kn">from</span> <span class="nn">rasterio</span> <span class="kn">import</span> <span class="n">Affine</span>  <span class="c1"># or from affine import Affine</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="inputs-are-ghs-pop-and-the-urban-extents">
+<h2>Inputs are GHS pop and the urban extents<a class="headerlink" href="#inputs-are-ghs-pop-and-the-urban-extents" title="Permalink to this heading">#</a></h2>
+<p>Mollweide projection should work good because it is an equal-area projection</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">GHS_pop</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;C:\Users\war-machine\Documents\world_bank_work\UZB_project\GHS_POP_E2015_GLOBE_R2019A_54009_1K_V1_0\GHS_POP_E2015_GLOBE_R2019A_54009_1K_V1_0.tif&quot;</span>
+<span class="c1"># GHS_pop = r&quot;C:\Users\war-machine\Documents\world_bank_work\UZB_project\clipped_eca_no_russia_1km.tif&quot;</span>
+<span class="c1"># GHS_pop = r&quot;C:\Users\war-machine\Documents\world_bank_work\UZB_project\2015_1km_GHS_Pop\GHS_POP_2015_UZB_merged.tif&quot;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># shpName = r&quot;C:\Users\war-machine\Documents\world_bank_work\UZB_project\metrics_shape_tool\Final_urban_extent_metrics\ECA_all_urban_extents_100k_mollweide.shp&quot;</span>
+<span class="c1"># shpName = r&quot;C:\Users\war-machine\Documents\world_bank_work\UZB_project\metrics_shape_tool\russia_urban_extents_merged_mollweide.shp&quot;</span>
+<span class="c1"># shpName = r&quot;C:\repos\GOST_Urban\Notebooks\Implementations\eca_wo_rus_urban_clusters_ghs_pop_smooth_100k_mollweide2.shp&quot;</span>
+<span class="c1"># shpName = r&quot;C:\Users\war-machine\Documents\world_bank_work\UZB_project\metrics_shape_tool\UZB_only_FUAs_Project_Mollweide.shp&quot;</span>
+<span class="c1"># shpName = r&quot;C:\Users\war-machine\Documents\world_bank_work\UZB_project\metrics_shape_tool\UZB_ghs_built_up_extents_4326\UZB_only_ghs_built_up_extents_mollweide_geom_fixed_greater_50k.shp&quot;</span>
+<span class="c1"># shpName = r&quot;C:\Users\war-machine\Documents\world_bank_work\UZB_project\metrics_shape_tool\UZB_ghs_built_up_extents_4326\UZB_ghs_built_up_extents_mollweide_geom_fixed.shp&quot;</span>
+<span class="c1"># shpName = r&quot;C:\Users\war-machine\Documents\world_bank_work\UZB_project\metrics_shape_tool\ECA_wo_rus_urban_extents\eca_wo_rus_built_up_extents_molleweide.shp&quot;</span>
+<span class="n">shpName</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;C:\Users\war-machine\Documents\world_bank_work\UZB_project\metrics_shape_tool\all_urban_clusters_5k_up_molleweide.shp&quot;</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="first-find-overall-grid-cell-group-median">
+<h2>First find overall grid cell group median<a class="headerlink" href="#first-find-overall-grid-cell-group-median" title="Permalink to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Psuedocode</span>
+
+<span class="c1"># pop_values = []</span>
+<span class="c1"># For each Shape/FUA:</span>
+<span class="c1"># Select all built-up pixels that are mostly within shape (and exclude pixels less than 77 per square km)</span>
+<span class="c1"># For each pixel:</span>
+<span class="c1"># pop_values.append(pixel value)</span>
+
+
+<span class="c1"># cell_group_median = median of pop_values</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%time</span>
+
+<span class="k">with</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">GHS_pop</span><span class="p">)</span> <span class="k">as</span> <span class="n">src</span><span class="p">:</span>
+    <span class="n">pixelSizeX</span><span class="p">,</span> <span class="n">pixelSizeY</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">res</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">pixelSizeX</span><span class="p">,</span> <span class="n">pixelSizeY</span><span class="p">)</span>
+
+    <span class="n">input_shapes_gpd</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">shpName</span><span class="p">)</span>
+
+    <span class="c1"># pop_values = []</span>
+    <span class="n">pop_values</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="c1"># for entry in input_shapes_gpd.head(2).iterrows():</span>
+    <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">input_shapes_gpd</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">entry</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+        <span class="c1"># extract the geometry in GeoJSON format</span>
+        <span class="n">geometry</span> <span class="o">=</span> <span class="n">entry</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;geometry&quot;</span><span class="p">]</span>  <span class="c1"># list of shapely geometries</span>
+        <span class="c1"># geometry = geoms[0] # shapely geometry</span>
+        <span class="c1"># converts to geojson format</span>
+        <span class="n">geoms</span> <span class="o">=</span> <span class="p">[</span><span class="n">mapping</span><span class="p">(</span><span class="n">geometry</span><span class="p">)]</span>
+
+        <span class="c1"># extract the raster values values within the polygon</span>
+        <span class="n">out_image</span><span class="p">,</span> <span class="n">out_transform</span> <span class="o">=</span> <span class="n">mask</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">geoms</span><span class="p">,</span> <span class="n">crop</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">nodata</span><span class="o">=-</span><span class="mf">9999.0</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">out_image</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span>
+
+        <span class="n">row</span><span class="p">,</span> <span class="n">col</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">data</span> <span class="o">!=</span> <span class="o">-</span><span class="mf">9999.0</span><span class="p">)</span>
+        <span class="n">val</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">data</span> <span class="o">!=</span> <span class="o">-</span><span class="mf">9999.0</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+
+        <span class="c1"># Adding the x,y, and geometry columns is not necessary</span>
+        <span class="n">T1</span> <span class="o">=</span> <span class="n">out_transform</span> <span class="o">*</span> <span class="n">Affine</span><span class="o">.</span><span class="n">translation</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>  <span class="c1"># reference the pixel centre</span>
+        <span class="c1"># row,column to x,y</span>
+        <span class="n">rc2xy</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">r</span><span class="p">,</span> <span class="n">c</span><span class="p">:</span> <span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span> <span class="o">*</span> <span class="n">T1</span>
+
+        <span class="n">d</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">({</span><span class="s2">&quot;col&quot;</span><span class="p">:</span> <span class="n">col</span><span class="p">,</span> <span class="s2">&quot;row&quot;</span><span class="p">:</span> <span class="n">row</span><span class="p">,</span> <span class="s2">&quot;val&quot;</span><span class="p">:</span> <span class="n">val</span><span class="p">})</span>
+
+        <span class="c1"># coordinate transformation</span>
+        <span class="n">d</span><span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">row</span><span class="p">:</span> <span class="n">rc2xy</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">row</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">col</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">d</span><span class="p">[</span><span class="s2">&quot;y&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">row</span><span class="p">:</span> <span class="n">rc2xy</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">row</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">col</span><span class="p">)[</span><span class="mi">1</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="c1"># geometry</span>
+        <span class="n">d</span><span class="p">[</span><span class="s2">&quot;geometry&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">row</span><span class="p">:</span> <span class="n">Point</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">],</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;y&quot;</span><span class="p">]),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="c1"># exlude pixels with value less than 77</span>
+        <span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">d</span><span class="p">))</span>
+
+        <span class="c1"># print(d)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">val</span><span class="p">[</span><span class="n">d</span><span class="o">.</span><span class="n">val</span> <span class="o">&gt;</span> <span class="mi">77</span><span class="p">]</span><span class="o">.</span><span class="n">to_list</span><span class="p">())</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="n">d</span><span class="o">.</span><span class="n">val</span> <span class="o">&gt;</span> <span class="mi">77</span><span class="p">]))</span>
+
+        <span class="c1"># extend values to pop_values</span>
+        <span class="n">pop_values</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">val</span><span class="p">[</span><span class="n">d</span><span class="o">.</span><span class="n">val</span> <span class="o">&gt;</span> <span class="mi">77</span><span class="p">]</span><span class="o">.</span><span class="n">to_list</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">CPLE_OpenFailedError</span><span class="g g-Whitespace">                      </span>Traceback (most recent call last)
+<span class="nn">File rasterio/_base.pyx:310,</span> in <span class="ni">rasterio._base.DatasetBase.__init__</span><span class="nt">()</span>
+
+<span class="nn">File rasterio/_base.pyx:221,</span> in <span class="ni">rasterio._base.open_dataset</span><span class="nt">()</span>
+
+<span class="nn">File rasterio/_err.pyx:221,</span> in <span class="ni">rasterio._err.exc_wrap_pointer</span><span class="nt">()</span>
+
+<span class="ne">CPLE_OpenFailedError</span>: C:\Users\war-machine\Documents\world_bank_work\UZB_project\GHS_POP_E2015_GLOBE_R2019A_54009_1K_V1_0\GHS_POP_E2015_GLOBE_R2019A_54009_1K_V1_0.tif: No such file or directory
+
+<span class="n">During</span> <span class="n">handling</span> <span class="n">of</span> <span class="n">the</span> <span class="n">above</span> <span class="n">exception</span><span class="p">,</span> <span class="n">another</span> <span class="n">exception</span> <span class="n">occurred</span><span class="p">:</span>
+
+<span class="ne">RasterioIOError</span><span class="g g-Whitespace">                           </span>Traceback (most recent call last)
+<span class="n">File</span> <span class="o">&lt;</span><span class="n">timed</span> <span class="n">exec</span><span class="o">&gt;</span><span class="p">:</span><span class="mi">1</span>
+
+<span class="nn">File /opt/hostedtoolcache/Python/3.10.14/x64/lib/python3.10/site-packages/rasterio/env.py:451,</span> in <span class="ni">ensure_env_with_credentials.&lt;locals&gt;.wrapper</span><span class="nt">(*args, **kwds)</span>
+<span class="g g-Whitespace">    </span><span class="mi">448</span>     <span class="n">session</span> <span class="o">=</span> <span class="n">DummySession</span><span class="p">()</span>
+<span class="g g-Whitespace">    </span><span class="mi">450</span> <span class="k">with</span> <span class="n">env_ctor</span><span class="p">(</span><span class="n">session</span><span class="o">=</span><span class="n">session</span><span class="p">):</span>
+<span class="ne">--&gt; </span><span class="mi">451</span>     <span class="k">return</span> <span class="n">f</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">)</span>
+
+<span class="nn">File /opt/hostedtoolcache/Python/3.10.14/x64/lib/python3.10/site-packages/rasterio/__init__.py:304,</span> in <span class="ni">open</span><span class="nt">(fp, mode, driver, width, height, count, crs, transform, dtype, nodata, sharing, **kwargs)</span>
+<span class="g g-Whitespace">    </span><span class="mi">301</span> <span class="n">path</span> <span class="o">=</span> <span class="n">_parse_path</span><span class="p">(</span><span class="n">raw_dataset_path</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">303</span> <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;r&quot;</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">304</span>     <span class="n">dataset</span> <span class="o">=</span> <span class="n">DatasetReader</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">driver</span><span class="o">=</span><span class="n">driver</span><span class="p">,</span> <span class="n">sharing</span><span class="o">=</span><span class="n">sharing</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">305</span> <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;r+&quot;</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">306</span>     <span class="n">dataset</span> <span class="o">=</span> <span class="n">get_writer_for_path</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">driver</span><span class="o">=</span><span class="n">driver</span><span class="p">)(</span>
+<span class="g g-Whitespace">    </span><span class="mi">307</span>         <span class="n">path</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">driver</span><span class="o">=</span><span class="n">driver</span><span class="p">,</span> <span class="n">sharing</span><span class="o">=</span><span class="n">sharing</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+<span class="g g-Whitespace">    </span><span class="mi">308</span>     <span class="p">)</span>
+
+<span class="nn">File rasterio/_base.pyx:312,</span> in <span class="ni">rasterio._base.DatasetBase.__init__</span><span class="nt">()</span>
+
+<span class="ne">RasterioIOError</span>: C:\Users\war-machine\Documents\world_bank_work\UZB_project\GHS_POP_E2015_GLOBE_R2019A_54009_1K_V1_0\GHS_POP_E2015_GLOBE_R2019A_54009_1K_V1_0.tif: No such file or directory
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">statistics</span>
+
+<span class="n">UZB_pop_median</span> <span class="o">=</span> <span class="n">statistics</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">pop_values</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">12</span><span class="p">],</span> <span class="n">line</span> <span class="mi">3</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="kn">import</span> <span class="nn">statistics</span>
+<span class="ne">----&gt; </span><span class="mi">3</span> <span class="n">UZB_pop_median</span> <span class="o">=</span> <span class="n">statistics</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">pop_values</span><span class="p">)</span>
+
+<span class="ne">NameError</span>: name &#39;pop_values&#39; is not defined
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">UZB_pop_median</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">13</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">UZB_pop_median</span>
+
+<span class="ne">NameError</span>: name &#39;UZB_pop_median&#39; is not defined
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="second-calculate-the-sprawl-metric-for-each-shape">
+<h2>Second calculate the Sprawl metric for each shape<a class="headerlink" href="#second-calculate-the-sprawl-metric-for-each-shape" title="Permalink to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Psuedocode</span>
+
+<span class="c1"># for each Shape/FUA:</span>
+<span class="c1"># pixel_count_below_median = 0</span>
+<span class="c1"># pixel_count_above_median = 0</span>
+
+<span class="c1"># Select all built-up pixels that are mostly within shape (and exclude pixels less than 77 per square km)</span>
+<span class="c1"># calculate pixel_share_below_median and pixel_share_above_median</span>
+
+<span class="c1"># Sprawl = ((L%−H%)+1)*0.5</span>
+<span class="c1"># Sprawl = ((pixel_share_below_median-pixel_share_above_median)+1)*.5</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%time</span>
+
+<span class="k">with</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">GHS_pop</span><span class="p">)</span> <span class="k">as</span> <span class="n">src</span><span class="p">:</span>
+    <span class="n">pixelSizeX</span><span class="p">,</span> <span class="n">pixelSizeY</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">res</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">pixelSizeX</span><span class="p">,</span> <span class="n">pixelSizeY</span><span class="p">)</span>
+
+    <span class="n">input_shapes_gpd</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">shpName</span><span class="p">)</span>
+
+    <span class="c1"># pixel_count_below_median = 0</span>
+    <span class="n">pixel_count_below_median</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="c1"># pixel_count_above_median = 0</span>
+    <span class="n">pixel_count_above_median</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="c1"># for entry in input_shapes_gpd.head(3).iterrows():</span>
+    <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">input_shapes_gpd</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">entry</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+        <span class="c1"># extract the geometry in GeoJSON format</span>
+        <span class="n">geometry</span> <span class="o">=</span> <span class="n">entry</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;geometry&quot;</span><span class="p">]</span>  <span class="c1"># list of shapely geometries</span>
+        <span class="c1"># geometry = geoms[0] # shapely geometry</span>
+        <span class="n">geoms</span> <span class="o">=</span> <span class="p">[</span><span class="n">mapping</span><span class="p">(</span><span class="n">geometry</span><span class="p">)]</span>
+
+        <span class="c1"># extract the raster values values within the polygon</span>
+        <span class="n">out_image</span><span class="p">,</span> <span class="n">out_transform</span> <span class="o">=</span> <span class="n">mask</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">geoms</span><span class="p">,</span> <span class="n">crop</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">nodata</span><span class="o">=-</span><span class="mf">9999.0</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">out_image</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span>
+
+        <span class="n">row</span><span class="p">,</span> <span class="n">col</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">data</span> <span class="o">!=</span> <span class="o">-</span><span class="mf">9999.0</span><span class="p">)</span>
+        <span class="n">val</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">extract</span><span class="p">(</span><span class="n">data</span> <span class="o">!=</span> <span class="o">-</span><span class="mf">9999.0</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+
+        <span class="n">d</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">({</span><span class="s2">&quot;col&quot;</span><span class="p">:</span> <span class="n">col</span><span class="p">,</span> <span class="s2">&quot;row&quot;</span><span class="p">:</span> <span class="n">row</span><span class="p">,</span> <span class="s2">&quot;val&quot;</span><span class="p">:</span> <span class="n">val</span><span class="p">})</span>
+
+        <span class="c1"># exlude pixels with value less than 77</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="n">d</span><span class="o">.</span><span class="n">val</span> <span class="o">&gt;</span> <span class="mi">77</span><span class="p">]</span>
+        <span class="n">d_count</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+        <span class="c1"># print(f&quot;d_count is {d_count}&quot;)</span>
+
+        <span class="c1"># print(d.val[d.val &lt; UZB_pop_median])</span>
+        <span class="c1"># print(len(d.val[d.val &lt; UZB_pop_median]))</span>
+        <span class="n">pixel_share_below_median</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">val</span><span class="p">[</span><span class="n">d</span><span class="o">.</span><span class="n">val</span> <span class="o">&lt;</span> <span class="n">UZB_pop_median</span><span class="p">])</span> <span class="o">/</span> <span class="n">d_count</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;pixel_share_below_median is: </span><span class="si">{</span><span class="n">pixel_share_below_median</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># print(d.val[d.val &gt; UZB_pop_median])</span>
+        <span class="c1"># print(len(d.val[d.val &gt; UZB_pop_median]))</span>
+        <span class="n">pixel_share_above_median</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">val</span><span class="p">[</span><span class="n">d</span><span class="o">.</span><span class="n">val</span> <span class="o">&gt;</span> <span class="n">UZB_pop_median</span><span class="p">])</span> <span class="o">/</span> <span class="n">d_count</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;pixel_share_above_median is: </span><span class="si">{</span><span class="n">pixel_share_above_median</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Sprawl = ((L%−H%)+1)*0.5</span>
+        <span class="c1"># Sprawl = ((pixel_count_below_median-pixel_count_above_median)+1)*.5</span>
+        <span class="n">Sprawl</span> <span class="o">=</span> <span class="p">((</span><span class="n">pixel_share_below_median</span> <span class="o">-</span> <span class="n">pixel_share_above_median</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.5</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Sprawl index is: </span><span class="si">{</span><span class="n">Sprawl</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># creates a temporary GDF for just the row&#39;s shape</span>
+        <span class="n">temp_gdf</span> <span class="o">=</span> <span class="n">input_shapes_gpd</span><span class="o">.</span><span class="n">iloc</span><span class="p">[[</span><span class="n">entry</span><span class="p">[</span><span class="mi">0</span><span class="p">]]]</span>
+
+        <span class="c1"># print(&quot;print temp_gdf&quot;)</span>
+        <span class="c1"># print(temp_gdf)</span>
+
+        <span class="c1"># Put all metrics in a DataFrame</span>
+        <span class="n">metrics_scalar</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">metrics_scalar</span><span class="p">[</span><span class="s2">&quot;sprawl_index&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">Sprawl</span><span class="p">]</span>
+        <span class="n">metrics_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">metrics_scalar</span><span class="p">)</span>
+
+        <span class="c1"># print(&quot;print metrics_scalar&quot;)</span>
+        <span class="c1"># print(metrics_scalar)</span>
+
+        <span class="c1"># and concatinate it with the row&#39;s shape</span>
+        <span class="n">new_temp_gdf</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">temp_gdf</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span> <span class="n">metrics_df</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="c1"># print(&quot;print new_temp_gdf&quot;)</span>
+        <span class="c1"># print(new_temp_gdf)</span>
+        <span class="c1"># print(entry[0])</span>
+        <span class="c1"># put the results of each row into a new DataFrame</span>
+        <span class="k">if</span> <span class="n">entry</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;new_temp_gdf&quot;</span><span class="p">)</span>
+            <span class="n">output_new_temp_gdf</span> <span class="o">=</span> <span class="n">new_temp_gdf</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">output_new_temp_gdf</span> <span class="o">=</span> <span class="n">output_new_temp_gdf</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="n">new_temp_gdf</span><span class="p">,</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span>
+            <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">CPLE_OpenFailedError</span><span class="g g-Whitespace">                      </span>Traceback (most recent call last)
+<span class="nn">File rasterio/_base.pyx:310,</span> in <span class="ni">rasterio._base.DatasetBase.__init__</span><span class="nt">()</span>
+
+<span class="nn">File rasterio/_base.pyx:221,</span> in <span class="ni">rasterio._base.open_dataset</span><span class="nt">()</span>
+
+<span class="nn">File rasterio/_err.pyx:221,</span> in <span class="ni">rasterio._err.exc_wrap_pointer</span><span class="nt">()</span>
+
+<span class="ne">CPLE_OpenFailedError</span>: C:\Users\war-machine\Documents\world_bank_work\UZB_project\GHS_POP_E2015_GLOBE_R2019A_54009_1K_V1_0\GHS_POP_E2015_GLOBE_R2019A_54009_1K_V1_0.tif: No such file or directory
+
+<span class="n">During</span> <span class="n">handling</span> <span class="n">of</span> <span class="n">the</span> <span class="n">above</span> <span class="n">exception</span><span class="p">,</span> <span class="n">another</span> <span class="n">exception</span> <span class="n">occurred</span><span class="p">:</span>
+
+<span class="ne">RasterioIOError</span><span class="g g-Whitespace">                           </span>Traceback (most recent call last)
+<span class="n">File</span> <span class="o">&lt;</span><span class="n">timed</span> <span class="n">exec</span><span class="o">&gt;</span><span class="p">:</span><span class="mi">1</span>
+
+<span class="nn">File /opt/hostedtoolcache/Python/3.10.14/x64/lib/python3.10/site-packages/rasterio/env.py:451,</span> in <span class="ni">ensure_env_with_credentials.&lt;locals&gt;.wrapper</span><span class="nt">(*args, **kwds)</span>
+<span class="g g-Whitespace">    </span><span class="mi">448</span>     <span class="n">session</span> <span class="o">=</span> <span class="n">DummySession</span><span class="p">()</span>
+<span class="g g-Whitespace">    </span><span class="mi">450</span> <span class="k">with</span> <span class="n">env_ctor</span><span class="p">(</span><span class="n">session</span><span class="o">=</span><span class="n">session</span><span class="p">):</span>
+<span class="ne">--&gt; </span><span class="mi">451</span>     <span class="k">return</span> <span class="n">f</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">)</span>
+
+<span class="nn">File /opt/hostedtoolcache/Python/3.10.14/x64/lib/python3.10/site-packages/rasterio/__init__.py:304,</span> in <span class="ni">open</span><span class="nt">(fp, mode, driver, width, height, count, crs, transform, dtype, nodata, sharing, **kwargs)</span>
+<span class="g g-Whitespace">    </span><span class="mi">301</span> <span class="n">path</span> <span class="o">=</span> <span class="n">_parse_path</span><span class="p">(</span><span class="n">raw_dataset_path</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">303</span> <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;r&quot;</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">304</span>     <span class="n">dataset</span> <span class="o">=</span> <span class="n">DatasetReader</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">driver</span><span class="o">=</span><span class="n">driver</span><span class="p">,</span> <span class="n">sharing</span><span class="o">=</span><span class="n">sharing</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">305</span> <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;r+&quot;</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">306</span>     <span class="n">dataset</span> <span class="o">=</span> <span class="n">get_writer_for_path</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">driver</span><span class="o">=</span><span class="n">driver</span><span class="p">)(</span>
+<span class="g g-Whitespace">    </span><span class="mi">307</span>         <span class="n">path</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">driver</span><span class="o">=</span><span class="n">driver</span><span class="p">,</span> <span class="n">sharing</span><span class="o">=</span><span class="n">sharing</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+<span class="g g-Whitespace">    </span><span class="mi">308</span>     <span class="p">)</span>
+
+<span class="nn">File rasterio/_base.pyx:312,</span> in <span class="ni">rasterio._base.DatasetBase.__init__</span><span class="nt">()</span>
+
+<span class="ne">RasterioIOError</span>: C:\Users\war-machine\Documents\world_bank_work\UZB_project\GHS_POP_E2015_GLOBE_R2019A_54009_1K_V1_0\GHS_POP_E2015_GLOBE_R2019A_54009_1K_V1_0.tif: No such file or directory
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">output_new_temp_gdf</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">16</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">output_new_temp_gdf</span>
+
+<span class="ne">NameError</span>: name &#39;output_new_temp_gdf&#39; is not defined
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># make the GeoDataFrame unprojected</span>
+<span class="n">output_new_temp_gdf</span> <span class="o">=</span> <span class="n">output_new_temp_gdf</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="s2">&quot;epsg:4326&quot;</span><span class="p">)</span>
+
+<span class="c1"># output = r&quot;C:\Users\war-machine\Documents\world_bank_work\UZB_project\metrics_shape_tool&quot;</span>
+<span class="c1"># output = r&quot;C:\Users\war-machine\Documents\world_bank_work\UZB_project\metrics_shape_tool\eca_metrics_results_russia&quot;</span>
+<span class="c1"># output = r&quot;C:\Users\war-machine\Documents\world_bank_work\UZB_project\metrics_shape_tool\eca_urban_metrics_results_wo_rus&quot;</span>
+<span class="c1"># output = r&quot;C:\Users\war-machine\Documents\world_bank_work\UZB_project\metrics_shape_tool\UZB_only_GHS_FUAs_results&quot;</span>
+<span class="c1"># output = r&quot;C:\Users\war-machine\Documents\world_bank_work\UZB_project\metrics_shape_tool\UZB_only_GHS_urban_extents_results&quot;</span>
+<span class="c1"># output = r&quot;C:\Users\war-machine\Documents\world_bank_work\UZB_project\metrics_shape_tool\UZB_only_GHS_urban_extents_results_all&quot;</span>
+<span class="c1"># output = r&quot;C:\Users\war-machine\Documents\world_bank_work\UZB_project\metrics_shape_tool\eca_urban_metrics_results_wo_rus_all&quot;</span>
+<span class="n">output</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;C:\Users\war-machine\Documents\world_bank_work\UZB_project\metrics_shape_tool\all_urban_extents_results_5k_up&quot;</span>
+
+<span class="c1"># save as CSV</span>
+
+<span class="c1"># output_new_temp_gdf.to_csv(output + r&quot;\ECA_all_urban_metrics_100k_sprawl.csv&quot;)</span>
+<span class="c1"># output_new_temp_gdf.to_csv(output + r&quot;\UZB_only_urban_metrics_FUAs_sprawl.csv&quot;)</span>
+<span class="c1"># output_new_temp_gdf.to_csv(output + r&quot;\UZB_only_urban_metrics_urban_extents_sprawl.csv&quot;)</span>
+<span class="c1"># output_new_temp_gdf.to_csv(output + r&quot;\UZB_only_urban_metrics_urban_extents_all_sprawl.csv&quot;)</span>
+<span class="c1"># output_new_temp_gdf.to_csv(output + r&quot;\ECA_wo_rus_urban_metrics_urban_extents_all_sprawl.csv&quot;)</span>
+<span class="n">output_new_temp_gdf</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">output</span> <span class="o">+</span> <span class="sa">r</span><span class="s2">&quot;\all_urban_metrics_5k_up_sprawl.csv&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">17</span><span class="p">],</span> <span class="n">line</span> <span class="mi">2</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="c1"># make the GeoDataFrame unprojected</span>
+<span class="ne">----&gt; </span><span class="mi">2</span> <span class="n">output_new_temp_gdf</span> <span class="o">=</span> <span class="n">output_new_temp_gdf</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="s2">&quot;epsg:4326&quot;</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="c1"># output = r&quot;C:\Users\war-machine\Documents\world_bank_work\UZB_project\metrics_shape_tool&quot;</span>
+<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="c1"># output = r&quot;C:\Users\war-machine\Documents\world_bank_work\UZB_project\metrics_shape_tool\eca_metrics_results_russia&quot;</span>
+<span class="g g-Whitespace">      </span><span class="mi">6</span> <span class="c1"># output = r&quot;C:\Users\war-machine\Documents\world_bank_work\UZB_project\metrics_shape_tool\eca_urban_metrics_results_wo_rus&quot;</span>
+   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">9</span> <span class="c1"># output = r&quot;C:\Users\war-machine\Documents\world_bank_work\UZB_project\metrics_shape_tool\UZB_only_GHS_urban_extents_results_all&quot;</span>
+<span class="g g-Whitespace">     </span><span class="mi">10</span> <span class="c1"># output = r&quot;C:\Users\war-machine\Documents\world_bank_work\UZB_project\metrics_shape_tool\eca_urban_metrics_results_wo_rus_all&quot;</span>
+<span class="g g-Whitespace">     </span><span class="mi">11</span> <span class="n">output</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;C:\Users\war-machine\Documents\world_bank_work\UZB_project\metrics_shape_tool\all_urban_extents_results_5k_up&quot;</span>
+
+<span class="ne">NameError</span>: name &#39;output_new_temp_gdf&#39; is not defined
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;total time to process: </span><span class="si">{</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="o">-</span><span class="n">start_time</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>total time to process: 0.36957263946533203
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./notebooks/Implementations/KAZ_SCADR_UrbanizationReview"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inputs-are-ghs-pop-and-the-urban-extents">Inputs are GHS pop and the urban extents</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#first-find-overall-grid-cell-group-median">First find overall grid cell group median</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#second-calculate-the-sprawl-metric-for-each-shape">Second calculate the Sprawl metric for each shape</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Benjamin P. Stewart
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../_static/scripts/bootstrap.js?digest=3ee479438cf8b5e0d341"></script>
+<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
