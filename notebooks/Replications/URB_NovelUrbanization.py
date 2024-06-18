@@ -9,6 +9,22 @@ import GOSTurban.UrbanRaster as urban
 
 
 def download_pop_file(url, filename):
+    """
+    Download a file from a url to a local file
+
+    Parameters
+    ----------
+    url : string
+        URL to download from
+
+    filename : string
+        Local file to save to
+
+    Returns
+    -------
+    None
+
+    """
     # Open the url
     r = requests.get(url)
     # Set decode_content value to True, otherwise the downloaded image file's size will be zero.
@@ -19,6 +35,22 @@ def download_pop_file(url, filename):
 
 
 def main(iso3, out_folder):
+    """
+    Download population data and calculate urban extents
+
+    Parameters
+    ----------
+    iso3 : string
+        ISO3 code for country
+
+    out_folder : string
+        Folder to save data to
+
+    Returns
+    -------
+    None
+
+    """
     # download the population data
     wp_url = f"https://data.worldpop.org/GIS/Population/Global_2000_2020_1km/2020/{iso3.upper()}/{iso3.lower()}_ppp_2020_1km_Aggregated.tif"
     print(wp_url)
@@ -31,7 +63,7 @@ def main(iso3, out_folder):
     try:
         if not os.path.exists(out_file):
             download_pop_file(wp_url, out_file)
-    except:
+    except Exception:
         print(f"Could not download national population data for {iso3} from {wp_url}")
         print(
             "If you can manually download to the defined out_folder, the script will run"
