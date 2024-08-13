@@ -9,22 +9,37 @@ from rasterio import features
 import pandas as pd
 import numpy as np
 
-import GOSTurban.UrbanRaster as urban
 
 import GOSTRocks.rasterMisc as rMisc
 from GOSTRocks.misc import tPrint
 
 
 class summarize_population(object):
-    """summarize population and urban populations for defined admin regions"""
+    """Summarize population and urban populations for defined admin regions"""
 
     def __init__(
         self, pop_layer, admin_layer, urban_layer="", hd_urban_layer="", temp_folder=""
     ):
-        """Summarize population into urban and rural based on GOST_Urban.UrbanRaster.calculateUrban
+        """
+        Summarize population into urban and rural based on GOST_Urban.UrbanRaster.calculateUrban
 
-        INPUT
-        pop_layer [string] - path
+        Parameters
+        ----------
+        pop_layer : string
+            Path to population layer
+        admin_layer : string
+            Path to admin layer
+        urban_layer : string, optional
+            Path to urban layer. The default is ''.
+        hd_urban_layer : string, optional
+            Path to high density urban layer. The default is ''.
+        temp_folder : string, optional
+            Path to temporary folder. The default is ''.
+
+        Returns
+        -------
+        None.
+
         """
         self.pop_layer = pop_layer
 
@@ -48,7 +63,19 @@ class summarize_population(object):
             self.temp_folder = temp_folder
 
     def check_inputs(self):
-        """Ensure all layers exist"""
+        """
+        Ensure all layers exist
+
+        Parameters
+        ----------
+        None
+
+        Returns
+        -------
+        bool
+            True if all layers exist, False if any do not exist.
+
+        """
         check_vals = {}
         good = True
         for lyr in [self.pop_layer, self.urban_layer, self.urban_hd_layer]:
@@ -59,13 +86,22 @@ class summarize_population(object):
         return good
 
     def calculate_zonal(self, out_name="", convert_urban_binary=False):
-        """Run zonal statistics on input admin layers, population layers, and urban layers
-
-        Args:
-            out_name (str, optional): name to append to output populations columns. Defaults to ''.
-            convert_urban_binary (bool, optional): option to convert urban layer to binary. Anything > 0 becomes binary 1 for urban. Defaults to False.
         """
+        Run zonal statistics on input admin layers, population layers, and urban layers
 
+        Parameters
+        ----------
+        out_name : str, optional
+            name to append to output populations columns. Defaults to ''.
+        convert_urban_binary : bool, optional
+            option to convert urban layer to binary. Anything > 0 becomes binary 1 for urban. Defaults to False.
+
+        Returns
+        -------
+        pd.DataFrame
+            Dataframe with zonal statistics for population and urban layers
+
+        """
         inP = self.in_pop.read()
         inA = self.admin_layer  # gpd.read_file(self.admin_layer)
 
@@ -101,7 +137,7 @@ class summarize_population(object):
             )
             try:
                 final = final.join(res)
-            except:
+            except Exception:
                 final = res
         return final
 
@@ -120,11 +156,24 @@ class urban_country(object):
     ):
         """Create object for managing input data for summarizing urban extents
 
-        INPUT
-        :param: iso3 - string describing iso3 code
-        :param: output_folder - string path to folder to hold results
-        :param: country_bounds - geopandas dataframe of admin0 boundary
+        Parameters
+        ----------
+        iso3 : str
+            string describing iso3 code
+        output_folder : str
+            string path to folder to hold results
+        country_bounds : gpd.GeoDataFrame
+            geopandas dataframe of admin0 boundary
+        pop_files : list
+            list of population files to summarize
+        final_folder : str, optional
+            string path to folder to hold final results. The default is ''.
+        ghspop_suffix : str, optional
+            string suffix to append to GHSPOP files. The default is ''.
 
+        Returns
+        -------
+        None.
 
         NAMING CONVENTION
         To save this renaming step on my side, which can also induce mistakes, would be possible for you Ben to rename the files in your code directly? This would be also helpful for all other countries we have to do, and for the 1km*1km rasters.
@@ -134,6 +183,7 @@ class urban_country(object):
         tza_upo15 and tza_upo18 for WorldPop population unconstrained
         tza_cpo15 and tza_cpo18 for WorldPop population constrained.
         Then for 1km*1km raster, names are the same except that the three lettres of the country's name are followed by 1k, ie tza1k_slo, tza1k_ele and so on.
+
         """
         self.iso3 = iso3
         self.out_folder = output_folder
@@ -186,7 +236,19 @@ class urban_country(object):
             self.inD.to_file(self.admin_shp)
 
     def process_dem(self, global_dem=""):
-        """Download DEM from AWS, calculate slope"""
+        """
+        Download DEM from AWS, calculate slope.
+
+        Parameters
+        ----------
+        global_dem : str, optional
+            string path to global dem file. The default is ''.
+
+        Returns
+        -------
+        None.
+
+        """
         # Download DEM
 
         if not os.path.exists(self.dem_file) and global_dem == "":
@@ -223,7 +285,29 @@ class urban_country(object):
         global_ghsl,
         global_smod,
     ):
-        """extract global layers for current country"""
+        """
+        Extract global layers for current country.
+
+        Parameters
+        ----------
+        global_landcover : string
+            string path to global landcover file
+        global_ghspop : string
+            string path to global GHSPOP file
+        global_ghspop1k : string
+            string path to global GHSPOP1k file
+        global_ghbuilt : string
+            string path to global GHSBuilt file
+        global_ghsl : string
+            string path to global GHSL file
+        global_smod : string
+            string path to global SMOD file
+
+        Returns
+        -------
+        None.
+
+        """
         # Extract desert from globcover
         if not os.path.exists(self.desert_file):
             tPrint("Extracting desert")
@@ -263,7 +347,7 @@ class urban_country(object):
             if inR.crs.to_epsg() != self.inD.crs.to_epsg():
                 tempD = self.inD.to_crs(inR.crs)
             else:
-                tempD = inD
+                tempD = self.inD
             ul = inR.index(*tempD.total_bounds[0:2])
             lr = inR.index(*tempD.total_bounds[2:4])
             # read the subset of the data into a numpy array
@@ -316,7 +400,7 @@ class urban_country(object):
         if not os.path.exists(self.admin_file):
             tPrint("Rasterizing admin boundaries")
             xx = rasterio.open(self.ghspop_file)
-            res = xx.meta["transform"][0]
+            # res = xx.meta["transform"][0]
             tempD = self.inD.to_crs(xx.crs)
             shapes = ((row["geometry"], 1) for idx, row in tempD.iterrows())
             burned = features.rasterize(
@@ -332,9 +416,23 @@ class urban_country(object):
                 outR.write_band(1, burned)
 
     def calculate_urban(self, urb_val=300, hd_urb_val=1500):
-        """Calculate urban and HD urban extents from population files"""
+        """
+        Calculate urban and HD urban extents from population files
+
+        Parameters
+        ----------
+        urb_val : int, optional
+            threshold value for urban extent. The default is 300.
+        hd_urb_val : int, optional
+            threshold value for high density urban extent. The default is 1500.
+
+        Returns
+        -------
+        None.
+
+        """
         # Calculate urban extents from population layers
-        ghs_R = rasterio.open(self.ghspop_file)
+        # ghs_R = rasterio.open(self.ghspop_file)
         for p_file in self.pop_files:
             final_pop = os.path.join(
                 self.final_folder,
@@ -345,31 +443,21 @@ class urban_country(object):
             print(final_pop)
             if "1k1k" in final_pop:
                 final_pop = final_pop.replace("1k1k", "1k")
-            final_urban = final_pop.replace(".tif", "_urban.tif")
-            final_urban_hd = final_pop.replace(".tif", "_urban_hd.tif")
-            urbanR = urban.urbanGriddedPop(final_pop)
-            # Convert density values for urbanization from 1km resolution to current resolution
-            in_raster = rasterio.open(final_pop)
-            total_ratio = (in_raster.res[0] * in_raster.res[1]) / 1000000
-            if not os.path.exists(final_urban):
-                urban_shp = urbanR.calculateUrban(
-                    densVal=(urb_val * total_ratio),
-                    totalPopThresh=5000,
-                    raster=final_urban,
-                )
-            if not os.path.exists(final_urban_hd):
-                cluster_shp = urbanR.calculateUrban(
-                    densVal=(hd_urb_val * total_ratio),
-                    totalPopThresh=50000,
-                    raster=final_urban_hd,
-                    smooth=True,
-                    queen=True,
-                )
 
     def pop_zonal_admin(self, admin_layer):
-        """calculate urban and rural
+        """
+        Calculate urban and rural
 
-        :param: - admin_layer
+        Parameters
+        ----------
+        admin_layer : gpd.GeoDataFrame
+            geopandas dataframe of admin layer
+
+        Returns
+        -------
+        pd.DataFrame
+            dataframe of zonal statistics for population and urban layers
+
         """
         for p_file in self.pop_files:
             pop_file = os.path.join(
@@ -383,11 +471,12 @@ class urban_country(object):
             yy = summarize_population(pop_file, admin_layer)
             if yy.check_inputs():
                 res = yy.calculate_zonal(out_name="")
-                out_file = f"/home/wb411133/data/Projects/MR_Novel_Urbanization/Data/LSO_URBAN_DATA_new_naming/LSO_{os.path.basename(p_file)}.csv"
-                try:
-                    final = final.join(res)
-                except:
-                    final = res
+                # out_file = f"/home/wb411133/data/Projects/MR_Novel_Urbanization/Data/LSO_URBAN_DATA_new_naming/LSO_{os.path.basename(p_file)}.csv"
+                final = res
+                # try:
+                #     final = final.join(res)
+                # except Exception:
+                #     final = res
             else:
                 print("Error summarizing population for %s" % pop_file)
         admin_layer = admin_layer.reset_index()
@@ -397,7 +486,20 @@ class urban_country(object):
         return final
 
     def compare_pop_rasters(self, verbose=True):
-        """read in and summarize population rasters"""
+        """
+        Read in and summarize population rasters.
+
+        Parameters
+        ----------
+        verbose : bool, optional
+            print results to console. The default is True.
+
+        Returns
+        -------
+        list
+            list of population rasters and their summed values
+
+        """
         all_res = []
         for pFile in self.pop_files:
             inR = rasterio.open(pFile)
@@ -409,7 +511,19 @@ class urban_country(object):
         return all_res
 
     def standardize_rasters(self, include_ghsl_h20=True):
-        """ """
+        """
+        Standardize rasters to GHSPOP resolution and extent
+
+        Parameters
+        ----------
+        include_ghsl_h20 : bool, optional
+            include GHSL water layer. The default is True.
+
+        Returns
+        -------
+        None.
+
+        """
         ghs_R = rasterio.open(self.ghspop_file)
         pFile = self.ghspop_file
         if self.suffix == "1k":
@@ -446,7 +560,7 @@ class urban_country(object):
         for file_def in file_defs:
             try:
                 out_file = file_def[3]
-            except:
+            except Exception:
                 out_file = os.path.join(
                     self.final_folder,
                     os.path.basename(file_def[0]).replace(
@@ -550,6 +664,18 @@ class urban_country(object):
                c. calculate overlap between water and urban
 
         https://ghsl.jrc.ec.europa.eu/documents/cfs01/V3/CFS_Ghana.pdf
+
+        Parameters
+        ----------
+        admin_stats : string
+            path to admin stats file
+        commune_stats : string
+            path to commune stats file
+
+        Returns
+        -------
+        None.
+
         """
         stats_file = os.path.join(
             self.out_folder, "DATA_EVALUATION_%s_%s.txt" % (self.iso3, self.suffix)
@@ -602,7 +728,7 @@ class urban_country(object):
                     out_stats.write(
                         f"{name}: {((urbPop/tPop) * 100).round(2)}% Urban; {((hdPop/tPop) * 100).round(2)}% HD Urban\n"
                     )
-                except:
+                except Exception:
                     print(f"Error processing {name}")
                     print(fileDef)
 
@@ -705,5 +831,5 @@ class urban_country(object):
                             try:
                                 curD_sum = curD.loc[curD > 0].sum()
                                 out_stats.write(f"{col}: {round(curD_sum)}\n")
-                            except:
+                            except Exception:
                                 pass

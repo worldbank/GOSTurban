@@ -18,23 +18,24 @@ pip install GOSTurban
 
 1. Clone or download this repository to your local machine. Then, navigate to the root directory of the repository:
 
-    ```shell
-    git clone https://github.com/worldbank/GOSTurban.git
-    cd GOSTurban
-    ```
+   ```shell
+   git clone https://github.com/worldbank/GOSTurban.git
+   cd GOSTurban
+   ```
 
 2. Create a virtual environment (optional but recommended):
 
-    ```shell
-    python3 -m venv venv
-    source venv/bin/activate  # On Windows, use `venv\Scripts\activate`
-    ```
+   ```shell
+   python3 -m venv venv
+   source venv/bin/activate  # On Windows, use `venv\Scripts\activate`
+   ```
 
 3. Install the package with dependencies:
 
-    ```shell
-    pip install .
-    ```
+   ```shell
+   pip install .
+   ```
+
 ### Developer Installation
 
 Install the package **in editable** mode with all of the dependencies needed to run the tests and build the documentation locally:
