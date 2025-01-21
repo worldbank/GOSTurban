@@ -1,4 +1,3 @@
-import sys
 import os
 import rasterio
 import elevation
@@ -10,11 +9,10 @@ from rasterio import features
 import pandas as pd
 import numpy as np
 
-sys.path.append("../")
-import GOST_Urban.UrbanRaster as urban
+import GOSTurban.UrbanRaster as urban
 
-import GOSTRocks.rasterMisc as rMisc
-from GOSTRocks.misc import tPrint
+import GOSTrocks.rasterMisc as rMisc
+from GOSTrocks.misc import tPrint
 
 
 class summarize_population(object):

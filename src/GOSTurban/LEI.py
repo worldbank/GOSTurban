@@ -6,7 +6,7 @@ import rasterio.features
 import pandas as pd
 import numpy as np
 
-from GOSTrocks.misc import tPrint
+from GOSTRocks.misc import tPrint
 from shapely.geometry import shape
 from shapely.wkt import loads
 

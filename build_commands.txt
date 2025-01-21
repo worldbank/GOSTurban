@@ -7,6 +7,4 @@ git push
 # Installation testing
 conda create -n urban_test --file .\requirements.txt -c conda-forge
 conda activate urban_test
-conda install ipykernel
-python -m ipykernel install --user --name=urban_test
 pip install --no-build-isolation --no-deps .
