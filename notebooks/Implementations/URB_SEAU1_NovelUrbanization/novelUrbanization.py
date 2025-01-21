@@ -11,12 +11,12 @@ import numpy as np
 
 
 # Import raster helpers
-import GOSTRocks.rasterMisc as rMisc
-from GOSTRocks.misc import tPrint
+import GOSTrocks.rasterMisc as rMisc
+from GOSTrocks.misc import tPrint
 
 # Import GOST urban functions
 sys.path.append("../../../src")
-import GOST_Urban.urban_helper as helper
+import GOSTurban.urban_helper as helper
 
 importlib.reload(helper)
 importlib.reload(rMisc)

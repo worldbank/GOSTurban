@@ -10,3 +10,4 @@ elevation
 geojson
 hatch
 git
+richdem
