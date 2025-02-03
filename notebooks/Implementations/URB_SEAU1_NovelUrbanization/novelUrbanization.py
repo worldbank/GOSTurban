@@ -422,7 +422,7 @@ def check_no_data(in_folder):
                         cur_file = os.path.join(root, f)
                         curR = rasterio.open(cur_file)
                         curD = curR.read()
-                        print(f'{f}: {(curD == curR.meta["nodata"]).sum()}')
+                        print(f"{f}: {(curD == curR.meta['nodata']).sum()}")
 
 
 def pp_point_urban_summaries(inD, urban_tiffs, out_file):
