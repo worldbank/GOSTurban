@@ -600,7 +600,7 @@ class urban_country(object):
                         f"{name}: TotalPop: {tPop.round(0)}, UrbanPop: {urbPop.round(0)}, HD Pop: {hdPop.round(0)}\n"
                     )
                     out_stats.write(
-                        f"{name}: {((urbPop/tPop) * 100).round(2)}% Urban; {((hdPop/tPop) * 100).round(2)}% HD Urban\n"
+                        f"{name}: {((urbPop / tPop) * 100).round(2)}% Urban; {((hdPop / tPop) * 100).round(2)}% HD Urban\n"
                     )
                 except:
                     print(f"Error processing {name}")
