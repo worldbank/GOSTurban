@@ -8,7 +8,7 @@ parts:
     chapters:
       - file: docs/novel_context.md
       - file: docs/urbanization_comparison
-      - file: notebooks/Implementations/MENA_Benchmarking/Map_Extents.ipynb              
+      - file: notebooks/Implementations/MENA_Benchmarking/Map_Extents.ipynb
   - caption: Tutorials
     chapters:
       - file: notebooks/Tutorials/UrbanAreas_tutorials.ipynb
