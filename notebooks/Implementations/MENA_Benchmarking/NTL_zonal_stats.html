@@ -404,7 +404,6 @@ document.write(`
 
 <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;C:/WBG/Work/Code/GOSTrocks/src&quot;</span><span class="p">)</span>
 
-<span class="kn">import</span><span class="w"> </span><span class="nn">GOSTrocks.ntlMisc</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ntlMisc</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">GOSTrocks.rasterMisc</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">rMisc</span>
 </pre></div>
 </div>
@@ -492,14 +491,14 @@ document.write(`
 <span class="n">flaring_d</span> <span class="o">=</span> <span class="n">flaring_d</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="n">m_crs</span><span class="p">)</span>
 
 <span class="n">nearest_calc</span> <span class="o">=</span> <span class="n">ckdnearest</span><span class="p">(</span><span class="n">inF_centroid</span><span class="p">,</span> <span class="n">flaring_d</span><span class="p">)</span>
-<span class="n">inF</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">inF</span><span class="p">,</span> <span class="n">nearest_calc</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,[</span><span class="s1">&#39;eFUA_ID&#39;</span><span class="p">,</span> <span class="s1">&#39;dist&#39;</span><span class="p">]],</span> <span class="n">on</span><span class="o">=</span><span class="s2">&quot;eFUA_ID&quot;</span><span class="p">)</span>
+<span class="n">inF</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">inF</span><span class="p">,</span> <span class="n">nearest_calc</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="p">[</span><span class="s2">&quot;eFUA_ID&quot;</span><span class="p">,</span> <span class="s2">&quot;dist&quot;</span><span class="p">]],</span> <span class="n">on</span><span class="o">=</span><span class="s2">&quot;eFUA_ID&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ntl_image</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;C:\WBG\Work\data\NTL\VNL_v21_npp_2019_global_vcmslcfg_c202205302300.average.dat.tif&quot;</span> <span class="c1">#ntl_images[0]</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ntl_image</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;C:\WBG\Work\data\NTL\VNL_v21_npp_2019_global_vcmslcfg_c202205302300.average.dat.tif&quot;</span>  <span class="c1"># ntl_images[0]</span>
 <span class="c1"># 1 Mute nighttime lights data within a mask</span>
 <span class="c1">### Buffer the flare locations by the defined distance</span>
 <span class="n">buffer_dist</span> <span class="o">=</span> <span class="mi">5000</span>  <span class="c1"># (metres)</span>
@@ -510,7 +509,7 @@ document.write(`
 <span class="n">buffered_flare</span> <span class="o">=</span> <span class="n">buffered_flare</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="mi">4326</span><span class="p">)</span>
 
 <span class="c1">### create a mask raster using the buffered flare locations</span>
-<span class="c1">#ntl_images = ntlMisc.aws_search_ntl()</span>
+<span class="c1"># ntl_images = ntlMisc.aws_search_ntl()</span>
 <span class="n">flare_mask</span> <span class="o">=</span> <span class="n">rMisc</span><span class="o">.</span><span class="n">rasterizeDataFrame</span><span class="p">(</span>
     <span class="n">buffered_flare</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">templateRaster</span><span class="o">=</span><span class="n">ntl_image</span><span class="p">,</span> <span class="n">nodata</span><span class="o">=</span><span class="mi">0</span>
 <span class="p">)</span>
@@ -522,9 +521,9 @@ document.write(`
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">### Use the mask in the zonal calculation</span>
-<span class="n">finalF</span> <span class="o">=</span> <span class="n">inF</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span> <span class="c1">#inF.copy()</span>
+<span class="n">finalF</span> <span class="o">=</span> <span class="n">inF</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>  <span class="c1"># inF.copy()</span>
 <span class="n">prefix</span> <span class="o">=</span> <span class="s2">&quot;FUA&quot;</span>
-<span class="n">date</span> <span class="o">=</span> <span class="mi">2019</span> <span class="c1">#os.path.basename(ntl_image).split(&quot;_&quot;)[2][:6]</span>
+<span class="n">date</span> <span class="o">=</span> <span class="mi">2019</span>  <span class="c1"># os.path.basename(ntl_image).split(&quot;_&quot;)[2][:6]</span>
 <span class="n">raw_ntl</span> <span class="o">=</span> <span class="n">rMisc</span><span class="o">.</span><span class="n">zonalStats</span><span class="p">(</span><span class="n">finalF</span><span class="p">,</span> <span class="n">ntl_image</span><span class="p">,</span> <span class="n">minVal</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">reProj</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">raw_ntl</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">raw_ntl</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;SUM&quot;</span><span class="p">,</span> <span class="s2">&quot;MIN&quot;</span><span class="p">,</span> <span class="s2">&quot;MAX&quot;</span><span class="p">,</span> <span class="s2">&quot;MEAN&quot;</span><span class="p">])</span>
 <span class="n">finalF</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;raw_</span><span class="si">{</span><span class="n">date</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">raw_ntl</span><span class="p">[</span><span class="s2">&quot;SUM&quot;</span><span class="p">]</span>
@@ -532,7 +531,9 @@ document.write(`
 <span class="n">ntl_r</span> <span class="o">=</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">ntl_image</span><span class="p">)</span>
 <span class="n">ntl_data</span> <span class="o">=</span> <span class="n">ntl_r</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
 <span class="n">masked_ntl_data</span> <span class="o">=</span> <span class="n">ntl_data</span> <span class="o">*</span> <span class="n">flare_mask</span>
-<span class="k">with</span> <span class="n">rMisc</span><span class="o">.</span><span class="n">create_rasterio_inmemory</span><span class="p">(</span><span class="n">ntl_r</span><span class="o">.</span><span class="n">profile</span><span class="p">,</span> <span class="n">masked_ntl_data</span><span class="p">)</span> <span class="k">as</span> <span class="n">masked_ntl_raster</span><span class="p">:</span>
+<span class="k">with</span> <span class="n">rMisc</span><span class="o">.</span><span class="n">create_rasterio_inmemory</span><span class="p">(</span>
+    <span class="n">ntl_r</span><span class="o">.</span><span class="n">profile</span><span class="p">,</span> <span class="n">masked_ntl_data</span>
+<span class="p">)</span> <span class="k">as</span> <span class="n">masked_ntl_raster</span><span class="p">:</span>
     <span class="n">masked_ntl</span> <span class="o">=</span> <span class="n">rMisc</span><span class="o">.</span><span class="n">zonalStats</span><span class="p">(</span><span class="n">finalF</span><span class="p">,</span> <span class="n">masked_ntl_raster</span><span class="p">,</span> <span class="n">minVal</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">reProj</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">masked_ntl</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">masked_ntl</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;SUM&quot;</span><span class="p">,</span> <span class="s2">&quot;MIN&quot;</span><span class="p">,</span> <span class="s2">&quot;MAX&quot;</span><span class="p">,</span> <span class="s2">&quot;MEAN&quot;</span><span class="p">])</span>
     <span class="n">finalF</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;mask_</span><span class="si">{</span><span class="n">date</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">masked_ntl</span><span class="p">[</span><span class="s2">&quot;SUM&quot;</span><span class="p">]</span>
@@ -540,7 +541,9 @@ document.write(`
 <span class="n">finalF</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span>
     <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">out_folder</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">prefix</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">date</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">buffer_dist</span><span class="si">}</span><span class="s2">_zonal_ntl.gpkg&quot;</span><span class="p">,</span> <span class="n">driver</span><span class="o">=</span><span class="s2">&quot;GPKG&quot;</span>
 <span class="p">)</span>
-<span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">finalF</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="s2">&quot;geometry&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">out_folder</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">prefix</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">date</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">buffer_dist</span><span class="si">}</span><span class="s2">_zonal_ntl.csv&quot;</span><span class="p">)</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">finalF</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="s2">&quot;geometry&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span>
+    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">out_folder</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">prefix</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">date</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">buffer_dist</span><span class="si">}</span><span class="s2">_zonal_ntl.csv&quot;</span>
+<span class="p">)</span>
 </pre></div>
 </div>
 </div>

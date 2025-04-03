@@ -394,17 +394,18 @@ document.write(`
 <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;../../../src&quot;</span><span class="p">)</span>
 
 <span class="c1"># Import local functions</span>
-<span class="c1">#from novelUrbanization import *</span>
+<span class="c1"># from novelUrbanization import *</span>
 
 <span class="o">%</span><span class="n">load_ext</span> <span class="n">autoreload</span>
 <span class="o">%</span><span class="n">autoreload</span> <span class="mi">2</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">urllib3.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">InsecureRequestWarning</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">urllib3</span><span class="w"> </span><span class="kn">import</span> <span class="n">disable_warnings</span>
+
 <span class="n">disable_warnings</span><span class="p">(</span><span class="n">InsecureRequestWarning</span><span class="p">)</span>
 
 <span class="n">s3client</span> <span class="o">=</span> <span class="n">boto3</span><span class="o">.</span><span class="n">client</span><span class="p">(</span><span class="s2">&quot;s3&quot;</span><span class="p">,</span> <span class="n">verify</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="n">out_folder</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;C:\WBG\Work\Projects\Novel_Urban\Mosaicks&#39;</span>
+<span class="n">out_folder</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;C:\WBG\Work\Projects\Novel_Urban\Mosaicks&quot;</span>
 </pre></div>
 </div>
 </div>
@@ -434,9 +435,14 @@ document.write(`
         <span class="n">token</span> <span class="o">=</span> <span class="n">objects</span><span class="p">[</span><span class="s2">&quot;NextContinuationToken&quot;</span><span class="p">]</span>
     <span class="n">loops</span> <span class="o">+=</span> <span class="mi">1</span>
     <span class="k">for</span> <span class="n">res</span> <span class="ow">in</span> <span class="n">objects</span><span class="p">[</span><span class="s2">&quot;Contents&quot;</span><span class="p">]:</span>
-        <span class="k">if</span> <span class="p">(</span><span class="s2">&quot;FINAL_STANDARD&quot;</span> <span class="ow">in</span> <span class="n">res</span><span class="p">[</span><span class="s2">&quot;Key&quot;</span><span class="p">])</span> <span class="ow">and</span> <span class="p">(</span> <span class="c1"># Look for the 250m data</span>
-            <span class="n">res</span><span class="p">[</span><span class="s2">&quot;Key&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="n">pop_layer</span><span class="p">)</span>
-        <span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="ow">not</span> <span class="s2">&quot;1k&quot;</span> <span class="ow">in</span> <span class="n">res</span><span class="p">[</span><span class="s2">&quot;Key&quot;</span><span class="p">])</span> <span class="ow">and</span> <span class="p">(</span><span class="ow">not</span> <span class="s2">&quot;NO_DATA&quot;</span> <span class="ow">in</span> <span class="n">res</span><span class="p">[</span><span class="s2">&quot;Key&quot;</span><span class="p">]):</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="p">(</span><span class="s2">&quot;FINAL_STANDARD&quot;</span> <span class="ow">in</span> <span class="n">res</span><span class="p">[</span><span class="s2">&quot;Key&quot;</span><span class="p">])</span>
+            <span class="ow">and</span> <span class="p">(</span>  <span class="c1"># Look for the 250m data</span>
+                <span class="n">res</span><span class="p">[</span><span class="s2">&quot;Key&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="n">pop_layer</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="ow">and</span> <span class="p">(</span><span class="s2">&quot;1k&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">res</span><span class="p">[</span><span class="s2">&quot;Key&quot;</span><span class="p">])</span>
+            <span class="ow">and</span> <span class="p">(</span><span class="s2">&quot;NO_DATA&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">res</span><span class="p">[</span><span class="s2">&quot;Key&quot;</span><span class="p">])</span>
+        <span class="p">):</span>
             <span class="n">pop_tiffs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;s3://</span><span class="si">{</span><span class="n">bucket</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">res</span><span class="p">[</span><span class="s2">&quot;Key&quot;</span><span class="p">]</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -444,8 +450,10 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">out_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span> <span class="n">out_folder</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;merged_</span><span class="si">{</span><span class="n">pop_layer</span><span class="si">}</span><span class="s2">&quot;</span> <span class="p">)</span>
-<span class="n">merged_data</span><span class="p">,</span> <span class="n">merged_profile</span> <span class="o">=</span> <span class="n">rMisc</span><span class="o">.</span><span class="n">merge_rasters</span><span class="p">(</span><span class="n">pop_tiffs</span><span class="p">,</span> <span class="n">gdal_unssafe</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">compress</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">out_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">out_folder</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;merged_</span><span class="si">{</span><span class="n">pop_layer</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="n">merged_data</span><span class="p">,</span> <span class="n">merged_profile</span> <span class="o">=</span> <span class="n">rMisc</span><span class="o">.</span><span class="n">merge_rasters</span><span class="p">(</span>
+    <span class="n">pop_tiffs</span><span class="p">,</span> <span class="n">gdal_unssafe</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">compress</span><span class="o">=</span><span class="kc">True</span>
+<span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -456,7 +464,7 @@ document.write(`
 <span class="n">merged_data</span><span class="p">[</span><span class="n">merged_data</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
 <span class="n">merged_data</span> <span class="o">=</span> <span class="n">merged_data</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">dtype</span><span class="p">)</span>
 <span class="n">merged_profile</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
-    <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">,</span>    
+    <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">,</span>
     <span class="n">nodata</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
 <span class="p">)</span>
 
@@ -491,9 +499,13 @@ document.write(`
         <span class="n">token</span> <span class="o">=</span> <span class="n">objects</span><span class="p">[</span><span class="s2">&quot;NextContinuationToken&quot;</span><span class="p">]</span>
     <span class="n">loops</span> <span class="o">+=</span> <span class="mi">1</span>
     <span class="k">for</span> <span class="n">res</span> <span class="ow">in</span> <span class="n">objects</span><span class="p">[</span><span class="s2">&quot;Contents&quot;</span><span class="p">]:</span>
-        <span class="k">if</span> <span class="p">(</span><span class="s2">&quot;FINAL_STANDARD&quot;</span> <span class="ow">in</span> <span class="n">res</span><span class="p">[</span><span class="s2">&quot;Key&quot;</span><span class="p">])</span> <span class="ow">and</span> <span class="p">(</span>
-            <span class="n">res</span><span class="p">[</span><span class="s2">&quot;Key&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;urban.tif&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">res</span><span class="p">[</span><span class="s2">&quot;Key&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;urban_hd.tif&quot;</span><span class="p">)</span>
-        <span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="ow">not</span> <span class="s2">&quot;1k&quot;</span> <span class="ow">in</span> <span class="n">res</span><span class="p">[</span><span class="s2">&quot;Key&quot;</span><span class="p">]):</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="p">(</span><span class="s2">&quot;FINAL_STANDARD&quot;</span> <span class="ow">in</span> <span class="n">res</span><span class="p">[</span><span class="s2">&quot;Key&quot;</span><span class="p">])</span>
+            <span class="ow">and</span> <span class="p">(</span>
+                <span class="n">res</span><span class="p">[</span><span class="s2">&quot;Key&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;urban.tif&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">res</span><span class="p">[</span><span class="s2">&quot;Key&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;urban_hd.tif&quot;</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="ow">and</span> <span class="p">(</span><span class="s2">&quot;1k&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">res</span><span class="p">[</span><span class="s2">&quot;Key&quot;</span><span class="p">])</span>
+        <span class="p">):</span>
             <span class="n">cur_pop</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="s2">&quot;Key&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
             <span class="n">cur_type</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="s2">&quot;Key&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.tif&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
             <span class="n">cur_lyr</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">cur_pop</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">cur_type</span><span class="si">}</span><span class="s2">&quot;</span>
@@ -512,11 +524,16 @@ document.write(`
     <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">out_folder</span><span class="p">)</span>
 
 <span class="k">for</span> <span class="n">cur_lbl</span><span class="p">,</span> <span class="n">rasters</span> <span class="ow">in</span> <span class="n">urban_tiff</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-    <span class="k">if</span> <span class="s2">&quot;cpo15&quot;</span> <span class="ow">in</span> <span class="n">cur_lbl</span><span class="p">:</span>    
+    <span class="k">if</span> <span class="s2">&quot;cpo15&quot;</span> <span class="ow">in</span> <span class="n">cur_lbl</span><span class="p">:</span>
         <span class="n">tPrint</span><span class="p">(</span><span class="n">cur_lbl</span><span class="p">)</span>
         <span class="n">out_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">out_folder</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">cur_lbl</span><span class="si">}</span><span class="s2">_DoU_Africa_mosaic.tif&quot;</span><span class="p">)</span>
         <span class="n">curD</span><span class="p">,</span> <span class="n">profile</span> <span class="o">=</span> <span class="n">rMisc</span><span class="o">.</span><span class="n">merge_rasters</span><span class="p">(</span>
-            <span class="n">rasters</span><span class="p">,</span> <span class="n">merge_method</span><span class="o">=</span><span class="s2">&quot;max&quot;</span><span class="p">,</span> <span class="n">boolean_gt_0</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">out_file</span><span class="o">=</span><span class="n">out_file</span><span class="p">,</span> <span class="n">gdal_unssafe</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">compress</span><span class="o">=</span><span class="kc">True</span>
+            <span class="n">rasters</span><span class="p">,</span>
+            <span class="n">merge_method</span><span class="o">=</span><span class="s2">&quot;max&quot;</span><span class="p">,</span>
+            <span class="n">boolean_gt_0</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">out_file</span><span class="o">=</span><span class="n">out_file</span><span class="p">,</span>
+            <span class="n">gdal_unssafe</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">compress</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="p">)</span>
 </pre></div>
 </div>
@@ -571,10 +588,10 @@ document.write(`
         <span class="n">token</span> <span class="o">=</span> <span class="n">objects</span><span class="p">[</span><span class="s2">&quot;NextContinuationToken&quot;</span><span class="p">]</span>
     <span class="n">loops</span> <span class="o">+=</span> <span class="mi">1</span>
     <span class="k">for</span> <span class="n">res</span> <span class="ow">in</span> <span class="n">objects</span><span class="p">[</span><span class="s2">&quot;Contents&quot;</span><span class="p">]:</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="s2">&quot;1k&quot;</span> <span class="ow">in</span> <span class="n">res</span><span class="p">[</span><span class="s2">&quot;Key&quot;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="s2">&quot;1k&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">res</span><span class="p">[</span><span class="s2">&quot;Key&quot;</span><span class="p">]:</span>
             <span class="n">cur_path</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;s3://</span><span class="si">{</span><span class="n">bucket</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">res</span><span class="p">[</span><span class="s1">&#39;Key&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
             <span class="n">cur_type</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">cur_path</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)[</span><span class="mi">2</span><span class="p">][:</span><span class="mi">2</span><span class="p">]</span>
-            <span class="k">if</span> <span class="n">cur_type</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;cc&quot;</span><span class="p">,</span> <span class="s2">&quot;co&quot;</span><span class="p">,</span> <span class="s2">&quot;ur&quot;</span><span class="p">,</span> <span class="s1">&#39;ce&#39;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">cur_type</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;cc&quot;</span><span class="p">,</span> <span class="s2">&quot;co&quot;</span><span class="p">,</span> <span class="s2">&quot;ur&quot;</span><span class="p">,</span> <span class="s2">&quot;ce&quot;</span><span class="p">]:</span>
                 <span class="n">cur_pop</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">cur_path</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;d&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
                 <span class="n">cur_label</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">cur_pop</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">cur_type</span><span class="si">}</span><span class="s2">&quot;</span>
                 <span class="k">try</span><span class="p">:</span>
@@ -594,10 +611,15 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">cur_lbl</span> <span class="o">=</span> <span class="s1">&#39;cpo15_ce&#39;</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">cur_lbl</span> <span class="o">=</span> <span class="s2">&quot;cpo15_ce&quot;</span>
 <span class="n">out_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">out_folder</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">cur_lbl</span><span class="si">}</span><span class="s2">_DB_Africa_mosaic_compress.tif&quot;</span><span class="p">)</span>
 <span class="n">curD</span><span class="p">,</span> <span class="n">profile</span> <span class="o">=</span> <span class="n">rMisc</span><span class="o">.</span><span class="n">merge_rasters</span><span class="p">(</span>
-    <span class="n">db_tiffs</span><span class="p">[</span><span class="n">cur_lbl</span><span class="p">],</span> <span class="n">merge_method</span><span class="o">=</span><span class="s2">&quot;max&quot;</span><span class="p">,</span> <span class="n">boolean_gt_0</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">out_file</span><span class="o">=</span><span class="n">out_file</span><span class="p">,</span> <span class="n">gdal_unssafe</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">compress</span><span class="o">=</span><span class="kc">True</span>
+    <span class="n">db_tiffs</span><span class="p">[</span><span class="n">cur_lbl</span><span class="p">],</span>
+    <span class="n">merge_method</span><span class="o">=</span><span class="s2">&quot;max&quot;</span><span class="p">,</span>
+    <span class="n">boolean_gt_0</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">out_file</span><span class="o">=</span><span class="n">out_file</span><span class="p">,</span>
+    <span class="n">gdal_unssafe</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">compress</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
 <span class="p">)</span>
 </pre></div>
 </div>
@@ -620,7 +642,12 @@ document.write(`
     <span class="n">out_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">out_folder</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">cur_lbl</span><span class="si">}</span><span class="s2">_DB_Africa_mosaic.tif&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">out_file</span><span class="p">):</span>
         <span class="n">curD</span><span class="p">,</span> <span class="n">profile</span> <span class="o">=</span> <span class="n">rMisc</span><span class="o">.</span><span class="n">merge_rasters</span><span class="p">(</span>
-            <span class="n">rasters</span><span class="p">,</span> <span class="n">merge_method</span><span class="o">=</span><span class="s2">&quot;max&quot;</span><span class="p">,</span> <span class="n">boolean_gt_0</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">out_file</span><span class="o">=</span><span class="n">out_file</span><span class="p">,</span> <span class="n">gdal_unssafe</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">compress</span><span class="o">=</span><span class="kc">True</span>
+            <span class="n">rasters</span><span class="p">,</span>
+            <span class="n">merge_method</span><span class="o">=</span><span class="s2">&quot;max&quot;</span><span class="p">,</span>
+            <span class="n">boolean_gt_0</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">out_file</span><span class="o">=</span><span class="n">out_file</span><span class="p">,</span>
+            <span class="n">gdal_unssafe</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">compress</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="p">)</span>
 </pre></div>
 </div>
@@ -637,10 +664,10 @@ document.write(`
 
 <span class="n">in_rasters</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="k">for</span> <span class="n">lbl</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="p">[</span>
-    <span class="p">[</span><span class="s1">&#39;ur&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
-    <span class="p">[</span><span class="s1">&#39;cc&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
-    <span class="p">[</span><span class="s1">&#39;co&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
-    <span class="p">[</span><span class="s1">&#39;ce&#39;</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;ur&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;cc&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;co&quot;</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+    <span class="p">[</span><span class="s2">&quot;ce&quot;</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span>
 <span class="p">]:</span>
     <span class="n">in_raster</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">out_folder</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;cpo15_</span><span class="si">{</span><span class="n">lbl</span><span class="si">}</span><span class="s2">_DB_Africa_mosaic.tif&quot;</span><span class="p">)</span>
     <span class="n">new_data</span> <span class="o">=</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">in_raster</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">val</span>
@@ -661,7 +688,9 @@ document.write(`
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">inR</span> <span class="o">=</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">in_raster</span><span class="p">)</span>
-<span class="k">with</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">out_folder</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;cpo15_merged_PP_DB_Africa_mosaic.tif&quot;</span><span class="p">),</span><span class="s2">&quot;w&quot;</span><span class="p">,</span><span class="o">**</span><span class="n">inR</span><span class="o">.</span><span class="n">profile</span><span class="p">)</span> <span class="k">as</span> <span class="n">dst</span><span class="p">:</span>
+<span class="k">with</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">out_folder</span><span class="p">,</span> <span class="s2">&quot;cpo15_merged_PP_DB_Africa_mosaic.tif&quot;</span><span class="p">),</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">inR</span><span class="o">.</span><span class="n">profile</span>
+<span class="p">)</span> <span class="k">as</span> <span class="n">dst</span><span class="p">:</span>
     <span class="n">dst</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">max_urban</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>

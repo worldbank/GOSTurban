@@ -371,13 +371,10 @@ document.write(`
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">boto3</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">rasterio</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">geopandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">gpd</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">rasterio.merge</span><span class="w"> </span><span class="kn">import</span> <span class="n">merge</span>
 
 <span class="c1"># Import raster helpers</span>
 <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;../../../../GOSTrocks/src&quot;</span><span class="p">)</span>
@@ -394,15 +391,15 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">in_folder</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;C:\WBG\Work\Projects\Novel_Urban\COG_DATA&#39;</span>
-<span class="n">out_folder</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;C:\WBG\Work\Projects\Novel_Urban\COG_RESULTS&#39;</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">in_folder</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;C:\WBG\Work\Projects\Novel_Urban\COG_DATA&quot;</span>
+<span class="n">out_folder</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;C:\WBG\Work\Projects\Novel_Urban\COG_RESULTS&quot;</span>
 <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">out_folder</span><span class="p">):</span>
     <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">out_folder</span><span class="p">)</span>
 
-<span class="n">iso3</span> <span class="o">=</span> <span class="s1">&#39;COG&#39;</span>
-<span class="n">pop_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">in_folder</span><span class="p">,</span> <span class="s1">&#39;DOU&#39;</span><span class="p">,</span> <span class="s1">&#39;cog_cpo20_WB.tif&#39;</span><span class="p">)</span>
-<span class="n">adm2</span> <span class="o">=</span> <span class="n">dMisc</span><span class="o">.</span><span class="n">get_geoboundaries</span><span class="p">(</span><span class="n">iso3</span><span class="p">,</span> <span class="s1">&#39;ADM2&#39;</span><span class="p">)</span>
-<span class="c1">#adm3 = dMisc.get_geoboundaries(iso3, &#39;ADM3&#39;)</span>
+<span class="n">iso3</span> <span class="o">=</span> <span class="s2">&quot;COG&quot;</span>
+<span class="n">pop_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">in_folder</span><span class="p">,</span> <span class="s2">&quot;DOU&quot;</span><span class="p">,</span> <span class="s2">&quot;cog_cpo20_WB.tif&quot;</span><span class="p">)</span>
+<span class="n">adm2</span> <span class="o">=</span> <span class="n">dMisc</span><span class="o">.</span><span class="n">get_geoboundaries</span><span class="p">(</span><span class="n">iso3</span><span class="p">,</span> <span class="s2">&quot;ADM2&quot;</span><span class="p">)</span>
+<span class="c1"># adm3 = dMisc.get_geoboundaries(iso3, &#39;ADM3&#39;)</span>
 </pre></div>
 </div>
 </div>
@@ -410,7 +407,7 @@ document.write(`
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">summarize_urban</span><span class="p">(</span><span class="n">adm</span><span class="p">,</span> <span class="n">pop_layer</span><span class="p">,</span> <span class="n">urban_layer</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot; Summarize urban population for each administrative unit</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Summarize urban population for each administrative unit</span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    adm : geoDataFrame</span>
@@ -420,20 +417,18 @@ document.write(`
 <span class="sd">    urban_layer : rasterio dataset</span>
 <span class="sd">        urban layer</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-        
+
     <span class="c1"># Read raster data</span>
     <span class="n">pop_data</span> <span class="o">=</span> <span class="n">pop_layer</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
     <span class="n">urban_data</span> <span class="o">=</span> <span class="n">urban_layer</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
     <span class="n">urban_data</span> <span class="o">=</span> <span class="p">(</span><span class="n">urban_data</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="o">*</span> <span class="mi">1</span>
-    
+
     <span class="n">urban_pop</span> <span class="o">=</span> <span class="n">pop_data</span> <span class="o">*</span> <span class="n">urban_data</span>
 
     <span class="k">with</span> <span class="n">rMisc</span><span class="o">.</span><span class="n">create_rasterio_inmemory</span><span class="p">(</span><span class="n">urban_layer</span><span class="o">.</span><span class="n">profile</span><span class="p">,</span> <span class="n">urban_pop</span><span class="p">)</span> <span class="k">as</span> <span class="n">urban_pop_ds</span><span class="p">:</span>
         <span class="n">res</span> <span class="o">=</span> <span class="n">rMisc</span><span class="o">.</span><span class="n">zonalStats</span><span class="p">(</span><span class="n">adm</span><span class="p">,</span> <span class="n">urban_pop_ds</span><span class="p">,</span> <span class="n">minVal</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-        <span class="n">res</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;SUM&#39;</span><span class="p">,</span> <span class="s1">&#39;MIN&#39;</span><span class="p">,</span> <span class="s1">&#39;MAX&#39;</span><span class="p">,</span> <span class="s1">&#39;MEAN&#39;</span><span class="p">])</span>
-    <span class="k">return</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="s1">&#39;SUM&#39;</span><span class="p">])</span>
-
-    
+        <span class="n">res</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;SUM&quot;</span><span class="p">,</span> <span class="s2">&quot;MIN&quot;</span><span class="p">,</span> <span class="s2">&quot;MAX&quot;</span><span class="p">,</span> <span class="s2">&quot;MEAN&quot;</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">res</span><span class="p">[</span><span class="s2">&quot;SUM&quot;</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>
@@ -447,27 +442,28 @@ document.write(`
     <span class="n">adm2</span> <span class="o">=</span> <span class="n">adm2</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="n">pop_layer</span><span class="o">.</span><span class="n">crs</span><span class="p">)</span>
 
 <span class="n">res</span> <span class="o">=</span> <span class="n">rMisc</span><span class="o">.</span><span class="n">zonalStats</span><span class="p">(</span><span class="n">adm2</span><span class="p">,</span> <span class="n">pop_layer</span><span class="p">,</span> <span class="n">minVal</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-<span class="n">res</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;SUM&#39;</span><span class="p">,</span> <span class="s1">&#39;MIN&#39;</span><span class="p">,</span> <span class="s1">&#39;MAX&#39;</span><span class="p">,</span> <span class="s1">&#39;MEAN&#39;</span><span class="p">])</span>
-<span class="n">urban_res</span><span class="p">[</span><span class="s1">&#39;total_pop&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">res</span><span class="p">[</span><span class="s1">&#39;SUM&#39;</span><span class="p">]</span>
+<span class="n">res</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;SUM&quot;</span><span class="p">,</span> <span class="s2">&quot;MIN&quot;</span><span class="p">,</span> <span class="s2">&quot;MAX&quot;</span><span class="p">,</span> <span class="s2">&quot;MEAN&quot;</span><span class="p">])</span>
+<span class="n">urban_res</span><span class="p">[</span><span class="s2">&quot;total_pop&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">res</span><span class="p">[</span><span class="s2">&quot;SUM&quot;</span><span class="p">]</span>
 
 <span class="k">for</span> <span class="n">urb_file</span><span class="p">,</span> <span class="n">lbl</span> <span class="ow">in</span> <span class="p">[</span>
-        <span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">in_folder</span><span class="p">,</span> <span class="s1">&#39;DOU&#39;</span><span class="p">,</span> <span class="s1">&#39;cog_cpo20_WB_urban.tif&#39;</span><span class="p">),</span> <span class="s1">&#39;DoU_urban&#39;</span><span class="p">],</span>
-        <span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">in_folder</span><span class="p">,</span> <span class="s1">&#39;DOU&#39;</span><span class="p">,</span> <span class="s1">&#39;cog_cpo20_WB_urban_hd.tif&#39;</span><span class="p">),</span> <span class="s1">&#39;DoU_urban_hd&#39;</span><span class="p">],</span>
-        <span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">in_folder</span><span class="p">,</span> <span class="s1">&#39;DB&#39;</span><span class="p">,</span> <span class="s1">&#39;cog_cpo20_WBd10b5000_cc.tif&#39;</span><span class="p">),</span> <span class="s1">&#39;DB_cc&#39;</span><span class="p">],</span>
-        <span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">in_folder</span><span class="p">,</span> <span class="s1">&#39;DB&#39;</span><span class="p">,</span> <span class="s1">&#39;cog_cpo20_WBd10b5000_co.tif&#39;</span><span class="p">),</span> <span class="s1">&#39;DB_co&#39;</span><span class="p">],</span>
-        <span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">in_folder</span><span class="p">,</span> <span class="s1">&#39;DB&#39;</span><span class="p">,</span> <span class="s1">&#39;cog_cpo20_WBd10b5000_ur.tif&#39;</span><span class="p">),</span> <span class="s1">&#39;DB_ur&#39;</span><span class="p">],</span>
-    <span class="p">]:</span>
+    <span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">in_folder</span><span class="p">,</span> <span class="s2">&quot;DOU&quot;</span><span class="p">,</span> <span class="s2">&quot;cog_cpo20_WB_urban.tif&quot;</span><span class="p">),</span> <span class="s2">&quot;DoU_urban&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">in_folder</span><span class="p">,</span> <span class="s2">&quot;DOU&quot;</span><span class="p">,</span> <span class="s2">&quot;cog_cpo20_WB_urban_hd.tif&quot;</span><span class="p">),</span> <span class="s2">&quot;DoU_urban_hd&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">in_folder</span><span class="p">,</span> <span class="s2">&quot;DB&quot;</span><span class="p">,</span> <span class="s2">&quot;cog_cpo20_WBd10b5000_cc.tif&quot;</span><span class="p">),</span> <span class="s2">&quot;DB_cc&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">in_folder</span><span class="p">,</span> <span class="s2">&quot;DB&quot;</span><span class="p">,</span> <span class="s2">&quot;cog_cpo20_WBd10b5000_co.tif&quot;</span><span class="p">),</span> <span class="s2">&quot;DB_co&quot;</span><span class="p">],</span>
+    <span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">in_folder</span><span class="p">,</span> <span class="s2">&quot;DB&quot;</span><span class="p">,</span> <span class="s2">&quot;cog_cpo20_WBd10b5000_ur.tif&quot;</span><span class="p">),</span> <span class="s2">&quot;DB_ur&quot;</span><span class="p">],</span>
+<span class="p">]:</span>
     <span class="n">tPrint</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Processing </span><span class="si">{</span><span class="n">lbl</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="n">urban_res</span><span class="p">[</span><span class="n">lbl</span><span class="p">]</span> <span class="o">=</span> <span class="n">summarize_urban</span><span class="p">(</span><span class="n">adm2</span><span class="p">,</span> <span class="n">pop_layer</span><span class="p">,</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">urb_file</span><span class="p">))</span>
-    
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">urban_res</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;geometry&#39;</span><span class="p">]))</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">out_folder</span><span class="p">,</span> <span class="s1">&#39;adm2_urban_pop.csv&#39;</span><span class="p">),</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="n">urban_res</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">out_folder</span><span class="p">,</span> <span class="s1">&#39;adm2_urban_pop.geojson&#39;</span><span class="p">),</span> <span class="n">driver</span><span class="o">=</span><span class="s1">&#39;GeoJSON&#39;</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">urban_res</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;geometry&quot;</span><span class="p">]))</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">out_folder</span><span class="p">,</span> <span class="s2">&quot;adm2_urban_pop.csv&quot;</span><span class="p">),</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span>
+<span class="p">)</span>
+<span class="n">urban_res</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">out_folder</span><span class="p">,</span> <span class="s2">&quot;adm2_urban_pop.geojson&quot;</span><span class="p">),</span> <span class="n">driver</span><span class="o">=</span><span class="s2">&quot;GeoJSON&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>

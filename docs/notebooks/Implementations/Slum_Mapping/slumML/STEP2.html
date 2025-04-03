@@ -1,0 +1,786 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>STEP-2 &#8212; GOST Urbanization</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../../../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../../../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../../../../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/styles/sphinx-book-theme.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../../_static/sphinx-design.5ea377869091fd0449014c60fc090103.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script data-url_root="../../../../../" id="documentation_options" src="../../../../../_static/documentation_options.js"></script>
+    <script src="../../../../../_static/jquery.js"></script>
+    <script src="../../../../../_static/underscore.js"></script>
+    <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../../../_static/doctools.js"></script>
+    <script src="../../../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../../../_static/clipboard.min.js"></script>
+    <script src="../../../../../_static/copybutton.js"></script>
+    <script src="../../../../../_static/scripts/sphinx-book-theme.js"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../../../../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../../../../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../../../../../_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'docs/notebooks/Implementations/Slum_Mapping/slumML/STEP2';</script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../../../README.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">GOST Urbanization</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../../../../README.html">
+                    Quantifying urbanization
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Novel Urbanization</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../novel_context.html">Novel Urbanization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../urbanization_comparison.html">Comparing urban methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../notebooks/Implementations/MENA_Benchmarking/Map_Extents.html">Mapping and comparing urban extents</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../../notebooks/Tutorials/UrbanAreas_tutorials.html">Degree of Urbanization</a></li>
+
+
+<li class="toctree-l1"><a class="reference internal" href="../../../../../notebooks/Tutorials/LEI_Example.html">Landscape Expansion Index</a></li>
+
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/worldbank/GOST_Urban" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../../../../_sources/docs/notebooks/Implementations/Slum_Mapping/slumML/STEP2.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>STEP-2</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#"><strong>STEP-2</strong></a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#initial-file-setting">Initial file setting</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#h2o-pipeline"><strong>h2o Pipeline</strong></a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#supervised-ml-classification-based-on-the-selected-model"><strong>Supervised ML classification based on the selected model</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#post-analytical-process"><strong>Post-analytical process</strong></a></li>
+</ul>
+</li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="step-2">
+<h1><strong>STEP-2</strong><a class="headerlink" href="#step-2" title="Permalink to this heading">#</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">google.colab</span><span class="w"> </span><span class="kn">import</span> <span class="n">drive</span>
+
+<span class="n">drive</span><span class="o">.</span><span class="n">mount</span><span class="p">(</span><span class="s2">&quot;/content/drive&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>OPTIONAL:</strong> Install required modules (geopandas, pyproj, h2o) if not yet installed.
+Create ‘modules’ directory under ‘Colab\ Notebooks’ (or specify a directory you like).</p>
+<p><a class="reference external" href="https://ggcs.io/2020/06/22/google-colab-pip-install/">https://ggcs.io/2020/06/22/google-colab-pip-install/</a> (Japanese)</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>!pip install --target /content/drive/MyDrive/Colab\ Notebooks/modules geopandas pyproj h2o
+</pre></div>
+</div>
+</div>
+</div>
+<p>Import modules</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;/content/drive/MyDrive/Colab Notebooks/modules&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pyproj</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">geopandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">gpd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">h2o</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">h2o.automl</span><span class="w"> </span><span class="kn">import</span> <span class="n">H2OAutoML</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">h2o.frame</span><span class="w"> </span><span class="kn">import</span> <span class="n">H2OFrame</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<hr class="docutils" />
+<section class="tex2jax_ignore mathjax_ignore" id="initial-file-setting">
+<h1>Initial file setting<a class="headerlink" href="#initial-file-setting" title="Permalink to this heading">#</a></h1>
+<p>Do not forget to mount your GoogleDrive! All necessary files need to be uploaded in directories on your GoogleDrive. You can easily mount your GoogleDrive from the left pane, click the folder icon and select mount drive. Also see: <a class="reference external" href="https://colab.research.google.com/notebooks/io.ipynb">https://colab.research.google.com/notebooks/io.ipynb</a></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pth</span> <span class="o">=</span> <span class="s2">&quot;/content/drive/MyDrive/Colab Notebooks/slumML/data/Yaounde/&quot;</span>  <span class="c1"># Directory to save model, ouputs</span>
+<span class="n">building_file</span> <span class="o">=</span> <span class="s2">&quot;/content/drive/MyDrive/Colab Notebooks/slumML/data/Yaounde/Yaounde_DA_morphology.shp&quot;</span>  <span class="c1"># Specify the processed building footprint data</span>
+<span class="n">sample_file</span> <span class="o">=</span> <span class="s2">&quot;/content/drive/MyDrive/Colab Notebooks/slumML/data/Yaounde/Yaounde_sample_data.shp&quot;</span>  <span class="c1"># Specify the sample data</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Read a Building Footprint layer processed at STEP-1</span>
+<span class="n">proj_4326</span> <span class="o">=</span> <span class="n">pyproj</span><span class="o">.</span><span class="n">Proj</span><span class="p">(</span><span class="mi">4326</span><span class="p">)</span>
+
+<span class="n">building_df</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">building_file</span><span class="p">)</span>
+<span class="n">building_df</span> <span class="o">=</span> <span class="n">building_df</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="mi">4326</span><span class="p">)</span>
+
+<span class="c1"># Read a Sample Area layer</span>
+<span class="n">sample_area</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">sample_file</span><span class="p">)</span>
+<span class="n">sample_area</span> <span class="o">=</span> <span class="n">sample_area</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="mi">4326</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Here, adjust your prediction and response variables.
+Modify the code below to satisfy your needs.Current setting is very basic: Apply all variables in the building_df.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Urban classes to be used in the sample layer and for classification</span>
+<span class="c1"># Assign unique integer for each class by yourself here.</span>
+<span class="c1"># class_map = {&#39;High Income&#39;:1,&#39;Middle income&#39;:2,&#39;Industrial&#39;:5, &#39;Informal&#39;:3, &#39;Commercial&#39;:4}</span>
+<span class="c1"># class_map = {&#39;High income&#39;:1,&#39;Middle income&#39;:2,&#39;Informal&#39;:3, &#39;Commercial&#39;:4}</span>
+<span class="c1"># class_map = {&#39;commercial&#39;:1,&#39;industrial&#39;:2,&#39;ins_admin&#39;:3, &#39;res&#39;:4, &#39;res_detached&#39;:5, &#39;slum&#39;:6}#Nairobi</span>
+<span class="c1"># class_map = {&#39;Commercial zone&#39;:1,&#39;Formal&#39;:2,&#39;Informal&#39;:3, &#39;middle income&#39;:4}#Bangui</span>
+<span class="c1"># class_map = {&#39;High Income&#39;:1,&#39;Middle Income&#39;:2,&#39;Low Income&#39;:3, &#39;Slum&#39;:4, &#39;Com Admin&#39;:5, &#39;Industrial&#39;:6}#Libreville, Brazzaville, &amp; PointeNoire</span>
+<span class="c1"># class_map = {&#39;commercial&#39;:1,&#39;informal&#39;:2,&#39;mid/low income&#39;:3}#Bambari</span>
+<span class="n">class_map</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;Administrative&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="s2">&quot;Bidonville&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="s2">&quot;Commercial&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+    <span class="s2">&quot;High income&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+    <span class="s2">&quot;Industrial&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
+    <span class="s2">&quot;Middle/Low income&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+<span class="p">}</span>  <span class="c1"># Douala, Yaounde</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Here, adjust your prediction and response variables. Modify the code below to satisfy your needs.</span>
+<span class="c1"># Current setting is very basic: Apply all variables in the building_df.</span>
+<span class="n">col</span> <span class="o">=</span> <span class="n">building_df</span><span class="o">.</span><span class="n">columns</span>
+<span class="n">predictors</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">col</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">22</span><span class="p">])</span>
+<span class="n">response</span> <span class="o">=</span> <span class="s2">&quot;type&quot;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">### OPTIONAL ###</span>
+<span class="c1"># The col defining the urban space type should have &#39;type&#39; name. So, if not, rename it here.</span>
+<span class="n">sample_area</span> <span class="o">=</span> <span class="n">sample_area</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;class&quot;</span><span class="p">:</span> <span class="s2">&quot;type&quot;</span><span class="p">})</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">### Generate a training data by intersecting &#39;building_df&#39; and &#39;sample_area&#39;</span>
+<span class="c1"># Set urban class default as &#39;unknown&#39;</span>
+
+<span class="n">source_df</span> <span class="o">=</span> <span class="n">building_df</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+<span class="n">source_df</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;unknown&quot;</span>
+
+<span class="c1"># Create an empty DF for append</span>
+<span class="n">training_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+
+<span class="c1"># &#39;training_data&#39; is now our official &#39;training data&#39; for the ML model.</span>
+<span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">sample_area</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">geometry</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">type</span>
+
+    <span class="n">df_temp</span> <span class="o">=</span> <span class="n">source_df</span><span class="p">[</span><span class="n">source_df</span><span class="o">.</span><span class="n">intersects</span><span class="p">(</span><span class="n">x</span><span class="p">)]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">df_temp</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">y</span>
+
+    <span class="n">training_data</span> <span class="o">=</span> <span class="n">training_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">df_temp</span><span class="p">)</span>
+
+<span class="n">training_data</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">training_data</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">class_map</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<hr class="docutils" />
+<section class="tex2jax_ignore mathjax_ignore" id="h2o-pipeline">
+<h1><strong>h2o Pipeline</strong><a class="headerlink" href="#h2o-pipeline" title="Permalink to this heading">#</a></h1>
+<p>Initialize h2o</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">h2o</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Data prep for the h2o pipeline, autoML model selection.
+The best-performed model will be saved in the directory specified by ‘pth.’</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Convert the training data to an h2o frame.</span>
+<span class="c1"># NOTE that this process will be inefficien if the original data has many NaNs.</span>
+<span class="n">hf</span> <span class="o">=</span> <span class="n">H2OFrame</span><span class="p">(</span><span class="n">training_data</span><span class="p">)</span>
+
+
+<span class="c1"># This block of code is fairly h2o standard. It trains 20 models on this data,</span>
+<span class="c1"># limiting the runtime to 1 hour. At the end of an hour or training 20 models,</span>
+<span class="c1"># whichever is first, it returns a DataFrame of predictions as preds, ordered by the quality of their predictions.</span>
+
+<span class="c1"># Split &#39;hf&#39; into a taraining frame and validation frame.</span>
+<span class="n">train</span><span class="p">,</span> <span class="n">valid</span> <span class="o">=</span> <span class="n">hf</span><span class="o">.</span><span class="n">split_frame</span><span class="p">(</span><span class="n">ratios</span><span class="o">=</span><span class="p">[</span><span class="mf">0.8</span><span class="p">],</span> <span class="n">seed</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="c1"># Identify predictors and response</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">predictors</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">response</span>
+
+<span class="c1">## For binary classification, response should be a factor</span>
+<span class="n">train</span><span class="p">[</span><span class="n">y</span><span class="p">]</span> <span class="o">=</span> <span class="n">train</span><span class="p">[</span><span class="n">y</span><span class="p">]</span><span class="o">.</span><span class="n">asfactor</span><span class="p">()</span>
+<span class="n">valid</span><span class="p">[</span><span class="n">y</span><span class="p">]</span> <span class="o">=</span> <span class="n">valid</span><span class="p">[</span><span class="n">y</span><span class="p">]</span><span class="o">.</span><span class="n">asfactor</span><span class="p">()</span>
+
+<span class="c1"># Run AutoML for 20 base models (limited to 1 hour max runtime by default)</span>
+<span class="n">aml</span> <span class="o">=</span> <span class="n">H2OAutoML</span><span class="p">(</span><span class="n">max_models</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">aml</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">training_frame</span><span class="o">=</span><span class="n">train</span><span class="p">)</span>
+
+<span class="c1"># View the AutoML Leaderboard</span>
+<span class="n">lb</span> <span class="o">=</span> <span class="n">aml</span><span class="o">.</span><span class="n">leaderboard</span>
+
+
+<span class="c1"># Print all rows instead of default (10 rows)</span>
+<span class="n">lb</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="n">rows</span><span class="o">=</span><span class="n">lb</span><span class="o">.</span><span class="n">nrows</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;** Model validation with &#39;valid&#39; hf **&quot;</span><span class="p">)</span>
+<span class="n">preds</span> <span class="o">=</span> <span class="n">aml</span><span class="o">.</span><span class="n">leader</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">valid</span><span class="p">)</span>
+
+<span class="c1"># Here, we print out the performance of our top performing model.</span>
+<span class="n">res</span> <span class="o">=</span> <span class="n">aml</span><span class="o">.</span><span class="n">leader</span><span class="o">.</span><span class="n">model_performance</span><span class="p">(</span><span class="n">valid</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+
+<span class="c1"># We save the model down to its own save location.</span>
+<span class="n">model_path</span> <span class="o">=</span> <span class="n">h2o</span><span class="o">.</span><span class="n">save_model</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">aml</span><span class="o">.</span><span class="n">leader</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="n">pth</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="supervised-ml-classification-based-on-the-selected-model">
+<h2><strong>Supervised ML classification based on the selected model</strong><a class="headerlink" href="#supervised-ml-classification-based-on-the-selected-model" title="Permalink to this heading">#</a></h2>
+<p>h2o struggled to generate predictions for more than 100,000 rows at a time.Thus, we split the original DataFrame into 100,000 row chunks, run the predictions on the h2o version of the frame, then send these to file.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">max_row_size</span> <span class="o">=</span> <span class="mi">100000</span>
+
+<span class="n">chunk_num</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">building_df</span><span class="p">)</span> <span class="o">/</span> <span class="n">max_row_size</span><span class="p">)</span>
+<span class="n">chunk_mod</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">building_df</span><span class="p">)</span> <span class="o">%</span> <span class="n">max_row_size</span>
+
+<span class="n">building_df</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;unknown&quot;</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">MLpred</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
+    <span class="n">df_input</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">predictors</span><span class="p">]</span>
+    <span class="c1"># Extract predictor cols only (specified by the &#39;predictors&#39; LIST)</span>
+    <span class="n">hf_temp</span> <span class="o">=</span> <span class="n">H2OFrame</span><span class="p">(</span><span class="n">df_input</span><span class="p">)</span>
+
+    <span class="n">preds_temp</span> <span class="o">=</span> <span class="n">aml</span><span class="o">.</span><span class="n">leader</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">hf_temp</span><span class="p">)</span>
+    <span class="n">pred_df_temp</span> <span class="o">=</span> <span class="n">preds_temp</span><span class="o">.</span><span class="n">as_data_frame</span><span class="p">()</span>
+
+    <span class="c1"># add &#39;PID&#39; to &#39;pred_df_temp&#39; so that it will be merged to the original &#39;df.&#39;</span>
+    <span class="n">df</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">pred_df_temp</span><span class="p">[</span><span class="s2">&quot;PID&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">PID</span>
+
+    <span class="n">ans</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">pred_df_temp</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s2">&quot;PID&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">ans</span>
+
+
+<span class="c1"># Create an empty DF for append</span>
+<span class="n">prediction_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+
+<span class="c1"># If the total number of building footprints is smaller than 100,000:</span>
+<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">building_df</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">100000</span><span class="p">:</span>
+    <span class="c1"># Prediction process here</span>
+    <span class="n">pred_x</span> <span class="o">=</span> <span class="n">MLpred</span><span class="p">(</span><span class="n">building_df</span><span class="p">)</span>
+    <span class="n">prediction_df</span> <span class="o">=</span> <span class="n">prediction_df</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pred_x</span><span class="p">)</span>
+
+<span class="k">else</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">chunk_num</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Processing Chunk No. </span><span class="si">{}</span><span class="s2"> ----&gt; row 0–</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">max_row_size</span><span class="p">))</span>
+            <span class="n">df_temp2</span> <span class="o">=</span> <span class="n">building_df</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">max_row_size</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+            <span class="c1"># Prediction process here</span>
+            <span class="n">pred_x</span> <span class="o">=</span> <span class="n">MLpred</span><span class="p">(</span><span class="n">df_temp2</span><span class="p">)</span>
+
+            <span class="n">prediction_df</span> <span class="o">=</span> <span class="n">prediction_df</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pred_x</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">start</span> <span class="o">=</span> <span class="n">i</span> <span class="o">*</span> <span class="n">max_row_size</span>
+            <span class="n">stop</span> <span class="o">=</span> <span class="p">(</span><span class="n">i</span> <span class="o">*</span> <span class="n">max_row_size</span><span class="p">)</span> <span class="o">+</span> <span class="n">max_row_size</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Processing Chunk No. </span><span class="si">{}</span><span class="s2"> ----&gt; row </span><span class="si">{}</span><span class="s2">–</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">stop</span><span class="p">))</span>
+            <span class="n">df_temp2</span> <span class="o">=</span> <span class="n">building_df</span><span class="p">[</span><span class="n">start</span><span class="p">:</span><span class="n">stop</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+            <span class="c1"># Prediction process here</span>
+            <span class="n">pred_x</span> <span class="o">=</span> <span class="n">MLpred</span><span class="p">(</span><span class="n">df_temp2</span><span class="p">)</span>
+
+            <span class="n">prediction_df</span> <span class="o">=</span> <span class="n">prediction_df</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pred_x</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">chunk_mod</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">start</span> <span class="o">=</span> <span class="n">chunk_num</span> <span class="o">*</span> <span class="n">max_row_size</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Processing Chunk No. </span><span class="si">{}</span><span class="s2"> ----&gt; row </span><span class="si">{}</span><span class="s2"> till the end&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">start</span><span class="p">))</span>
+        <span class="n">df_temp2</span> <span class="o">=</span> <span class="n">building_df</span><span class="p">[</span><span class="n">start</span><span class="p">:]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+        <span class="c1"># Prediction process here</span>
+        <span class="n">pred_x</span> <span class="o">=</span> <span class="n">MLpred</span><span class="p">(</span><span class="n">df_temp2</span><span class="p">)</span>
+
+        <span class="n">prediction_df</span> <span class="o">=</span> <span class="n">prediction_df</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pred_x</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<hr class="docutils" />
+</section>
+<section id="post-analytical-process">
+<h2><strong>Post-analytical process</strong><a class="headerlink" href="#post-analytical-process" title="Permalink to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">### Exporting</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Exporting reulst to shapefile...&quot;</span><span class="p">)</span>
+<span class="n">output_path</span> <span class="o">=</span> <span class="n">pth</span> <span class="o">+</span> <span class="s2">&quot;\prediction_result.shp&quot;</span>
+<span class="n">prediction_df</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="n">output_path</span><span class="p">,</span> <span class="n">driver</span><span class="o">=</span><span class="s2">&quot;ESRI Shapefile&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">### Refreshing H2O cluster (if necessary)</span>
+<span class="n">h2o</span><span class="o">.</span><span class="n">shutdown</span><span class="p">(</span><span class="n">prompt</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./docs/notebooks/Implementations/Slum_Mapping/slumML"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#"><strong>STEP-2</strong></a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#initial-file-setting">Initial file setting</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#h2o-pipeline"><strong>h2o Pipeline</strong></a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#supervised-ml-classification-based-on-the-selected-model"><strong>Supervised ML classification based on the selected model</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#post-analytical-process"><strong>Post-analytical process</strong></a></li>
+</ul>
+</li>
+</ul>
+
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Benjamin P. Stewart
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

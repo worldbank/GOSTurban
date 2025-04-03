@@ -372,13 +372,9 @@ document.write(`
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 
-<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">geopandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">gpd</span>
 
 <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;C:\WBG\Work\Code\GOSTrocks\src&quot;</span><span class="p">)</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">GOSTrocks.shapeMisc</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">shapeMisc</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">GOSTrocks.dataMisc</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">dMisc</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">GOSTrocks.misc</span><span class="w"> </span><span class="kn">import</span> <span class="n">tPrint</span>
 
 <span class="o">%</span><span class="n">load_ext</span> <span class="n">autoreload</span>
 <span class="o">%</span><span class="n">autoreload</span> <span class="mi">2</span>
@@ -420,20 +416,30 @@ document.write(`
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># convert inFUA geometry to centroid</span>
-<span class="n">inFUA</span><span class="p">[</span><span class="s1">&#39;geometry&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">inFUA</span><span class="o">.</span><span class="n">centroid</span>
+<span class="n">inFUA</span><span class="p">[</span><span class="s2">&quot;geometry&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">inFUA</span><span class="o">.</span><span class="n">centroid</span>
 
 <span class="c1"># Spatial join inOE (centroids) to inFUA</span>
-<span class="n">joined_extents</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">sjoin_nearest</span><span class="p">(</span><span class="n">inOE</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,[</span><span class="s1">&#39;OE_FUAID&#39;</span><span class="p">,</span> <span class="s1">&#39;geometry&#39;</span><span class="p">]],</span> <span class="n">inFUA</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,[</span><span class="s1">&#39;eFUA_ID&#39;</span><span class="p">,</span> <span class="s1">&#39;geometry&#39;</span><span class="p">]],</span>  <span class="n">how</span><span class="o">=</span><span class="s1">&#39;inner&#39;</span><span class="p">,</span> <span class="n">distance_col</span><span class="o">=</span><span class="s1">&#39;dist_to_fua&#39;</span><span class="p">)</span>
-<span class="c1">#pd.DataFrame(joined_extents.drop([&#39;geometry&#39;, &#39;index_right&#39;], axis=1)).to_csv(os.path.join(out_folder, &#39;OE_FUA_join_raw.csv&#39;))</span>
-<span class="n">joined_extents</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s1">&#39;dist_to_fua&#39;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">joined_extents</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">sjoin_nearest</span><span class="p">(</span>
+    <span class="n">inOE</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="p">[</span><span class="s2">&quot;OE_FUAID&quot;</span><span class="p">,</span> <span class="s2">&quot;geometry&quot;</span><span class="p">]],</span>
+    <span class="n">inFUA</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="p">[</span><span class="s2">&quot;eFUA_ID&quot;</span><span class="p">,</span> <span class="s2">&quot;geometry&quot;</span><span class="p">]],</span>
+    <span class="n">how</span><span class="o">=</span><span class="s2">&quot;inner&quot;</span><span class="p">,</span>
+    <span class="n">distance_col</span><span class="o">=</span><span class="s2">&quot;dist_to_fua&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="c1"># pd.DataFrame(joined_extents.drop([&#39;geometry&#39;, &#39;index_right&#39;], axis=1)).to_csv(os.path.join(out_folder, &#39;OE_FUA_join_raw.csv&#39;))</span>
+<span class="n">joined_extents</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s2">&quot;dist_to_fua&quot;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">joined_res</span> <span class="o">=</span> <span class="n">joined_extents</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;OE_FUAID&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">(</span><span class="n">count</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;eFUA_ID&#39;</span><span class="p">,</span> <span class="s1">&#39;count&#39;</span><span class="p">),</span> <span class="n">FUA_IDs</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;eFUA_ID&#39;</span><span class="p">,</span> <span class="s1">&#39;unique&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">&#39;count&#39;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="n">joined_res</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">out_folder</span><span class="p">,</span> <span class="s1">&#39;OE_GHSL_aggregated.csv&#39;</span><span class="p">),</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">joined_res</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">joined_extents</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;OE_FUAID&quot;</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">agg</span><span class="p">(</span><span class="n">count</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;eFUA_ID&quot;</span><span class="p">,</span> <span class="s2">&quot;count&quot;</span><span class="p">),</span> <span class="n">FUA_IDs</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;eFUA_ID&quot;</span><span class="p">,</span> <span class="s2">&quot;unique&quot;</span><span class="p">))</span>
+    <span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+    <span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s2">&quot;count&quot;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="p">)</span>
+<span class="n">joined_res</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">out_folder</span><span class="p">,</span> <span class="s2">&quot;OE_GHSL_aggregated.csv&quot;</span><span class="p">),</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
