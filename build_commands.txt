@@ -8,3 +8,6 @@ git push
 conda create -n urban_test --file .\requirements.txt -c conda-forge
 conda activate urban_test
 pip install --no-build-isolation --no-deps .
+
+# Build jupyter book
+jupyter-book build --all --config docs/_config.yml --toc docs/_toc.yml .
