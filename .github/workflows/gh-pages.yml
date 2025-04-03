@@ -20,6 +20,7 @@ jobs:
         run: |
           jupyter-book config sphinx docs/
           jupyter nbconvert --ClearOutputPreprocessor.enabled=True --ClearMetadataPreprocessor.enabled=True --clear-output --inplace $(find . -type f -name '*.ipynb')
+          jupyter-book build --all --config docs/_config.yml --toc docs/_toc.yml .
       - name: Build Sphinx Documentation
         run: |
           sphinx-build docs _build/html -b html

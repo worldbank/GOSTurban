@@ -24,4 +24,3 @@ This method eschews the absolute density thresholds of the EC methodology and in
 | Cores | __co__ | contiguous pixels within urban areas that are above the 95th percentile of the counterfactual within the urban core |
 | Cities | __cc__ | urban areas that have a core |
 | Pop centers | __ce__ | contiguous pixels within a city that are above the 95th percentile of the counterfactual within the city. |
-

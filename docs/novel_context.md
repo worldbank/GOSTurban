@@ -1,5 +1,5 @@
 # Novel Urbanization
-The World Bank has long been interested in identifying novel methods for quantifying urbanization; relying on countries' reported statistics belies the inherent differences in how countries calculate urban areas, and makes comparisons across space and time very difficult. 
+The World Bank has long been interested in identifying novel methods for quantifying urbanization; relying on countries' reported statistics belies the inherent differences in how countries calculate urban areas, and makes comparisons across space and time very difficult.
 
 This project compares two urbanization methods (Degree of Urbanization and Dartboard) across sub-saharan Africa, including the effects on poverty measures in a select number of countries. Details on the methods can be found below. If you want to access the data, see links below:
 
