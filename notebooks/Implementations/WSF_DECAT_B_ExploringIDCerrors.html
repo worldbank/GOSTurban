@@ -181,14 +181,9 @@
                 </a>
             </li>
         </ul>
-        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Novel Urbanization</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../../api/GOSTurban.html">GOSTurban package</a></li>
-</ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Novel Urbanization</span></p>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../../novel_context.html">Novel Urbanization</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../urbanization_comparison.html">Comparing urban methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="MENA_Benchmarking/Map_Extents.html">Mapping and comparing urban extents</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
 <ul class="nav bd-sidenav">
@@ -391,95 +386,35 @@ document.write(`
 </ol>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">sys</span>
-<span class="kn">import</span> <span class="nn">json</span>
-<span class="kn">import</span> <span class="nn">importlib</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">importlib</span>
 
-<span class="kn">import</span> <span class="nn">rasterio</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">rasterio</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">geopandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">gpd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
 <span class="c1"># Get reference to GOSTRocks</span>
 <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;../../../gostrocks/src&quot;</span><span class="p">)</span>
 <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;../../&quot;</span><span class="p">)</span>
 
-<span class="kn">import</span> <span class="nn">src.WSF.wsfdata</span> <span class="k">as</span> <span class="nn">wsfdata</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">line</span> <span class="mi">15</span>
-<span class="g g-Whitespace">     </span><span class="mi">12</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;../../../gostrocks/src&quot;</span><span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">13</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;../../&quot;</span><span class="p">)</span>
-<span class="ne">---&gt; </span><span class="mi">15</span> <span class="kn">import</span> <span class="nn">src.WSF.wsfdata</span> <span class="k">as</span> <span class="nn">wsfdata</span>
-
-<span class="ne">ModuleNotFoundError</span>: No module named &#39;src.WSF&#39;
+<span class="kn">import</span><span class="w"> </span><span class="nn">src.WSF.wsfdata</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">wsfdata</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">matplotlib</span> inline
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">get_ipython</span><span class="p">()</span><span class="o">.</span><span class="n">run_line_magic</span><span class="p">(</span><span class="s1">&#39;matplotlib&#39;</span><span class="p">,</span> <span class="s1">&#39;inline&#39;</span><span class="p">)</span>
-
-<span class="nn">File /opt/hostedtoolcache/Python/3.10.14/x64/lib/python3.10/site-packages/IPython/core/interactiveshell.py:2480,</span> in <span class="ni">InteractiveShell.run_line_magic</span><span class="nt">(self, magic_name, line, _stack_depth)</span>
-<span class="g g-Whitespace">   </span><span class="mi">2478</span>     <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;local_ns&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_local_scope</span><span class="p">(</span><span class="n">stack_depth</span><span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">2479</span> <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">builtin_trap</span><span class="p">:</span>
-<span class="ne">-&gt; </span><span class="mi">2480</span>     <span class="n">result</span> <span class="o">=</span> <span class="n">fn</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">2482</span> <span class="c1"># The code below prevents the output from being displayed</span>
-<span class="g g-Whitespace">   </span><span class="mi">2483</span> <span class="c1"># when using magics with decorator @output_can_be_silenced</span>
-<span class="g g-Whitespace">   </span><span class="mi">2484</span> <span class="c1"># when the last Python token in the expression is a &#39;;&#39;.</span>
-<span class="g g-Whitespace">   </span><span class="mi">2485</span> <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="n">magic</span><span class="o">.</span><span class="n">MAGIC_OUTPUT_CAN_BE_SILENCED</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
-
-<span class="nn">File /opt/hostedtoolcache/Python/3.10.14/x64/lib/python3.10/site-packages/IPython/core/magics/pylab.py:103,</span> in <span class="ni">PylabMagics.matplotlib</span><span class="nt">(self, line)</span>
-<span class="g g-Whitespace">     </span><span class="mi">98</span>     <span class="nb">print</span><span class="p">(</span>
-<span class="g g-Whitespace">     </span><span class="mi">99</span>         <span class="s2">&quot;Available matplotlib backends: </span><span class="si">%s</span><span class="s2">&quot;</span>
-<span class="g g-Whitespace">    </span><span class="mi">100</span>         <span class="o">%</span> <span class="n">_list_matplotlib_backends_and_gui_loops</span><span class="p">()</span>
-<span class="g g-Whitespace">    </span><span class="mi">101</span>     <span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">102</span> <span class="k">else</span><span class="p">:</span>
-<span class="ne">--&gt; </span><span class="mi">103</span>     <span class="n">gui</span><span class="p">,</span> <span class="n">backend</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">shell</span><span class="o">.</span><span class="n">enable_matplotlib</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">gui</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">gui</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">else</span> <span class="n">args</span><span class="o">.</span><span class="n">gui</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">104</span>     <span class="bp">self</span><span class="o">.</span><span class="n">_show_matplotlib_backend</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">gui</span><span class="p">,</span> <span class="n">backend</span><span class="p">)</span>
-
-<span class="nn">File /opt/hostedtoolcache/Python/3.10.14/x64/lib/python3.10/site-packages/IPython/core/interactiveshell.py:3665,</span> in <span class="ni">InteractiveShell.enable_matplotlib</span><span class="nt">(self, gui)</span>
-<span class="g g-Whitespace">   </span><span class="mi">3662</span>     <span class="kn">import</span> <span class="nn">matplotlib_inline.backend_inline</span>
-<span class="g g-Whitespace">   </span><span class="mi">3664</span> <span class="kn">from</span> <span class="nn">IPython.core</span> <span class="kn">import</span> <span class="n">pylabtools</span> <span class="k">as</span> <span class="n">pt</span>
-<span class="ne">-&gt; </span><span class="mi">3665</span> <span class="n">gui</span><span class="p">,</span> <span class="n">backend</span> <span class="o">=</span> <span class="n">pt</span><span class="o">.</span><span class="n">find_gui_and_backend</span><span class="p">(</span><span class="n">gui</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pylab_gui_select</span><span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">3667</span> <span class="k">if</span> <span class="n">gui</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
-<span class="g g-Whitespace">   </span><span class="mi">3668</span>     <span class="c1"># If we have our first gui selection, store it</span>
-<span class="g g-Whitespace">   </span><span class="mi">3669</span>     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pylab_gui_select</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-
-<span class="nn">File /opt/hostedtoolcache/Python/3.10.14/x64/lib/python3.10/site-packages/IPython/core/pylabtools.py:338,</span> in <span class="ni">find_gui_and_backend</span><span class="nt">(gui, gui_select)</span>
-<span class="g g-Whitespace">    </span><span class="mi">321</span> <span class="k">def</span> <span class="nf">find_gui_and_backend</span><span class="p">(</span><span class="n">gui</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">gui_select</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="g g-Whitespace">    </span><span class="mi">322</span><span class="w">     </span><span class="sd">&quot;&quot;&quot;Given a gui string return the gui and mpl backend.</span>
-<span class="g g-Whitespace">    </span><span class="mi">323</span><span class="sd"> </span>
-<span class="g g-Whitespace">    </span><span class="mi">324</span><span class="sd">     Parameters</span>
-<span class="sd">   (...)</span>
-<span class="g g-Whitespace">    </span><span class="mi">335</span><span class="sd">     &#39;WXAgg&#39;,&#39;Qt4Agg&#39;,&#39;module://matplotlib_inline.backend_inline&#39;,&#39;agg&#39;).</span>
-<span class="g g-Whitespace">    </span><span class="mi">336</span><span class="sd">     &quot;&quot;&quot;</span>
-<span class="ne">--&gt; </span><span class="mi">338</span>     <span class="kn">import</span> <span class="nn">matplotlib</span>
-<span class="g g-Whitespace">    </span><span class="mi">340</span>     <span class="k">if</span> <span class="n">_matplotlib_manages_backends</span><span class="p">():</span>
-<span class="g g-Whitespace">    </span><span class="mi">341</span>         <span class="n">backend_registry</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">backends</span><span class="o">.</span><span class="n">registry</span><span class="o">.</span><span class="n">backend_registry</span>
-
-<span class="ne">ModuleNotFoundError</span>: No module named &#39;matplotlib&#39;
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="n">matplotlib</span> <span class="n">inline</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">inWSF_folder</span> <span class="o">=</span> <span class="s2">&quot;/home/public/Data/PROJECTS/LEI/DLR_V2&quot;</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">inWSF_folder</span> <span class="o">=</span> <span class="s2">&quot;/home/public/Data/PROJECTS/LEI/DLR_V2&quot;</span>
 <span class="n">outWSF_folder</span> <span class="o">=</span> <span class="s2">&quot;/home/wb411133/data/Global/WSF&quot;</span>
 
 <span class="c1"># Get a list of cities</span>
@@ -498,88 +433,51 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">len</span><span class="p">(</span><span class="n">allCities</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">len</span><span class="p">(</span><span class="n">allCities</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">curCity</span> <span class="o">=</span> <span class="s2">&quot;Accra&quot;</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">curCity</span> <span class="o">=</span> <span class="s2">&quot;Accra&quot;</span>
 <span class="n">thresh</span> <span class="o">=</span> <span class="mi">3</span>
 <span class="n">wsfD</span> <span class="o">=</span> <span class="n">wsfdata</span><span class="o">.</span><span class="n">wsf_dataset</span><span class="p">(</span><span class="n">allCities</span><span class="p">[</span><span class="n">curCity</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span> <span class="n">line</span> <span class="mi">3</span>
-<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="n">curCity</span> <span class="o">=</span> <span class="s2">&quot;Accra&quot;</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="n">thresh</span> <span class="o">=</span> <span class="mi">3</span>
-<span class="ne">----&gt; </span><span class="mi">3</span> <span class="n">wsfD</span> <span class="o">=</span> <span class="n">wsfdata</span><span class="o">.</span><span class="n">wsf_dataset</span><span class="p">(</span><span class="n">allCities</span><span class="p">[</span><span class="n">curCity</span><span class="p">])</span>
-
-<span class="ne">NameError</span>: name &#39;wsfdata&#39; is not defined
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>wsfD.summarize_idc?
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>wsfD.summarize_idc<span class="o">?</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Object `wsfD.summarize_idc` not found.
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>wsfD.correct_evolution_idc?
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>wsfD.correct_evolution_idc<span class="o">?</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Object `wsfD.correct_evolution_idc` not found.
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>wsfD.analyze_idc?
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>wsfD.analyze_idc<span class="o">?</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Object `wsfD.analyze_idc` not found.
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>wsfD.generate_evolution_plot?
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>wsfD.generate_evolution_plot<span class="o">?</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Object `wsfD.generate_evolution_plot` not found.
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">builtData</span> <span class="o">=</span> <span class="n">wsfD</span><span class="o">.</span><span class="n">generate_evolution_plot</span><span class="p">()</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">builtData</span> <span class="o">=</span> <span class="n">wsfD</span><span class="o">.</span><span class="n">generate_evolution_plot</span><span class="p">()</span>
 <span class="n">builtData</span><span class="p">[</span><span class="s2">&quot;idcQuality&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">wsfD</span><span class="o">.</span><span class="n">summarize_idc</span><span class="p">(</span><span class="n">thresh</span><span class="o">=</span><span class="n">thresh</span><span class="p">)</span>
 
 <span class="n">outFolder</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">outWSF_folder</span><span class="p">,</span> <span class="n">curCity</span><span class="p">)</span>
@@ -601,56 +499,24 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">10</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">builtData</span> <span class="o">=</span> <span class="n">wsfD</span><span class="o">.</span><span class="n">generate_evolution_plot</span><span class="p">()</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="n">builtData</span><span class="p">[</span><span class="s2">&quot;idcQuality&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">wsfD</span><span class="o">.</span><span class="n">summarize_idc</span><span class="p">(</span><span class="n">thresh</span><span class="o">=</span><span class="n">thresh</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="n">outFolder</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">outWSF_folder</span><span class="p">,</span> <span class="n">curCity</span><span class="p">)</span>
-
-<span class="ne">NameError</span>: name &#39;wsfD&#39; is not defined
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">basePlot</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s2">&quot;built&quot;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">basePlot</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s2">&quot;built&quot;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">11</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">basePlot</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s2">&quot;built&quot;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
-
-<span class="ne">NameError</span>: name &#39;basePlot&#39; is not defined
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">basePlot</span><span class="p">[</span><span class="s2">&quot;cumBuilt&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">basePlot</span><span class="p">[</span><span class="s2">&quot;cumBuilt&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">12</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">basePlot</span><span class="p">[</span><span class="s2">&quot;cumBuilt&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
-
-<span class="ne">NameError</span>: name &#39;basePlot&#39; is not defined
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Loop through all the cities to process the results</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Loop through all the cities to process the results</span>
 <span class="n">importlib</span><span class="o">.</span><span class="n">reload</span><span class="p">(</span><span class="n">wsfdata</span><span class="p">)</span>
 <span class="n">allRes</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="k">for</span> <span class="n">thresh</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">]:</span>
@@ -699,28 +565,10 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">13</span><span class="p">],</span> <span class="n">line</span> <span class="mi">2</span>
-<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="c1"># Loop through all the cities to process the results</span>
-<span class="ne">----&gt; </span><span class="mi">2</span> <span class="n">importlib</span><span class="o">.</span><span class="n">reload</span><span class="p">(</span><span class="n">wsfdata</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="n">allRes</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="k">for</span> <span class="n">thresh</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">]:</span>
-
-<span class="ne">NameError</span>: name &#39;wsfdata&#39; is not defined
-</pre></div>
-</div>
-</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">outWSF_folder</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&#39;/home/wb411133/data/Global/WSF&#39;
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">outWSF_folder</span>
 </pre></div>
 </div>
 </div>
@@ -730,82 +578,43 @@ document.write(`
 <h1>Debugging Below<a class="headerlink" href="#debugging-below" title="Permalink to this heading">#</a></h1>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">importlib</span><span class="o">.</span><span class="n">reload</span><span class="p">(</span><span class="n">wsfdata</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">importlib</span><span class="o">.</span><span class="n">reload</span><span class="p">(</span><span class="n">wsfdata</span><span class="p">)</span>
 <span class="n">wsfD</span> <span class="o">=</span> <span class="n">wsfdata</span><span class="o">.</span><span class="n">wsf_dataset</span><span class="p">(</span><span class="n">allCities</span><span class="p">[</span><span class="n">curCity</span><span class="p">])</span>
 <span class="n">evolution</span> <span class="o">=</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">wsfD</span><span class="o">.</span><span class="n">evolution</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
 <span class="n">idc</span> <span class="o">=</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">wsfD</span><span class="o">.</span><span class="n">evolution_idc</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">15</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">importlib</span><span class="o">.</span><span class="n">reload</span><span class="p">(</span><span class="n">wsfdata</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="n">wsfD</span> <span class="o">=</span> <span class="n">wsfdata</span><span class="o">.</span><span class="n">wsf_dataset</span><span class="p">(</span><span class="n">allCities</span><span class="p">[</span><span class="n">curCity</span><span class="p">])</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="n">evolution</span> <span class="o">=</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">wsfD</span><span class="o">.</span><span class="n">evolution</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
-
-<span class="ne">NameError</span>: name &#39;wsfdata&#39; is not defined
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">allCities</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">allCities</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>dict_keys([])
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">totalCells</span> <span class="o">=</span> <span class="p">(</span><span class="n">evolution</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">totalCells</span> <span class="o">=</span> <span class="p">(</span><span class="n">evolution</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
 <span class="n">allRes</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">evolution_masked</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
     <span class="n">allRes</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">evolution_masked</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">&lt;</span> <span class="n">thresh</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">/</span> <span class="n">totalCells</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">17</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">totalCells</span> <span class="o">=</span> <span class="p">(</span><span class="n">evolution</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="n">allRes</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">evolution_masked</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
-
-<span class="ne">NameError</span>: name &#39;evolution&#39; is not defined
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">allCities</span><span class="p">[</span><span class="s2">&quot;Houston&quot;</span><span class="p">][</span><span class="mi">3</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">allCities</span><span class="p">[</span><span class="s2">&quot;Houston&quot;</span><span class="p">][</span><span class="mi">3</span><span class="p">]</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">KeyError</span><span class="g g-Whitespace">                                  </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">18</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">allCities</span><span class="p">[</span><span class="s2">&quot;Houston&quot;</span><span class="p">][</span><span class="mi">3</span><span class="p">]</span>
-
-<span class="ne">KeyError</span>: &#39;Houston&#39;
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">rasterio.features</span> <span class="kn">import</span> <span class="n">shapes</span>
-<span class="kn">from</span> <span class="nn">shapely.geometry</span> <span class="kn">import</span> <span class="n">shape</span>
-<span class="kn">import</span> <span class="nn">geojson</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">rasterio.features</span><span class="w"> </span><span class="kn">import</span> <span class="n">shapes</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">shapely.geometry</span><span class="w"> </span><span class="kn">import</span> <span class="n">shape</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">geojson</span>
 
 <span class="c1">### Testing new WSF work using rasterio</span>
 <span class="n">inFile</span> <span class="o">=</span> <span class="n">allCities</span><span class="p">[</span><span class="s2">&quot;Houston&quot;</span><span class="p">][</span><span class="mi">3</span><span class="p">]</span>
@@ -814,24 +623,10 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">KeyError</span><span class="g g-Whitespace">                                  </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">19</span><span class="p">],</span> <span class="n">line</span> <span class="mi">6</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="kn">import</span> <span class="nn">geojson</span>
-<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="c1">### Testing new WSF work using rasterio</span>
-<span class="ne">----&gt; </span><span class="mi">6</span> <span class="n">inFile</span> <span class="o">=</span> <span class="n">allCities</span><span class="p">[</span><span class="s2">&quot;Houston&quot;</span><span class="p">][</span><span class="mi">3</span><span class="p">]</span>
-<span class="g g-Whitespace">      </span><span class="mi">7</span> <span class="n">inD</span> <span class="o">=</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">inFile</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">8</span> <span class="n">x</span> <span class="o">=</span> <span class="n">inD</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
-
-<span class="ne">KeyError</span>: &#39;Houston&#39;
-</pre></div>
-</div>
-</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># generate two datasets based on new and old built area</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># generate two datasets based on new and old built area</span>
 <span class="n">oldDate</span> <span class="o">=</span> <span class="mi">2000</span>
 <span class="n">newDate</span> <span class="o">=</span> <span class="mi">2015</span>
 
@@ -845,20 +640,6 @@ document.write(`
 <span class="n">curDF</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">(</span>
     <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s2">&quot;Date&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">newDate</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">allGeoms</span><span class="p">)}),</span> <span class="n">geometry</span><span class="o">=</span><span class="n">allGeoms</span>
 <span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">20</span><span class="p">],</span> <span class="n">line</span> <span class="mi">5</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="n">oldDate</span> <span class="o">=</span> <span class="mi">2000</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="n">newDate</span> <span class="o">=</span> <span class="mi">2015</span>
-<span class="ne">----&gt; </span><span class="mi">5</span> <span class="n">oldD</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">&lt;</span> <span class="n">oldDate</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">x</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">6</span> <span class="n">newD</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">&gt;</span> <span class="n">oldDate</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">x</span> <span class="o">&lt;</span> <span class="n">newDate</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">8</span> <span class="n">newBuilt_shapes</span> <span class="o">=</span> <span class="n">shapes</span><span class="p">(</span><span class="n">newD</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int16</span><span class="p">),</span> <span class="n">transform</span><span class="o">=</span><span class="n">inD</span><span class="o">.</span><span class="n">transform</span><span class="p">)</span>
-
-<span class="ne">NameError</span>: name &#39;x&#39; is not defined
 </pre></div>
 </div>
 </div>

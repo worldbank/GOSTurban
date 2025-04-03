@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Mosaic the DoU layers &#8212; GOST Urbanization</title>
+    <title>Mosaick the selected population layers &#8212; GOST Urbanization</title>
   
   
   
@@ -181,14 +181,9 @@
                 </a>
             </li>
         </ul>
-        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Novel Urbanization</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../../../api/GOSTurban.html">GOSTurban package</a></li>
-</ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Novel Urbanization</span></p>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../../../novel_context.html">Novel Urbanization</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../urbanization_comparison.html">Comparing urban methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../MENA_Benchmarking/Map_Extents.html">Mapping and comparing urban extents</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
 <ul class="nav bd-sidenav">
@@ -350,7 +345,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Mosaic the DoU layers</h1>
+    <h1>Mosaick the selected population layers</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -360,8 +355,12 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Mosaic the DoU layers</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#mosaick-data-from-pp">Mosaick data from PP</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Mosaick the selected population layers</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#mosaic-the-dou-layers">Mosaic the DoU layers</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#mosaick-data-from-pp">Mosaick data from PP</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#combine-pp-layers-into-single-raster">Combine PP layers into single raster</a></li>
+</ul>
+</li>
 </ul>
 
             </nav>
@@ -376,53 +375,103 @@ document.write(`
                   
   <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">boto3</span>
-<span class="kn">import</span> <span class="nn">rasterio</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">boto3</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">rasterio</span>
 
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">rasterio.merge</span> <span class="kn">import</span> <span class="n">merge</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">rasterio.merge</span><span class="w"> </span><span class="kn">import</span> <span class="n">merge</span>
 
 <span class="c1"># Import raster helpers</span>
-<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;/home/wb411133/Code/gostrocks/src&quot;</span><span class="p">)</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;../../../../GOSTrocks/src&quot;</span><span class="p">)</span>
 
-<span class="kn">import</span> <span class="nn">GOSTRocks.rasterMisc</span> <span class="k">as</span> <span class="nn">rMisc</span>
-<span class="kn">from</span> <span class="nn">GOSTRocks.misc</span> <span class="kn">import</span> <span class="n">tPrint</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">GOSTrocks.rasterMisc</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">rMisc</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">GOSTrocks.misc</span><span class="w"> </span><span class="kn">import</span> <span class="n">tPrint</span>
 
 <span class="c1"># Import GOST urban functions</span>
-<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;../../../src&quot;</span><span class="p">)</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;../../../src&quot;</span><span class="p">)</span>
 
 <span class="c1"># Import local functions</span>
-<span class="kn">from</span> <span class="nn">novelUrbanization</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="c1">#from novelUrbanization import *</span>
 
-<span class="o">%</span><span class="k">load_ext</span> autoreload
-<span class="o">%</span><span class="k">autoreload</span> 2
+<span class="o">%</span><span class="n">load_ext</span> <span class="n">autoreload</span>
+<span class="o">%</span><span class="n">autoreload</span> <span class="mi">2</span>
 
-<span class="n">s3client</span> <span class="o">=</span> <span class="n">boto3</span><span class="o">.</span><span class="n">client</span><span class="p">(</span><span class="s2">&quot;s3&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">line</span> <span class="mi">3</span>
-<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="kn">import</span> <span class="nn">sys</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="kn">import</span> <span class="nn">os</span>
-<span class="ne">----&gt; </span><span class="mi">3</span> <span class="kn">import</span> <span class="nn">boto3</span>
-<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="kn">import</span> <span class="nn">rasterio</span>
-<span class="g g-Whitespace">      </span><span class="mi">7</span> <span class="kn">from</span> <span class="nn">rasterio.merge</span> <span class="kn">import</span> <span class="n">merge</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">urllib3.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">InsecureRequestWarning</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">urllib3</span><span class="w"> </span><span class="kn">import</span> <span class="n">disable_warnings</span>
+<span class="n">disable_warnings</span><span class="p">(</span><span class="n">InsecureRequestWarning</span><span class="p">)</span>
 
-<span class="ne">ModuleNotFoundError</span>: No module named &#39;boto3&#39;
+<span class="n">s3client</span> <span class="o">=</span> <span class="n">boto3</span><span class="o">.</span><span class="n">client</span><span class="p">(</span><span class="s2">&quot;s3&quot;</span><span class="p">,</span> <span class="n">verify</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">out_folder</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;C:\WBG\Work\Projects\Novel_Urban\Mosaicks&#39;</span>
 </pre></div>
 </div>
 </div>
 </div>
+<section id="mosaick-the-selected-population-layers">
+<h1>Mosaick the selected population layers<a class="headerlink" href="#mosaick-the-selected-population-layers" title="Permalink to this heading">#</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">bucket</span> <span class="o">=</span> <span class="s2">&quot;wbg-geography01&quot;</span>
+<span class="n">prefix</span> <span class="o">=</span> <span class="s2">&quot;URBANIZATION/MR_Novel_Poverty/&quot;</span>
+<span class="n">pop_layer</span> <span class="o">=</span> <span class="s2">&quot;_cpo15.tif&quot;</span>
+
+<span class="c1"># Loop through the S3 bucket and get all the keys for files that are .tif</span>
+<span class="n">more_results</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="n">loops</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">pop_tiffs</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">while</span> <span class="n">more_results</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">loops</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">objects</span> <span class="o">=</span> <span class="n">s3client</span><span class="o">.</span><span class="n">list_objects_v2</span><span class="p">(</span>
+            <span class="n">Bucket</span><span class="o">=</span><span class="n">bucket</span><span class="p">,</span> <span class="n">Prefix</span><span class="o">=</span><span class="n">prefix</span><span class="p">,</span> <span class="n">ContinuationToken</span><span class="o">=</span><span class="n">token</span>
+        <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">objects</span> <span class="o">=</span> <span class="n">s3client</span><span class="o">.</span><span class="n">list_objects_v2</span><span class="p">(</span><span class="n">Bucket</span><span class="o">=</span><span class="n">bucket</span><span class="p">,</span> <span class="n">Prefix</span><span class="o">=</span><span class="n">prefix</span><span class="p">)</span>
+    <span class="n">more_results</span> <span class="o">=</span> <span class="n">objects</span><span class="p">[</span><span class="s2">&quot;IsTruncated&quot;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">more_results</span><span class="p">:</span>
+        <span class="n">token</span> <span class="o">=</span> <span class="n">objects</span><span class="p">[</span><span class="s2">&quot;NextContinuationToken&quot;</span><span class="p">]</span>
+    <span class="n">loops</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">for</span> <span class="n">res</span> <span class="ow">in</span> <span class="n">objects</span><span class="p">[</span><span class="s2">&quot;Contents&quot;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="p">(</span><span class="s2">&quot;FINAL_STANDARD&quot;</span> <span class="ow">in</span> <span class="n">res</span><span class="p">[</span><span class="s2">&quot;Key&quot;</span><span class="p">])</span> <span class="ow">and</span> <span class="p">(</span> <span class="c1"># Look for the 250m data</span>
+            <span class="n">res</span><span class="p">[</span><span class="s2">&quot;Key&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="n">pop_layer</span><span class="p">)</span>
+        <span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="ow">not</span> <span class="s2">&quot;1k&quot;</span> <span class="ow">in</span> <span class="n">res</span><span class="p">[</span><span class="s2">&quot;Key&quot;</span><span class="p">])</span> <span class="ow">and</span> <span class="p">(</span><span class="ow">not</span> <span class="s2">&quot;NO_DATA&quot;</span> <span class="ow">in</span> <span class="n">res</span><span class="p">[</span><span class="s2">&quot;Key&quot;</span><span class="p">]):</span>
+            <span class="n">pop_tiffs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;s3://</span><span class="si">{</span><span class="n">bucket</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">res</span><span class="p">[</span><span class="s2">&quot;Key&quot;</span><span class="p">]</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">out_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span> <span class="n">out_folder</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;merged_</span><span class="si">{</span><span class="n">pop_layer</span><span class="si">}</span><span class="s2">&quot;</span> <span class="p">)</span>
+<span class="n">merged_data</span><span class="p">,</span> <span class="n">merged_profile</span> <span class="o">=</span> <span class="n">rMisc</span><span class="o">.</span><span class="n">merge_rasters</span><span class="p">(</span><span class="n">pop_tiffs</span><span class="p">,</span> <span class="n">gdal_unssafe</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">compress</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">dtype</span> <span class="o">=</span> <span class="s2">&quot;uint16&quot;</span>
+<span class="n">merged_data</span><span class="p">[</span><span class="n">merged_data</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">merged_data</span> <span class="o">=</span> <span class="n">merged_data</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">dtype</span><span class="p">)</span>
+<span class="n">merged_profile</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+    <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">,</span>    
+    <span class="n">nodata</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="k">with</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">out_file</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">merged_profile</span><span class="p">)</span> <span class="k">as</span> <span class="n">dst</span><span class="p">:</span>
+    <span class="n">dst</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">merged_data</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
 <section class="tex2jax_ignore mathjax_ignore" id="mosaic-the-dou-layers">
 <h1>Mosaic the DoU layers<a class="headerlink" href="#mosaic-the-dou-layers" title="Permalink to this heading">#</a></h1>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">bucket</span> <span class="o">=</span> <span class="s2">&quot;wbg-geography01&quot;</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">bucket</span> <span class="o">=</span> <span class="s2">&quot;wbg-geography01&quot;</span>
 <span class="n">prefix</span> <span class="o">=</span> <span class="s2">&quot;URBANIZATION/MR_Novel_Poverty/&quot;</span>
 
 <span class="c1"># Loop through the S3 bucket and get all the keys for files that are .tif</span>
@@ -442,13 +491,13 @@ document.write(`
         <span class="n">token</span> <span class="o">=</span> <span class="n">objects</span><span class="p">[</span><span class="s2">&quot;NextContinuationToken&quot;</span><span class="p">]</span>
     <span class="n">loops</span> <span class="o">+=</span> <span class="mi">1</span>
     <span class="k">for</span> <span class="n">res</span> <span class="ow">in</span> <span class="n">objects</span><span class="p">[</span><span class="s2">&quot;Contents&quot;</span><span class="p">]:</span>
-        <span class="k">if</span> <span class="p">(</span><span class="s2">&quot;FINAL_STANDARD_1KM&quot;</span> <span class="ow">in</span> <span class="n">res</span><span class="p">[</span><span class="s2">&quot;Key&quot;</span><span class="p">])</span> <span class="ow">and</span> <span class="p">(</span>
+        <span class="k">if</span> <span class="p">(</span><span class="s2">&quot;FINAL_STANDARD&quot;</span> <span class="ow">in</span> <span class="n">res</span><span class="p">[</span><span class="s2">&quot;Key&quot;</span><span class="p">])</span> <span class="ow">and</span> <span class="p">(</span>
             <span class="n">res</span><span class="p">[</span><span class="s2">&quot;Key&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;urban.tif&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">res</span><span class="p">[</span><span class="s2">&quot;Key&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;urban_hd.tif&quot;</span><span class="p">)</span>
-        <span class="p">):</span>
+        <span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="ow">not</span> <span class="s2">&quot;1k&quot;</span> <span class="ow">in</span> <span class="n">res</span><span class="p">[</span><span class="s2">&quot;Key&quot;</span><span class="p">]):</span>
             <span class="n">cur_pop</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="s2">&quot;Key&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
             <span class="n">cur_type</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">res</span><span class="p">[</span><span class="s2">&quot;Key&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.tif&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
             <span class="n">cur_lyr</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">cur_pop</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">cur_type</span><span class="si">}</span><span class="s2">&quot;</span>
-            <span class="n">cur_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;s3://&quot;</span><span class="p">,</span> <span class="n">bucket</span><span class="p">,</span> <span class="n">res</span><span class="p">[</span><span class="s2">&quot;Key&quot;</span><span class="p">])</span>
+            <span class="n">cur_path</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;s3://</span><span class="si">{</span><span class="n">bucket</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">res</span><span class="p">[</span><span class="s1">&#39;Key&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">urban_tiff</span><span class="p">[</span><span class="n">cur_lyr</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cur_path</span><span class="p">)</span>
             <span class="k">except</span><span class="p">:</span>
@@ -456,81 +505,26 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">line</span> <span class="mi">15</span>
-<span class="g g-Whitespace">     </span><span class="mi">11</span>     <span class="n">objects</span> <span class="o">=</span> <span class="n">s3client</span><span class="o">.</span><span class="n">list_objects_v2</span><span class="p">(</span>
-<span class="g g-Whitespace">     </span><span class="mi">12</span>         <span class="n">Bucket</span><span class="o">=</span><span class="n">bucket</span><span class="p">,</span> <span class="n">Prefix</span><span class="o">=</span><span class="n">prefix</span><span class="p">,</span> <span class="n">ContinuationToken</span><span class="o">=</span><span class="n">token</span>
-<span class="g g-Whitespace">     </span><span class="mi">13</span>     <span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">14</span> <span class="k">else</span><span class="p">:</span>
-<span class="ne">---&gt; </span><span class="mi">15</span>     <span class="n">objects</span> <span class="o">=</span> <span class="n">s3client</span><span class="o">.</span><span class="n">list_objects_v2</span><span class="p">(</span><span class="n">Bucket</span><span class="o">=</span><span class="n">bucket</span><span class="p">,</span> <span class="n">Prefix</span><span class="o">=</span><span class="n">prefix</span><span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">16</span> <span class="n">more_results</span> <span class="o">=</span> <span class="n">objects</span><span class="p">[</span><span class="s2">&quot;IsTruncated&quot;</span><span class="p">]</span>
-<span class="g g-Whitespace">     </span><span class="mi">17</span> <span class="k">if</span> <span class="n">more_results</span><span class="p">:</span>
-
-<span class="ne">NameError</span>: name &#39;s3client&#39; is not defined
-</pre></div>
-</div>
-</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">out_folder</span> <span class="o">=</span> <span class="s2">&quot;/home/wb411133/temp/urban_mosaics&quot;</span>
-<span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">out_folder</span><span class="p">):</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">out_folder</span><span class="p">):</span>
     <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">out_folder</span><span class="p">)</span>
 
 <span class="k">for</span> <span class="n">cur_lbl</span><span class="p">,</span> <span class="n">rasters</span> <span class="ow">in</span> <span class="n">urban_tiff</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-    <span class="n">tPrint</span><span class="p">(</span><span class="n">cur_lbl</span><span class="p">)</span>
-    <span class="n">out_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">out_folder</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">cur_lbl</span><span class="si">}</span><span class="s2">_DoU_Africa_mosaic.tif&quot;</span><span class="p">)</span>
-    <span class="n">curD</span><span class="p">,</span> <span class="n">profile</span> <span class="o">=</span> <span class="n">rMisc</span><span class="o">.</span><span class="n">merge_rasters</span><span class="p">(</span>
-        <span class="n">rasters</span><span class="p">,</span> <span class="n">merge_method</span><span class="o">=</span><span class="s2">&quot;max&quot;</span><span class="p">,</span> <span class="n">boolean_gt_0</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">out_file</span><span class="o">=</span><span class="n">out_file</span>
-    <span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">PermissionError</span><span class="g g-Whitespace">                           </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">line</span> <span class="mi">3</span>
-<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="n">out_folder</span> <span class="o">=</span> <span class="s2">&quot;/home/wb411133/temp/urban_mosaics&quot;</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">out_folder</span><span class="p">):</span>
-<span class="ne">----&gt; </span><span class="mi">3</span>     <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">out_folder</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="k">for</span> <span class="n">cur_lbl</span><span class="p">,</span> <span class="n">rasters</span> <span class="ow">in</span> <span class="n">urban_tiff</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-<span class="g g-Whitespace">      </span><span class="mi">6</span>     <span class="n">tPrint</span><span class="p">(</span><span class="n">cur_lbl</span><span class="p">)</span>
-
-<span class="nn">File /opt/hostedtoolcache/Python/3.10.14/x64/lib/python3.10/os.py:215,</span> in <span class="ni">makedirs</span><span class="nt">(name, mode, exist_ok)</span>
-<span class="g g-Whitespace">    </span><span class="mi">213</span> <span class="k">if</span> <span class="n">head</span> <span class="ow">and</span> <span class="n">tail</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">head</span><span class="p">):</span>
-<span class="g g-Whitespace">    </span><span class="mi">214</span>     <span class="k">try</span><span class="p">:</span>
-<span class="ne">--&gt; </span><span class="mi">215</span>         <span class="n">makedirs</span><span class="p">(</span><span class="n">head</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="n">exist_ok</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">216</span>     <span class="k">except</span> <span class="ne">FileExistsError</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">217</span>         <span class="c1"># Defeats race condition when another thread created the path</span>
-<span class="g g-Whitespace">    </span><span class="mi">218</span>         <span class="k">pass</span>
-
-<span class="nn">File /opt/hostedtoolcache/Python/3.10.14/x64/lib/python3.10/os.py:215,</span> in <span class="ni">makedirs</span><span class="nt">(name, mode, exist_ok)</span>
-<span class="g g-Whitespace">    </span><span class="mi">213</span> <span class="k">if</span> <span class="n">head</span> <span class="ow">and</span> <span class="n">tail</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">head</span><span class="p">):</span>
-<span class="g g-Whitespace">    </span><span class="mi">214</span>     <span class="k">try</span><span class="p">:</span>
-<span class="ne">--&gt; </span><span class="mi">215</span>         <span class="n">makedirs</span><span class="p">(</span><span class="n">head</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="n">exist_ok</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">216</span>     <span class="k">except</span> <span class="ne">FileExistsError</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">217</span>         <span class="c1"># Defeats race condition when another thread created the path</span>
-<span class="g g-Whitespace">    </span><span class="mi">218</span>         <span class="k">pass</span>
-
-<span class="nn">File /opt/hostedtoolcache/Python/3.10.14/x64/lib/python3.10/os.py:225,</span> in <span class="ni">makedirs</span><span class="nt">(name, mode, exist_ok)</span>
-<span class="g g-Whitespace">    </span><span class="mi">223</span>         <span class="k">return</span>
-<span class="g g-Whitespace">    </span><span class="mi">224</span> <span class="k">try</span><span class="p">:</span>
-<span class="ne">--&gt; </span><span class="mi">225</span>     <span class="n">mkdir</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">mode</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">226</span> <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">227</span>     <span class="c1"># Cannot rely on checking for EEXIST, since the operating system</span>
-<span class="g g-Whitespace">    </span><span class="mi">228</span>     <span class="c1"># could give priority to other errors like EACCES or EROFS</span>
-<span class="g g-Whitespace">    </span><span class="mi">229</span>     <span class="k">if</span> <span class="ow">not</span> <span class="n">exist_ok</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
-
-<span class="ne">PermissionError</span>: [Errno 13] Permission denied: &#39;/home/wb411133&#39;
+    <span class="k">if</span> <span class="s2">&quot;cpo15&quot;</span> <span class="ow">in</span> <span class="n">cur_lbl</span><span class="p">:</span>    
+        <span class="n">tPrint</span><span class="p">(</span><span class="n">cur_lbl</span><span class="p">)</span>
+        <span class="n">out_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">out_folder</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">cur_lbl</span><span class="si">}</span><span class="s2">_DoU_Africa_mosaic.tif&quot;</span><span class="p">)</span>
+        <span class="n">curD</span><span class="p">,</span> <span class="n">profile</span> <span class="o">=</span> <span class="n">rMisc</span><span class="o">.</span><span class="n">merge_rasters</span><span class="p">(</span>
+            <span class="n">rasters</span><span class="p">,</span> <span class="n">merge_method</span><span class="o">=</span><span class="s2">&quot;max&quot;</span><span class="p">,</span> <span class="n">boolean_gt_0</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">out_file</span><span class="o">=</span><span class="n">out_file</span><span class="p">,</span> <span class="n">gdal_unssafe</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">compress</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">opened_tiffs</span> <span class="o">=</span> <span class="p">[</span><span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">hd_urban_tiff</span><span class="p">]</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">opened_tiffs</span> <span class="o">=</span> <span class="p">[</span><span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">hd_urban_tiff</span><span class="p">]</span>
 <span class="n">merged</span><span class="p">,</span> <span class="n">out_transform</span> <span class="o">=</span> <span class="n">merge</span><span class="p">(</span><span class="n">opened_tiffs</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;max&quot;</span><span class="p">)</span>
 <span class="n">merged</span> <span class="o">=</span> <span class="p">((</span><span class="n">merged</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="o">*</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;uint8&quot;</span><span class="p">)</span>
 
@@ -551,25 +545,13 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">opened_tiffs</span> <span class="o">=</span> <span class="p">[</span><span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">hd_urban_tiff</span><span class="p">]</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="n">merged</span><span class="p">,</span> <span class="n">out_transform</span> <span class="o">=</span> <span class="n">merge</span><span class="p">(</span><span class="n">opened_tiffs</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;max&quot;</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="n">merged</span> <span class="o">=</span> <span class="p">((</span><span class="n">merged</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="o">*</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;uint8&quot;</span><span class="p">)</span>
-
-<span class="ne">NameError</span>: name &#39;hd_urban_tiff&#39; is not defined
-</pre></div>
-</div>
-</div>
 </div>
 </section>
 <section class="tex2jax_ignore mathjax_ignore" id="mosaick-data-from-pp">
 <h1>Mosaick data from PP<a class="headerlink" href="#mosaick-data-from-pp" title="Permalink to this heading">#</a></h1>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">bucket</span> <span class="o">=</span> <span class="s2">&quot;wbg-geography01&quot;</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">bucket</span> <span class="o">=</span> <span class="s2">&quot;wbg-geography01&quot;</span>
 <span class="n">prefix</span> <span class="o">=</span> <span class="s2">&quot;URBANIZATION/MR_Novel_Poverty/AAPPC/Delineations/&quot;</span>
 
 <span class="c1"># Loop through the S3 bucket and get all the keys for files that are .tif</span>
@@ -589,10 +571,10 @@ document.write(`
         <span class="n">token</span> <span class="o">=</span> <span class="n">objects</span><span class="p">[</span><span class="s2">&quot;NextContinuationToken&quot;</span><span class="p">]</span>
     <span class="n">loops</span> <span class="o">+=</span> <span class="mi">1</span>
     <span class="k">for</span> <span class="n">res</span> <span class="ow">in</span> <span class="n">objects</span><span class="p">[</span><span class="s2">&quot;Contents&quot;</span><span class="p">]:</span>
-        <span class="k">if</span> <span class="s2">&quot;1k&quot;</span> <span class="ow">in</span> <span class="n">res</span><span class="p">[</span><span class="s2">&quot;Key&quot;</span><span class="p">]:</span>
-            <span class="n">cur_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;s3://&quot;</span><span class="p">,</span> <span class="n">bucket</span><span class="p">,</span> <span class="n">res</span><span class="p">[</span><span class="s2">&quot;Key&quot;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="s2">&quot;1k&quot;</span> <span class="ow">in</span> <span class="n">res</span><span class="p">[</span><span class="s2">&quot;Key&quot;</span><span class="p">]:</span>
+            <span class="n">cur_path</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;s3://</span><span class="si">{</span><span class="n">bucket</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">res</span><span class="p">[</span><span class="s1">&#39;Key&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
             <span class="n">cur_type</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">cur_path</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)[</span><span class="mi">2</span><span class="p">][:</span><span class="mi">2</span><span class="p">]</span>
-            <span class="k">if</span> <span class="n">cur_type</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;cc&quot;</span><span class="p">,</span> <span class="s2">&quot;co&quot;</span><span class="p">,</span> <span class="s2">&quot;ur&quot;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">cur_type</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;cc&quot;</span><span class="p">,</span> <span class="s2">&quot;co&quot;</span><span class="p">,</span> <span class="s2">&quot;ur&quot;</span><span class="p">,</span> <span class="s1">&#39;ce&#39;</span><span class="p">]:</span>
                 <span class="n">cur_pop</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">cur_path</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;d&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
                 <span class="n">cur_label</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">cur_pop</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">cur_type</span><span class="si">}</span><span class="s2">&quot;</span>
                 <span class="k">try</span><span class="p">:</span>
@@ -602,78 +584,97 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span> <span class="n">line</span> <span class="mi">15</span>
-<span class="g g-Whitespace">     </span><span class="mi">11</span>     <span class="n">objects</span> <span class="o">=</span> <span class="n">s3client</span><span class="o">.</span><span class="n">list_objects_v2</span><span class="p">(</span>
-<span class="g g-Whitespace">     </span><span class="mi">12</span>         <span class="n">Bucket</span><span class="o">=</span><span class="n">bucket</span><span class="p">,</span> <span class="n">Prefix</span><span class="o">=</span><span class="n">prefix</span><span class="p">,</span> <span class="n">ContinuationToken</span><span class="o">=</span><span class="n">token</span>
-<span class="g g-Whitespace">     </span><span class="mi">13</span>     <span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">14</span> <span class="k">else</span><span class="p">:</span>
-<span class="ne">---&gt; </span><span class="mi">15</span>     <span class="n">objects</span> <span class="o">=</span> <span class="n">s3client</span><span class="o">.</span><span class="n">list_objects_v2</span><span class="p">(</span><span class="n">Bucket</span><span class="o">=</span><span class="n">bucket</span><span class="p">,</span> <span class="n">Prefix</span><span class="o">=</span><span class="n">prefix</span><span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">16</span> <span class="n">more_results</span> <span class="o">=</span> <span class="n">objects</span><span class="p">[</span><span class="s2">&quot;IsTruncated&quot;</span><span class="p">]</span>
-<span class="g g-Whitespace">     </span><span class="mi">17</span> <span class="k">if</span> <span class="n">more_results</span><span class="p">:</span>
-
-<span class="ne">NameError</span>: name &#39;s3client&#39; is not defined
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">db_tiffs</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">out_folder</span> <span class="o">=</span> <span class="s2">&quot;/home/wb411133/temp/urban_mosaics&quot;</span>
-<span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">out_folder</span><span class="p">):</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">cur_lbl</span> <span class="o">=</span> <span class="s1">&#39;cpo15_ce&#39;</span>
+<span class="n">out_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">out_folder</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">cur_lbl</span><span class="si">}</span><span class="s2">_DB_Africa_mosaic_compress.tif&quot;</span><span class="p">)</span>
+<span class="n">curD</span><span class="p">,</span> <span class="n">profile</span> <span class="o">=</span> <span class="n">rMisc</span><span class="o">.</span><span class="n">merge_rasters</span><span class="p">(</span>
+    <span class="n">db_tiffs</span><span class="p">[</span><span class="n">cur_lbl</span><span class="p">],</span> <span class="n">merge_method</span><span class="o">=</span><span class="s2">&quot;max&quot;</span><span class="p">,</span> <span class="n">boolean_gt_0</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">out_file</span><span class="o">=</span><span class="n">out_file</span><span class="p">,</span> <span class="n">gdal_unssafe</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">compress</span><span class="o">=</span><span class="kc">True</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">profile</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">out_folder</span><span class="p">):</span>
     <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">out_folder</span><span class="p">)</span>
 
-<span class="k">for</span> <span class="n">cur_lbl</span><span class="p">,</span> <span class="n">rasters</span> <span class="ow">in</span> <span class="n">urban_tiff</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+<span class="k">for</span> <span class="n">cur_lbl</span><span class="p">,</span> <span class="n">rasters</span> <span class="ow">in</span> <span class="n">db_tiffs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
     <span class="n">tPrint</span><span class="p">(</span><span class="n">cur_lbl</span><span class="p">)</span>
     <span class="n">out_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">out_folder</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">cur_lbl</span><span class="si">}</span><span class="s2">_DB_Africa_mosaic.tif&quot;</span><span class="p">)</span>
-    <span class="n">curD</span><span class="p">,</span> <span class="n">profile</span> <span class="o">=</span> <span class="n">rMisc</span><span class="o">.</span><span class="n">merge_rasters</span><span class="p">(</span>
-        <span class="n">rasters</span><span class="p">,</span> <span class="n">merge_method</span><span class="o">=</span><span class="s2">&quot;max&quot;</span><span class="p">,</span> <span class="n">boolean_gt_0</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">out_file</span><span class="o">=</span><span class="n">out_file</span>
-    <span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">PermissionError</span><span class="g g-Whitespace">                           </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span> <span class="n">line</span> <span class="mi">3</span>
-<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="n">out_folder</span> <span class="o">=</span> <span class="s2">&quot;/home/wb411133/temp/urban_mosaics&quot;</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">out_folder</span><span class="p">):</span>
-<span class="ne">----&gt; </span><span class="mi">3</span>     <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">out_folder</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="k">for</span> <span class="n">cur_lbl</span><span class="p">,</span> <span class="n">rasters</span> <span class="ow">in</span> <span class="n">urban_tiff</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-<span class="g g-Whitespace">      </span><span class="mi">6</span>     <span class="n">tPrint</span><span class="p">(</span><span class="n">cur_lbl</span><span class="p">)</span>
-
-<span class="nn">File /opt/hostedtoolcache/Python/3.10.14/x64/lib/python3.10/os.py:215,</span> in <span class="ni">makedirs</span><span class="nt">(name, mode, exist_ok)</span>
-<span class="g g-Whitespace">    </span><span class="mi">213</span> <span class="k">if</span> <span class="n">head</span> <span class="ow">and</span> <span class="n">tail</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">head</span><span class="p">):</span>
-<span class="g g-Whitespace">    </span><span class="mi">214</span>     <span class="k">try</span><span class="p">:</span>
-<span class="ne">--&gt; </span><span class="mi">215</span>         <span class="n">makedirs</span><span class="p">(</span><span class="n">head</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="n">exist_ok</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">216</span>     <span class="k">except</span> <span class="ne">FileExistsError</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">217</span>         <span class="c1"># Defeats race condition when another thread created the path</span>
-<span class="g g-Whitespace">    </span><span class="mi">218</span>         <span class="k">pass</span>
-
-<span class="nn">File /opt/hostedtoolcache/Python/3.10.14/x64/lib/python3.10/os.py:215,</span> in <span class="ni">makedirs</span><span class="nt">(name, mode, exist_ok)</span>
-<span class="g g-Whitespace">    </span><span class="mi">213</span> <span class="k">if</span> <span class="n">head</span> <span class="ow">and</span> <span class="n">tail</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">head</span><span class="p">):</span>
-<span class="g g-Whitespace">    </span><span class="mi">214</span>     <span class="k">try</span><span class="p">:</span>
-<span class="ne">--&gt; </span><span class="mi">215</span>         <span class="n">makedirs</span><span class="p">(</span><span class="n">head</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="n">exist_ok</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">216</span>     <span class="k">except</span> <span class="ne">FileExistsError</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">217</span>         <span class="c1"># Defeats race condition when another thread created the path</span>
-<span class="g g-Whitespace">    </span><span class="mi">218</span>         <span class="k">pass</span>
-
-<span class="nn">File /opt/hostedtoolcache/Python/3.10.14/x64/lib/python3.10/os.py:225,</span> in <span class="ni">makedirs</span><span class="nt">(name, mode, exist_ok)</span>
-<span class="g g-Whitespace">    </span><span class="mi">223</span>         <span class="k">return</span>
-<span class="g g-Whitespace">    </span><span class="mi">224</span> <span class="k">try</span><span class="p">:</span>
-<span class="ne">--&gt; </span><span class="mi">225</span>     <span class="n">mkdir</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">mode</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">226</span> <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">227</span>     <span class="c1"># Cannot rely on checking for EEXIST, since the operating system</span>
-<span class="g g-Whitespace">    </span><span class="mi">228</span>     <span class="c1"># could give priority to other errors like EACCES or EROFS</span>
-<span class="g g-Whitespace">    </span><span class="mi">229</span>     <span class="k">if</span> <span class="ow">not</span> <span class="n">exist_ok</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
-
-<span class="ne">PermissionError</span>: [Errno 13] Permission denied: &#39;/home/wb411133&#39;
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">out_file</span><span class="p">):</span>
+        <span class="n">curD</span><span class="p">,</span> <span class="n">profile</span> <span class="o">=</span> <span class="n">rMisc</span><span class="o">.</span><span class="n">merge_rasters</span><span class="p">(</span>
+            <span class="n">rasters</span><span class="p">,</span> <span class="n">merge_method</span><span class="o">=</span><span class="s2">&quot;max&quot;</span><span class="p">,</span> <span class="n">boolean_gt_0</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">out_file</span><span class="o">=</span><span class="n">out_file</span><span class="p">,</span> <span class="n">gdal_unssafe</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">compress</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
+<section id="combine-pp-layers-into-single-raster">
+<h2>Combine PP layers into single raster<a class="headerlink" href="#combine-pp-layers-into-single-raster" title="Permalink to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">try</span><span class="p">:</span>
+    <span class="k">del</span> <span class="n">final</span>
+<span class="k">except</span><span class="p">:</span>
+    <span class="k">pass</span>
+
+<span class="n">in_rasters</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">lbl</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="p">[</span>
+    <span class="p">[</span><span class="s1">&#39;ur&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+    <span class="p">[</span><span class="s1">&#39;cc&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
+    <span class="p">[</span><span class="s1">&#39;co&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+    <span class="p">[</span><span class="s1">&#39;ce&#39;</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span>
+<span class="p">]:</span>
+    <span class="n">in_raster</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">out_folder</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;cpo15_</span><span class="si">{</span><span class="n">lbl</span><span class="si">}</span><span class="s2">_DB_Africa_mosaic.tif&quot;</span><span class="p">)</span>
+    <span class="n">new_data</span> <span class="o">=</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">in_raster</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">val</span>
+    <span class="n">in_rasters</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_data</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">combo_urban</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">in_rasters</span><span class="p">)</span>
+<span class="n">max_urban</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">combo_urban</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">max_urban</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">inR</span> <span class="o">=</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">in_raster</span><span class="p">)</span>
+<span class="k">with</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">out_folder</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;cpo15_merged_PP_DB_Africa_mosaic.tif&quot;</span><span class="p">),</span><span class="s2">&quot;w&quot;</span><span class="p">,</span><span class="o">**</span><span class="n">inR</span><span class="o">.</span><span class="n">profile</span><span class="p">)</span> <span class="k">as</span> <span class="n">dst</span><span class="p">:</span>
+    <span class="n">dst</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">max_urban</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">out_folder</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -722,8 +723,12 @@ document.write(`
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Mosaic the DoU layers</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#mosaick-data-from-pp">Mosaick data from PP</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Mosaick the selected population layers</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#mosaic-the-dou-layers">Mosaic the DoU layers</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#mosaick-data-from-pp">Mosaick data from PP</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#combine-pp-layers-into-single-raster">Combine PP layers into single raster</a></li>
+</ul>
+</li>
 </ul>
 
   </nav></div>

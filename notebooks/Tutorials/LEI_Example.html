@@ -180,14 +180,9 @@
                 </a>
             </li>
         </ul>
-        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Novel Urbanization</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../../api/GOSTurban.html">GOSTurban package</a></li>
-</ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Novel Urbanization</span></p>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../../novel_context.html">Novel Urbanization</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../urbanization_comparison.html">Comparing urban methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Implementations/MENA_Benchmarking/Map_Extents.html">Mapping and comparing urban extents</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
 <ul class="current nav bd-sidenav">
@@ -402,41 +397,27 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">rasterio</span>
-<span class="kn">import</span> <span class="nn">rasterio.features</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">rasterio</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">rasterio.features</span>
 
-<span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">geopandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">gpd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 
-<span class="kn">import</span> <span class="nn">GOSTRocks.rasterMisc</span> <span class="k">as</span> <span class="nn">rMisc</span>
-<span class="kn">import</span> <span class="nn">GOSTRocks.ghslMisc</span> <span class="k">as</span> <span class="nn">ghslMisc</span>
-<span class="kn">import</span> <span class="nn">GOSTurban.LEI</span> <span class="k">as</span> <span class="nn">lei</span>
-<span class="kn">import</span> <span class="nn">GOSTRocks.mapMisc</span> <span class="k">as</span> <span class="nn">mapMisc</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">GOSTRocks.rasterMisc</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">rMisc</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">GOSTRocks.ghslMisc</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ghslMisc</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">GOSTurban.LEI</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">lei</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">GOSTRocks.mapMisc</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">mapMisc</span>
 
-<span class="o">%</span><span class="k">load_ext</span> autoreload
-<span class="o">%</span><span class="k">autoreload</span> 2
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">line</span> <span class="mi">8</span>
-<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
-<span class="g g-Whitespace">      </span><span class="mi">6</span> <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="ne">----&gt; </span><span class="mi">8</span> <span class="kn">import</span> <span class="nn">GOSTRocks.rasterMisc</span> <span class="k">as</span> <span class="nn">rMisc</span>
-<span class="g g-Whitespace">      </span><span class="mi">9</span> <span class="kn">import</span> <span class="nn">GOSTRocks.ghslMisc</span> <span class="k">as</span> <span class="nn">ghslMisc</span>
-<span class="g g-Whitespace">     </span><span class="mi">10</span> <span class="kn">import</span> <span class="nn">GOSTurban.LEI</span> <span class="k">as</span> <span class="nn">lei</span>
-
-<span class="ne">ModuleNotFoundError</span>: No module named &#39;GOSTRocks&#39;
+<span class="o">%</span><span class="n">load_ext</span> <span class="n">autoreload</span>
+<span class="o">%</span><span class="n">autoreload</span> <span class="mi">2</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define input variables</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define input variables</span>
 <span class="n">tutorial_folder</span> <span class="o">=</span> <span class="s2">&quot;../../data/tutorial_data&quot;</span>
 <span class="n">aoi_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tutorial_folder</span><span class="p">,</span> <span class="s2">&quot;AOI_GHSL.geojson&quot;</span><span class="p">)</span>
 <span class="n">input_ghsl</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tutorial_folder</span><span class="p">,</span> <span class="s2">&quot;GHSL.tif&quot;</span><span class="p">)</span>
@@ -446,7 +427,7 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># This section will extract GHSL data from global data, if you have the GHSL for the AOI extracted</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># This section will extract GHSL data from global data, if you have the GHSL for the AOI extracted</span>
 <span class="c1">#    define above as input_ghsl</span>
 <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">input_ghsl</span><span class="p">):</span>
     <span class="n">temp_folder</span> <span class="o">=</span> <span class="s2">&quot;C:/Temp&quot;</span>
@@ -480,7 +461,7 @@ document.write(`
 <p>The current release of the data provides individual layers ber annum of fractional area built per 1 hectare cell. For the LEI examples, we need binary data of existing built and new built. We leverage a function from the <a class="reference external" href="https://github.com/worldbank/GOSTrocks">GOSTrocks library</a> to combine these multiple yearly layers into a single geotiff with each pixel labelled with the year it was built.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ghsl_r</span> <span class="o">=</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">input_ghsl</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ghsl_r</span> <span class="o">=</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">input_ghsl</span><span class="p">)</span>
 <span class="n">ghsl_d</span> <span class="o">=</span> <span class="n">ghsl_r</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
 <span class="n">ghsl_d</span><span class="p">[</span><span class="n">ghsl_d</span> <span class="o">==</span> <span class="n">ghsl_r</span><span class="o">.</span><span class="n">meta</span><span class="p">[</span><span class="s2">&quot;nodata&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="mi">0</span>
 
@@ -490,25 +471,12 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="n">line</span> <span class="mi">6</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="n">ghsl_d</span><span class="p">[</span><span class="n">ghsl_d</span> <span class="o">==</span> <span class="n">ghsl_r</span><span class="o">.</span><span class="n">meta</span><span class="p">[</span><span class="s2">&quot;nodata&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="mi">0</span>
-<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="n">thresh</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1975</span><span class="p">,</span> <span class="mi">2031</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
-<span class="ne">----&gt; </span><span class="mi">6</span> <span class="k">with</span> <span class="n">rMisc</span><span class="o">.</span><span class="n">create_rasterio_inmemory</span><span class="p">(</span><span class="n">ghsl_r</span><span class="o">.</span><span class="n">profile</span><span class="p">,</span> <span class="n">ghsl_d</span><span class="p">)</span> <span class="k">as</span> <span class="n">temp_ghsl</span><span class="p">:</span>
-<span class="g g-Whitespace">      </span><span class="mi">7</span>     <span class="n">mapMisc</span><span class="o">.</span><span class="n">static_map_raster</span><span class="p">(</span><span class="n">temp_ghsl</span><span class="p">,</span> <span class="n">thresh</span><span class="o">=</span><span class="n">thresh</span><span class="p">)</span>
-
-<span class="ne">NameError</span>: name &#39;rMisc&#39; is not defined
-</pre></div>
-</div>
-</div>
 </div>
 <section id="calculate-lei-between-1990-and-2000">
 <h2>Calculate LEI between 1990 and 2000<a class="headerlink" href="#calculate-lei-between-1990-and-2000" title="Permalink to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># This calculates the change from 1990 and 2000</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># This calculates the change from 1990 and 2000</span>
 <span class="n">lei_raw</span> <span class="o">=</span> <span class="n">lei</span><span class="o">.</span><span class="n">calculate_LEI</span><span class="p">(</span>
     <span class="n">input_ghsl</span><span class="p">,</span> <span class="n">old_list</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1975</span><span class="p">,</span> <span class="mi">1991</span><span class="p">,</span> <span class="mi">5</span><span class="p">)),</span> <span class="n">new_list</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1995</span><span class="p">,</span> <span class="mi">2001</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
 <span class="p">)</span>
@@ -523,35 +491,16 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span> <span class="n">line</span> <span class="mi">2</span>
-<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="c1"># This calculates the change from 1990 and 2000</span>
-<span class="ne">----&gt; </span><span class="mi">2</span> <span class="n">lei_raw</span> <span class="o">=</span> <span class="n">lei</span><span class="o">.</span><span class="n">calculate_LEI</span><span class="p">(</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span>     <span class="n">input_ghsl</span><span class="p">,</span> <span class="n">old_list</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1975</span><span class="p">,</span> <span class="mi">1991</span><span class="p">,</span> <span class="mi">5</span><span class="p">)),</span> <span class="n">new_list</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1995</span><span class="p">,</span> <span class="mi">2001</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
-<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="n">lei_90_00</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">(</span>
-<span class="g g-Whitespace">      </span><span class="mi">6</span>     <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">lei_raw</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;geometry&quot;</span><span class="p">,</span> <span class="s2">&quot;old&quot;</span><span class="p">,</span> <span class="s2">&quot;total&quot;</span><span class="p">]),</span>
-<span class="g g-Whitespace">      </span><span class="mi">7</span>     <span class="n">geometry</span><span class="o">=</span><span class="s2">&quot;geometry&quot;</span><span class="p">,</span>
-<span class="g g-Whitespace">      </span><span class="mi">8</span>     <span class="n">crs</span><span class="o">=</span><span class="n">ghsl_r</span><span class="o">.</span><span class="n">crs</span><span class="p">,</span>
-<span class="g g-Whitespace">      </span><span class="mi">9</span> <span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">10</span> <span class="n">lei_90_00</span><span class="p">[</span><span class="s2">&quot;LEI&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">lei_90_00</span><span class="p">[</span><span class="s2">&quot;old&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="n">lei_90_00</span><span class="p">[</span><span class="s2">&quot;total&quot;</span><span class="p">]</span>
-
-<span class="ne">NameError</span>: name &#39;lei&#39; is not defined
-</pre></div>
-</div>
-</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Map LEI results</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Map LEI results</span>
 <span class="n">leap_val</span> <span class="o">=</span> <span class="mf">0.30</span>
 <span class="n">exp_val</span> <span class="o">=</span> <span class="mf">0.70</span>
 <span class="n">lei_90_00</span><span class="p">[</span><span class="s2">&quot;area&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">lei_90_00</span><span class="p">[</span><span class="s2">&quot;geometry&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">area</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">calculate_LEI</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="n">leap_val</span><span class="p">,</span> <span class="n">exp_val</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">calculate_LEI</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="n">leap_val</span><span class="p">,</span> <span class="n">exp_val</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">val</span> <span class="o">&lt;=</span> <span class="n">leap_val</span><span class="p">:</span>
         <span class="k">return</span> <span class="mi">3</span>
     <span class="k">elif</span> <span class="n">val</span> <span class="o">&lt;</span> <span class="n">exp_val</span><span class="p">:</span>
@@ -569,36 +518,11 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span> <span class="n">line</span> <span class="mi">4</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="n">leap_val</span> <span class="o">=</span> <span class="mf">0.30</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="n">exp_val</span> <span class="o">=</span> <span class="mf">0.70</span>
-<span class="ne">----&gt; </span><span class="mi">4</span> <span class="n">lei_90_00</span><span class="p">[</span><span class="s2">&quot;area&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">lei_90_00</span><span class="p">[</span><span class="s2">&quot;geometry&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">area</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">7</span> <span class="k">def</span> <span class="nf">calculate_LEI</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="n">leap_val</span><span class="p">,</span> <span class="n">exp_val</span><span class="p">):</span>
-<span class="g g-Whitespace">      </span><span class="mi">8</span>     <span class="k">if</span> <span class="n">val</span> <span class="o">&lt;=</span> <span class="n">leap_val</span><span class="p">:</span>
-
-<span class="ne">NameError</span>: name &#39;lei_90_00&#39; is not defined
-</pre></div>
-</div>
-</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Calculate summaries of lei as area (km2) in each class</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Calculate summaries of lei as area (km2) in each class</span>
 <span class="n">lei</span><span class="o">.</span><span class="n">summarize_LEI</span><span class="p">(</span><span class="n">lei_90_00</span><span class="p">,</span> <span class="n">leap_val</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">exp_val</span><span class="o">=</span><span class="mf">0.75</span><span class="p">)</span> <span class="o">/</span> <span class="mi">1000000</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">7</span><span class="p">],</span> <span class="n">line</span> <span class="mi">2</span>
-<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="c1"># Calculate summaries of lei as area (km2) in each class</span>
-<span class="ne">----&gt; </span><span class="mi">2</span> <span class="n">lei</span><span class="o">.</span><span class="n">summarize_LEI</span><span class="p">(</span><span class="n">lei_90_00</span><span class="p">,</span> <span class="n">leap_val</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">exp_val</span><span class="o">=</span><span class="mf">0.75</span><span class="p">)</span> <span class="o">/</span> <span class="mi">1000000</span>
-
-<span class="ne">NameError</span>: name &#39;lei&#39; is not defined
 </pre></div>
 </div>
 </div>
@@ -608,7 +532,7 @@ document.write(`
 <h2>Calculate LEI between 2000 and 2030<a class="headerlink" href="#calculate-lei-between-2000-and-2030" title="Permalink to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># This calculates the change from 2000 and 2014</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># This calculates the change from 2000 and 2014</span>
 <span class="n">lei_raw</span> <span class="o">=</span> <span class="n">lei</span><span class="o">.</span><span class="n">calculate_LEI</span><span class="p">(</span>
     <span class="n">input_ghsl</span><span class="p">,</span> <span class="n">old_list</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1975</span><span class="p">,</span> <span class="mi">2011</span><span class="p">,</span> <span class="mi">5</span><span class="p">)),</span> <span class="n">new_list</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">2015</span><span class="p">,</span> <span class="mi">2030</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
 <span class="p">)</span>
@@ -618,25 +542,10 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">8</span><span class="p">],</span> <span class="n">line</span> <span class="mi">2</span>
-<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="c1"># This calculates the change from 2000 and 2014</span>
-<span class="ne">----&gt; </span><span class="mi">2</span> <span class="n">lei_raw</span> <span class="o">=</span> <span class="n">lei</span><span class="o">.</span><span class="n">calculate_LEI</span><span class="p">(</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span>     <span class="n">input_ghsl</span><span class="p">,</span> <span class="n">old_list</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1975</span><span class="p">,</span> <span class="mi">2011</span><span class="p">,</span> <span class="mi">5</span><span class="p">)),</span> <span class="n">new_list</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">2015</span><span class="p">,</span> <span class="mi">2030</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
-<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="n">lei_00_14</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">lei_raw</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;geometry&quot;</span><span class="p">,</span> <span class="s2">&quot;old&quot;</span><span class="p">,</span> <span class="s2">&quot;total&quot;</span><span class="p">])</span>
-<span class="g g-Whitespace">      </span><span class="mi">6</span> <span class="n">lei_00_14</span><span class="p">[</span><span class="s2">&quot;LEI&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">lei_00_14</span><span class="p">[</span><span class="s2">&quot;old&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="n">lei_00_14</span><span class="p">[</span><span class="s2">&quot;total&quot;</span><span class="p">]</span>
-
-<span class="ne">NameError</span>: name &#39;lei&#39; is not defined
-</pre></div>
-</div>
-</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Map LEI results</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Map LEI results</span>
 <span class="n">leap_val</span> <span class="o">=</span> <span class="mf">0.30</span>
 <span class="n">exp_val</span> <span class="o">=</span> <span class="mf">0.70</span>
 <span class="n">lei_90_00</span><span class="p">[</span><span class="s2">&quot;area&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">lei_90_00</span><span class="p">[</span><span class="s2">&quot;geometry&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">area</span><span class="p">)</span>
@@ -660,66 +569,21 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">9</span><span class="p">],</span> <span class="n">line</span> <span class="mi">4</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="n">leap_val</span> <span class="o">=</span> <span class="mf">0.30</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="n">exp_val</span> <span class="o">=</span> <span class="mf">0.70</span>
-<span class="ne">----&gt; </span><span class="mi">4</span> <span class="n">lei_90_00</span><span class="p">[</span><span class="s2">&quot;area&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">lei_90_00</span><span class="p">[</span><span class="s2">&quot;geometry&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">area</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">7</span> <span class="c1"># def calculate_LEI(val, leap_val, exp_val):</span>
-<span class="g g-Whitespace">      </span><span class="mi">8</span> <span class="c1">#     if val &lt;= leap_val:</span>
-<span class="g g-Whitespace">      </span><span class="mi">9</span> <span class="c1">#         return 3</span>
-   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">12</span> <span class="c1">#     else:</span>
-<span class="g g-Whitespace">     </span><span class="mi">13</span> <span class="c1">#         return 1</span>
-<span class="g g-Whitespace">     </span><span class="mi">16</span> <span class="n">lei_90_00</span><span class="p">[</span><span class="s2">&quot;class&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">lei_90_00</span><span class="p">[</span><span class="s2">&quot;LEI&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
-<span class="g g-Whitespace">     </span><span class="mi">17</span>     <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">calculate_LEI</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">leap_val</span><span class="p">,</span> <span class="n">exp_val</span><span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">18</span> <span class="p">)</span>
-
-<span class="ne">NameError</span>: name &#39;lei_90_00&#39; is not defined
-</pre></div>
-</div>
-</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Calculate summaries of lei</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Calculate summaries of lei</span>
 <span class="n">lei</span><span class="o">.</span><span class="n">summarize_LEI</span><span class="p">(</span><span class="n">lei_00_14</span><span class="p">,</span> <span class="n">leap_val</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">exp_val</span><span class="o">=</span><span class="mf">0.75</span><span class="p">)</span> <span class="o">/</span> <span class="mi">1000000</span>
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">10</span><span class="p">],</span> <span class="n">line</span> <span class="mi">2</span>
-<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="c1"># Calculate summaries of lei</span>
-<span class="ne">----&gt; </span><span class="mi">2</span> <span class="n">lei</span><span class="o">.</span><span class="n">summarize_LEI</span><span class="p">(</span><span class="n">lei_00_14</span><span class="p">,</span> <span class="n">leap_val</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">exp_val</span><span class="o">=</span><span class="mf">0.75</span><span class="p">)</span> <span class="o">/</span> <span class="mi">1000000</span>
-
-<span class="ne">NameError</span>: name &#39;lei&#39; is not defined
-</pre></div>
-</div>
-</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># write raw LEI results to file</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># write raw LEI results to file</span>
 <span class="n">input_folder</span> <span class="o">=</span> <span class="s2">&quot;.&quot;</span>
 <span class="n">lei_90_00</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">input_folder</span><span class="p">,</span> <span class="s2">&quot;GHSL_LEI_90_00.csv&quot;</span><span class="p">))</span>
 <span class="n">lei_00_14</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">input_folder</span><span class="p">,</span> <span class="s2">&quot;GHSL_LEI_00_14.csv&quot;</span><span class="p">))</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">11</span><span class="p">],</span> <span class="n">line</span> <span class="mi">3</span>
-<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="c1"># write raw LEI results to file</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="n">input_folder</span> <span class="o">=</span> <span class="s2">&quot;.&quot;</span>
-<span class="ne">----&gt; </span><span class="mi">3</span> <span class="n">lei_90_00</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">input_folder</span><span class="p">,</span> <span class="s2">&quot;GHSL_LEI_90_00.csv&quot;</span><span class="p">))</span>
-<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="n">lei_00_14</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">input_folder</span><span class="p">,</span> <span class="s2">&quot;GHSL_LEI_00_14.csv&quot;</span><span class="p">))</span>
-
-<span class="ne">NameError</span>: name &#39;lei_90_00&#39; is not defined
 </pre></div>
 </div>
 </div>

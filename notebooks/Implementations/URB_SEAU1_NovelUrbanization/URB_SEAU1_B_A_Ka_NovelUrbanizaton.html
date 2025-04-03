@@ -181,14 +181,9 @@
                 </a>
             </li>
         </ul>
-        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Novel Urbanization</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../../../api/GOSTurban.html">GOSTurban package</a></li>
-</ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Novel Urbanization</span></p>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../../../novel_context.html">Novel Urbanization</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../urbanization_comparison.html">Comparing urban methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../MENA_Benchmarking/Map_Extents.html">Mapping and comparing urban extents</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
 <ul class="nav bd-sidenav">
@@ -396,57 +391,43 @@ b. Set everything to 16bit</p></li>
 </ol>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">importlib</span>
-<span class="kn">import</span> <span class="nn">shutil</span>
-<span class="kn">import</span> <span class="nn">pathlib</span>
-<span class="kn">import</span> <span class="nn">datetime</span>
-<span class="kn">import</span> <span class="nn">math</span>
-<span class="kn">import</span> <span class="nn">rasterio</span>
-<span class="kn">import</span> <span class="nn">rasterio.warp</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">importlib</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">shutil</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pathlib</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">datetime</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">rasterio</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">rasterio.warp</span>
 
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">geopandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">gpd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">shapely.geometry</span> <span class="kn">import</span> <span class="n">Point</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">shapely.geometry</span><span class="w"> </span><span class="kn">import</span> <span class="n">Point</span>
 
 <span class="c1"># Import raster helpers</span>
 <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;/home/wb411133/Code/gostrocks/src&quot;</span><span class="p">)</span>
 
-<span class="kn">import</span> <span class="nn">GOSTRocks.metadataMisc</span> <span class="k">as</span> <span class="nn">meta</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">GOSTRocks.metadataMisc</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">meta</span>
 
 <span class="c1"># Import GOST urban functions</span>
 <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;../../../src&quot;</span><span class="p">)</span>
 
 <span class="c1"># Import local functions</span>
-<span class="kn">import</span> <span class="nn">novelUrbanization</span> <span class="k">as</span> <span class="nn">nu</span>
-<span class="kn">from</span> <span class="nn">novelUrbanization</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">novelUrbanization</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nu</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">novelUrbanization</span><span class="w"> </span><span class="kn">import</span> <span class="o">*</span>
 
-<span class="o">%</span><span class="k">load_ext</span> autoreload
-<span class="o">%</span><span class="k">autoreload</span> 2
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">line</span> <span class="mi">20</span>
-<span class="g g-Whitespace">     </span><span class="mi">17</span> <span class="c1"># Import raster helpers</span>
-<span class="g g-Whitespace">     </span><span class="mi">18</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;/home/wb411133/Code/gostrocks/src&quot;</span><span class="p">)</span>
-<span class="ne">---&gt; </span><span class="mi">20</span> <span class="kn">import</span> <span class="nn">GOSTRocks.metadataMisc</span> <span class="k">as</span> <span class="nn">meta</span>
-<span class="g g-Whitespace">     </span><span class="mi">22</span> <span class="c1"># Import GOST urban functions</span>
-<span class="g g-Whitespace">     </span><span class="mi">23</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;../../../src&quot;</span><span class="p">)</span>
-
-<span class="ne">ModuleNotFoundError</span>: No module named &#39;GOSTRocks&#39;
+<span class="o">%</span><span class="n">load_ext</span> <span class="n">autoreload</span>
+<span class="o">%</span><span class="n">autoreload</span> <span class="mi">2</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">global_bounds</span> <span class="o">=</span> <span class="s2">&quot;/home/public/Data/GLOBAL/ADMIN/Admin0_Polys.shp&quot;</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">global_bounds</span> <span class="o">=</span> <span class="s2">&quot;/home/public/Data/GLOBAL/ADMIN/Admin0_Polys.shp&quot;</span>
 <span class="n">global_bounds_adm2</span> <span class="o">=</span> <span class="s2">&quot;/home/public/Data/GLOBAL/ADMIN/Admin2_Polys.shp&quot;</span>
 
 <span class="n">inG</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">global_bounds</span><span class="p">)</span>
@@ -457,105 +438,13 @@ b. Set everything to 16bit</p></li>
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">DataSourceError</span><span class="g g-Whitespace">                           </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">line</span> <span class="mi">4</span>
-<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="n">global_bounds</span> <span class="o">=</span> <span class="s2">&quot;/home/public/Data/GLOBAL/ADMIN/Admin0_Polys.shp&quot;</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="n">global_bounds_adm2</span> <span class="o">=</span> <span class="s2">&quot;/home/public/Data/GLOBAL/ADMIN/Admin2_Polys.shp&quot;</span>
-<span class="ne">----&gt; </span><span class="mi">4</span> <span class="n">inG</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">global_bounds</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="n">inG2</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">global_bounds_adm2</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">7</span> <span class="n">runSmall</span> <span class="o">=</span> <span class="kc">True</span>
-
-<span class="nn">File /opt/hostedtoolcache/Python/3.10.14/x64/lib/python3.10/site-packages/geopandas/io/file.py:294,</span> in <span class="ni">_read_file</span><span class="nt">(filename, bbox, mask, columns, rows, engine, **kwargs)</span>
-<span class="g g-Whitespace">    </span><span class="mi">291</span>             <span class="n">from_bytes</span> <span class="o">=</span> <span class="kc">True</span>
-<span class="g g-Whitespace">    </span><span class="mi">293</span> <span class="k">if</span> <span class="n">engine</span> <span class="o">==</span> <span class="s2">&quot;pyogrio&quot;</span><span class="p">:</span>
-<span class="ne">--&gt; </span><span class="mi">294</span>     <span class="k">return</span> <span class="n">_read_file_pyogrio</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">295</span>         <span class="n">filename</span><span class="p">,</span> <span class="n">bbox</span><span class="o">=</span><span class="n">bbox</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">mask</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">columns</span><span class="p">,</span> <span class="n">rows</span><span class="o">=</span><span class="n">rows</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
-<span class="g g-Whitespace">    </span><span class="mi">296</span>     <span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">298</span> <span class="k">elif</span> <span class="n">engine</span> <span class="o">==</span> <span class="s2">&quot;fiona&quot;</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">299</span>     <span class="k">if</span> <span class="n">pd</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">is_file_like</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
-
-<span class="nn">File /opt/hostedtoolcache/Python/3.10.14/x64/lib/python3.10/site-packages/geopandas/io/file.py:547,</span> in <span class="ni">_read_file_pyogrio</span><span class="nt">(path_or_bytes, bbox, mask, rows, **kwargs)</span>
-<span class="g g-Whitespace">    </span><span class="mi">538</span>     <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">539</span>         <span class="s2">&quot;The &#39;include_fields&#39; and &#39;ignore_fields&#39; keywords are deprecated, and &quot;</span>
-<span class="g g-Whitespace">    </span><span class="mi">540</span>         <span class="s2">&quot;will be removed in a future release. You can use the &#39;columns&#39; keyword &quot;</span>
-   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">543</span>         <span class="n">stacklevel</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">544</span>     <span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">545</span>     <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;columns&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;include_fields&quot;</span><span class="p">)</span>
-<span class="ne">--&gt; </span><span class="mi">547</span> <span class="k">return</span> <span class="n">pyogrio</span><span class="o">.</span><span class="n">read_dataframe</span><span class="p">(</span><span class="n">path_or_bytes</span><span class="p">,</span> <span class="n">bbox</span><span class="o">=</span><span class="n">bbox</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-
-<span class="nn">File /opt/hostedtoolcache/Python/3.10.14/x64/lib/python3.10/site-packages/pyogrio/geopandas.py:261,</span> in <span class="ni">read_dataframe</span><span class="nt">(path_or_buffer, layer, encoding, columns, read_geometry, force_2d, skip_features, max_features, where, bbox, mask, fids, sql, sql_dialect, fid_as_index, use_arrow, on_invalid, arrow_to_pandas_kwargs, **kwargs)</span>
-<span class="g g-Whitespace">    </span><span class="mi">256</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">use_arrow</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">257</span>     <span class="c1"># For arrow, datetimes are read as is.</span>
-<span class="g g-Whitespace">    </span><span class="mi">258</span>     <span class="c1"># For numpy IO, datetimes are read as string values to preserve timezone info</span>
-<span class="g g-Whitespace">    </span><span class="mi">259</span>     <span class="c1"># as numpy does not directly support timezones.</span>
-<span class="g g-Whitespace">    </span><span class="mi">260</span>     <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;datetime_as_string&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
-<span class="ne">--&gt; </span><span class="mi">261</span> <span class="n">result</span> <span class="o">=</span> <span class="n">read_func</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">262</span>     <span class="n">path_or_buffer</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">263</span>     <span class="n">layer</span><span class="o">=</span><span class="n">layer</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">264</span>     <span class="n">encoding</span><span class="o">=</span><span class="n">encoding</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">265</span>     <span class="n">columns</span><span class="o">=</span><span class="n">columns</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">266</span>     <span class="n">read_geometry</span><span class="o">=</span><span class="n">read_geometry</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">267</span>     <span class="n">force_2d</span><span class="o">=</span><span class="n">gdal_force_2d</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">268</span>     <span class="n">skip_features</span><span class="o">=</span><span class="n">skip_features</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">269</span>     <span class="n">max_features</span><span class="o">=</span><span class="n">max_features</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">270</span>     <span class="n">where</span><span class="o">=</span><span class="n">where</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">271</span>     <span class="n">bbox</span><span class="o">=</span><span class="n">bbox</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">272</span>     <span class="n">mask</span><span class="o">=</span><span class="n">mask</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">273</span>     <span class="n">fids</span><span class="o">=</span><span class="n">fids</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">274</span>     <span class="n">sql</span><span class="o">=</span><span class="n">sql</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">275</span>     <span class="n">sql_dialect</span><span class="o">=</span><span class="n">sql_dialect</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">276</span>     <span class="n">return_fids</span><span class="o">=</span><span class="n">fid_as_index</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">277</span>     <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">278</span> <span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">280</span> <span class="k">if</span> <span class="n">use_arrow</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">281</span>     <span class="n">meta</span><span class="p">,</span> <span class="n">table</span> <span class="o">=</span> <span class="n">result</span>
-
-<span class="nn">File /opt/hostedtoolcache/Python/3.10.14/x64/lib/python3.10/site-packages/pyogrio/raw.py:196,</span> in <span class="ni">read</span><span class="nt">(path_or_buffer, layer, encoding, columns, read_geometry, force_2d, skip_features, max_features, where, bbox, mask, fids, sql, sql_dialect, return_fids, datetime_as_string, **kwargs)</span>
-<span class="g g-Whitespace">     </span><span class="mi">56</span><span class="w"> </span><span class="sd">&quot;&quot;&quot;Read OGR data source into numpy arrays.</span>
-<span class="g g-Whitespace">     </span><span class="mi">57</span><span class="sd"> </span>
-<span class="g g-Whitespace">     </span><span class="mi">58</span><span class="sd"> IMPORTANT: non-linear geometry types (e.g., MultiSurface) are converted</span>
-<span class="sd">   (...)</span>
-<span class="g g-Whitespace">    </span><span class="mi">191</span><span class="sd"> </span>
-<span class="g g-Whitespace">    </span><span class="mi">192</span><span class="sd"> &quot;&quot;&quot;</span>
-<span class="g g-Whitespace">    </span><span class="mi">194</span> <span class="n">dataset_kwargs</span> <span class="o">=</span> <span class="n">_preprocess_options_key_value</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span> <span class="k">if</span> <span class="n">kwargs</span> <span class="k">else</span> <span class="p">{}</span>
-<span class="ne">--&gt; </span><span class="mi">196</span> <span class="k">return</span> <span class="n">ogr_read</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">197</span>     <span class="n">get_vsi_path_or_buffer</span><span class="p">(</span><span class="n">path_or_buffer</span><span class="p">),</span>
-<span class="g g-Whitespace">    </span><span class="mi">198</span>     <span class="n">layer</span><span class="o">=</span><span class="n">layer</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">199</span>     <span class="n">encoding</span><span class="o">=</span><span class="n">encoding</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">200</span>     <span class="n">columns</span><span class="o">=</span><span class="n">columns</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">201</span>     <span class="n">read_geometry</span><span class="o">=</span><span class="n">read_geometry</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">202</span>     <span class="n">force_2d</span><span class="o">=</span><span class="n">force_2d</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">203</span>     <span class="n">skip_features</span><span class="o">=</span><span class="n">skip_features</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">204</span>     <span class="n">max_features</span><span class="o">=</span><span class="n">max_features</span> <span class="ow">or</span> <span class="mi">0</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">205</span>     <span class="n">where</span><span class="o">=</span><span class="n">where</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">206</span>     <span class="n">bbox</span><span class="o">=</span><span class="n">bbox</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">207</span>     <span class="n">mask</span><span class="o">=</span><span class="n">_mask_to_wkb</span><span class="p">(</span><span class="n">mask</span><span class="p">),</span>
-<span class="g g-Whitespace">    </span><span class="mi">208</span>     <span class="n">fids</span><span class="o">=</span><span class="n">fids</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">209</span>     <span class="n">sql</span><span class="o">=</span><span class="n">sql</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">210</span>     <span class="n">sql_dialect</span><span class="o">=</span><span class="n">sql_dialect</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">211</span>     <span class="n">return_fids</span><span class="o">=</span><span class="n">return_fids</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">212</span>     <span class="n">dataset_kwargs</span><span class="o">=</span><span class="n">dataset_kwargs</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">213</span>     <span class="n">datetime_as_string</span><span class="o">=</span><span class="n">datetime_as_string</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">214</span> <span class="p">)</span>
-
-<span class="nn">File /opt/hostedtoolcache/Python/3.10.14/x64/lib/python3.10/site-packages/pyogrio/_io.pyx:1239,</span> in <span class="ni">pyogrio._io.ogr_read</span><span class="nt">()</span>
-
-<span class="nn">File /opt/hostedtoolcache/Python/3.10.14/x64/lib/python3.10/site-packages/pyogrio/_io.pyx:219,</span> in <span class="ni">pyogrio._io.ogr_open</span><span class="nt">()</span>
-
-<span class="ne">DataSourceError</span>: /home/public/Data/GLOBAL/ADMIN/Admin0_Polys.shp: No such file or directory
-</pre></div>
-</div>
-</div>
 </div>
 </section>
 <section class="tex2jax_ignore mathjax_ignore" id="convert-ea-csv-files-to-geometry">
 <h1>Convert EA csv files to geometry<a class="headerlink" href="#convert-ea-csv-files-to-geometry" title="Permalink to this heading">#</a></h1>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">in_folder</span> <span class="o">=</span> <span class="s2">&quot;/home/wb411133/data/Projects/MR_Novel_Urbanization/Data/EA_Files/&quot;</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">in_folder</span> <span class="o">=</span> <span class="s2">&quot;/home/wb411133/data/Projects/MR_Novel_Urbanization/Data/EA_Files/&quot;</span>
 <span class="n">ea_files</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="k">for</span> <span class="n">root</span><span class="p">,</span> <span class="n">dirs</span><span class="p">,</span> <span class="n">files</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">walk</span><span class="p">(</span><span class="n">in_folder</span><span class="p">):</span>
     <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
@@ -566,39 +455,24 @@ b. Set everything to 16bit</p></li>
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[]
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">ea_files</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">ea_files</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">IndexError</span><span class="g g-Whitespace">                                </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">ea_files</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
-
-<span class="ne">IndexError</span>: list index out of range
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">try_float</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">try_float</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
     <span class="k">except</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">None</span>
 
 
-<span class="k">def</span> <span class="nf">read_geog</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">lat_column</span><span class="p">,</span> <span class="n">lon_column</span><span class="p">,</span> <span class="n">crs</span><span class="o">=</span><span class="s2">&quot;epsg:4326&quot;</span><span class="p">,</span> <span class="n">write_out</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">read_geog</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">lat_column</span><span class="p">,</span> <span class="n">lon_column</span><span class="p">,</span> <span class="n">crs</span><span class="o">=</span><span class="s2">&quot;epsg:4326&quot;</span><span class="p">,</span> <span class="n">write_out</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">file</span><span class="p">))</span>
     <span class="n">out_file</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.csv&quot;</span><span class="p">,</span> <span class="s2">&quot;.geojson&quot;</span><span class="p">)</span>
     <span class="n">inD</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
@@ -633,30 +507,13 @@ b. Set everything to 16bit</p></li>
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">IndexError</span><span class="g g-Whitespace">                                </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span> <span class="n">line</span> <span class="mi">39</span>
-<span class="g g-Whitespace">     </span><span class="mi">26</span>     <span class="k">return</span> <span class="n">inD</span>
-<span class="g g-Whitespace">     </span><span class="mi">29</span> <span class="c1"># res = read_geog(ea_files[0], &quot;latdd_corrected&quot;, &quot;londd_corrected&quot;)</span>
-<span class="g g-Whitespace">     </span><span class="mi">30</span> <span class="c1"># res = read_geog(ea_files[1], &quot;lat&quot;, &quot;lon&quot;)</span>
-<span class="g g-Whitespace">     </span><span class="mi">31</span> <span class="c1"># res = read_geog(ea_files[2], &quot;latitude&quot;, &quot;longitude&quot;)</span>
-   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">37</span> <span class="c1"># res = read_geog(ea_files[8], &quot;lat_corrected&quot;, &quot;lon_corrected&quot;)</span>
-<span class="g g-Whitespace">     </span><span class="mi">38</span> <span class="c1"># res = read_geog(ea_files[9], &quot;lat_corrected&quot;, &quot;lon_corrected&quot;)</span>
-<span class="ne">---&gt; </span><span class="mi">39</span> <span class="n">res</span> <span class="o">=</span> <span class="n">read_geog</span><span class="p">(</span><span class="n">ea_files</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="s2">&quot;latDD_corrected&quot;</span><span class="p">,</span> <span class="s2">&quot;lonDD_corrected&quot;</span><span class="p">)</span>
-
-<span class="ne">IndexError</span>: list index out of range
-</pre></div>
-</div>
-</div>
 </div>
 </section>
 <section class="tex2jax_ignore mathjax_ignore" id="run-individual-counties">
 <h1>Run individual counties<a class="headerlink" href="#run-individual-counties" title="Permalink to this heading">#</a></h1>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Process Individual countries</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Process Individual countries</span>
 <span class="n">iso3</span> <span class="o">=</span> <span class="s2">&quot;COG&quot;</span>
 <span class="n">local_path</span> <span class="o">=</span> <span class="s2">&quot;/home/public/Data/COUNTRY/</span><span class="si">{country}</span><span class="s2">/WORLDPOP/&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">country</span><span class="o">=</span><span class="n">iso3</span><span class="p">)</span>
 <span class="n">constrained_WP_folder</span> <span class="o">=</span> <span class="s2">&quot;/home/public/Data/GLOBAL/Population/RF_SSA_2015-2020&quot;</span>
@@ -686,7 +543,7 @@ b. Set everything to 16bit</p></li>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">importlib</span><span class="o">.</span><span class="n">reload</span><span class="p">(</span><span class="n">nu</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">importlib</span><span class="o">.</span><span class="n">reload</span><span class="p">(</span><span class="n">nu</span><span class="p">)</span>
 <span class="c1"># Calculate urban definitions</span>
 <span class="n">nu</span><span class="o">.</span><span class="n">calculate_urban</span><span class="p">(</span>
     <span class="n">iso3</span><span class="p">,</span> <span class="n">inG</span><span class="p">,</span> <span class="n">inG2</span><span class="p">,</span> <span class="n">pop_files</span><span class="p">,</span> <span class="n">ea_file</span><span class="p">,</span> <span class="n">output_folder</span><span class="p">,</span> <span class="n">small</span><span class="o">=</span><span class="n">runSmall</span><span class="p">,</span> <span class="n">km</span><span class="o">=</span><span class="n">runLarge</span>
@@ -700,24 +557,10 @@ b. Set everything to 16bit</p></li>
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">7</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">importlib</span><span class="o">.</span><span class="n">reload</span><span class="p">(</span><span class="n">nu</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="c1"># Calculate urban definitions</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="n">nu</span><span class="o">.</span><span class="n">calculate_urban</span><span class="p">(</span>
-<span class="g g-Whitespace">      </span><span class="mi">4</span>     <span class="n">iso3</span><span class="p">,</span> <span class="n">inG</span><span class="p">,</span> <span class="n">inG2</span><span class="p">,</span> <span class="n">pop_files</span><span class="p">,</span> <span class="n">ea_file</span><span class="p">,</span> <span class="n">output_folder</span><span class="p">,</span> <span class="n">small</span><span class="o">=</span><span class="n">runSmall</span><span class="p">,</span> <span class="n">km</span><span class="o">=</span><span class="n">runLarge</span>
-<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="p">)</span>
-
-<span class="ne">NameError</span>: name &#39;nu&#39; is not defined
-</pre></div>
-</div>
-</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Calculate Point-based statistics</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Calculate Point-based statistics</span>
 <span class="n">input_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_folder</span><span class="p">,</span> <span class="s2">&quot;HBS_GPS.csv&quot;</span><span class="p">)</span>
 <span class="n">pop_tiffs</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;eth_gpo.tif&quot;</span><span class="p">,</span> <span class="s2">&quot;eth_upo15.tif&quot;</span><span class="p">,</span> <span class="s2">&quot;eth_upo16.tif&quot;</span><span class="p">]</span>
 <span class="n">all_tiffs</span> <span class="o">=</span> <span class="p">[]</span>
@@ -746,79 +589,10 @@ b. Set everything to 16bit</p></li>
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">FileNotFoundError</span><span class="g g-Whitespace">                         </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">8</span><span class="p">],</span> <span class="n">line</span> <span class="mi">12</span>
-<span class="g g-Whitespace">      </span><span class="mi">9</span>     <span class="n">all_tiffs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">base_folder_1km</span><span class="p">,</span> <span class="n">pFile</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;eth&quot;</span><span class="p">,</span> <span class="s2">&quot;eth1k&quot;</span><span class="p">)))</span>
-<span class="g g-Whitespace">     </span><span class="mi">11</span> <span class="c1"># Read in ETH HH locations, clean</span>
-<span class="ne">---&gt; </span><span class="mi">12</span> <span class="n">inD</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">input_file</span><span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">13</span> <span class="n">inD</span> <span class="o">=</span> <span class="n">inD</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="o">~</span><span class="n">inD</span><span class="p">[</span><span class="s2">&quot;latDD_corrected&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isnull</span><span class="p">()]</span>
-<span class="g g-Whitespace">     </span><span class="mi">14</span> <span class="n">inD</span> <span class="o">=</span> <span class="n">inD</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="o">~</span><span class="n">inD</span><span class="p">[</span><span class="s2">&quot;lonDD_corrected&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isnull</span><span class="p">()]</span>
-
-<span class="nn">File /opt/hostedtoolcache/Python/3.10.14/x64/lib/python3.10/site-packages/pandas/io/parsers/readers.py:1026,</span> in <span class="ni">read_csv</span><span class="nt">(filepath_or_buffer, sep, delimiter, header, names, index_col, usecols, dtype, engine, converters, true_values, false_values, skipinitialspace, skiprows, skipfooter, nrows, na_values, keep_default_na, na_filter, verbose, skip_blank_lines, parse_dates, infer_datetime_format, keep_date_col, date_parser, date_format, dayfirst, cache_dates, iterator, chunksize, compression, thousands, decimal, lineterminator, quotechar, quoting, doublequote, escapechar, comment, encoding, encoding_errors, dialect, on_bad_lines, delim_whitespace, low_memory, memory_map, float_precision, storage_options, dtype_backend)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1013</span> <span class="n">kwds_defaults</span> <span class="o">=</span> <span class="n">_refine_defaults_read</span><span class="p">(</span>
-<span class="g g-Whitespace">   </span><span class="mi">1014</span>     <span class="n">dialect</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1015</span>     <span class="n">delimiter</span><span class="p">,</span>
-   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1022</span>     <span class="n">dtype_backend</span><span class="o">=</span><span class="n">dtype_backend</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1023</span> <span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1024</span> <span class="n">kwds</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwds_defaults</span><span class="p">)</span>
-<span class="ne">-&gt; </span><span class="mi">1026</span> <span class="k">return</span> <span class="n">_read</span><span class="p">(</span><span class="n">filepath_or_buffer</span><span class="p">,</span> <span class="n">kwds</span><span class="p">)</span>
-
-<span class="nn">File /opt/hostedtoolcache/Python/3.10.14/x64/lib/python3.10/site-packages/pandas/io/parsers/readers.py:620,</span> in <span class="ni">_read</span><span class="nt">(filepath_or_buffer, kwds)</span>
-<span class="g g-Whitespace">    </span><span class="mi">617</span> <span class="n">_validate_names</span><span class="p">(</span><span class="n">kwds</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;names&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span>
-<span class="g g-Whitespace">    </span><span class="mi">619</span> <span class="c1"># Create the parser.</span>
-<span class="ne">--&gt; </span><span class="mi">620</span> <span class="n">parser</span> <span class="o">=</span> <span class="n">TextFileReader</span><span class="p">(</span><span class="n">filepath_or_buffer</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">622</span> <span class="k">if</span> <span class="n">chunksize</span> <span class="ow">or</span> <span class="n">iterator</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">623</span>     <span class="k">return</span> <span class="n">parser</span>
-
-<span class="nn">File /opt/hostedtoolcache/Python/3.10.14/x64/lib/python3.10/site-packages/pandas/io/parsers/readers.py:1620,</span> in <span class="ni">TextFileReader.__init__</span><span class="nt">(self, f, engine, **kwds)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1617</span>     <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s2">&quot;has_index_names&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwds</span><span class="p">[</span><span class="s2">&quot;has_index_names&quot;</span><span class="p">]</span>
-<span class="g g-Whitespace">   </span><span class="mi">1619</span> <span class="bp">self</span><span class="o">.</span><span class="n">handles</span><span class="p">:</span> <span class="n">IOHandles</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="ne">-&gt; </span><span class="mi">1620</span> <span class="bp">self</span><span class="o">.</span><span class="n">_engine</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_engine</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">engine</span><span class="p">)</span>
-
-<span class="nn">File /opt/hostedtoolcache/Python/3.10.14/x64/lib/python3.10/site-packages/pandas/io/parsers/readers.py:1880,</span> in <span class="ni">TextFileReader._make_engine</span><span class="nt">(self, f, engine)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1878</span>     <span class="k">if</span> <span class="s2">&quot;b&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">mode</span><span class="p">:</span>
-<span class="g g-Whitespace">   </span><span class="mi">1879</span>         <span class="n">mode</span> <span class="o">+=</span> <span class="s2">&quot;b&quot;</span>
-<span class="ne">-&gt; </span><span class="mi">1880</span> <span class="bp">self</span><span class="o">.</span><span class="n">handles</span> <span class="o">=</span> <span class="n">get_handle</span><span class="p">(</span>
-<span class="g g-Whitespace">   </span><span class="mi">1881</span>     <span class="n">f</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1882</span>     <span class="n">mode</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1883</span>     <span class="n">encoding</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;encoding&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
-<span class="g g-Whitespace">   </span><span class="mi">1884</span>     <span class="n">compression</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;compression&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
-<span class="g g-Whitespace">   </span><span class="mi">1885</span>     <span class="n">memory_map</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;memory_map&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
-<span class="g g-Whitespace">   </span><span class="mi">1886</span>     <span class="n">is_text</span><span class="o">=</span><span class="n">is_text</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1887</span>     <span class="n">errors</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;encoding_errors&quot;</span><span class="p">,</span> <span class="s2">&quot;strict&quot;</span><span class="p">),</span>
-<span class="g g-Whitespace">   </span><span class="mi">1888</span>     <span class="n">storage_options</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;storage_options&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
-<span class="g g-Whitespace">   </span><span class="mi">1889</span> <span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1890</span> <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">handles</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
-<span class="g g-Whitespace">   </span><span class="mi">1891</span> <span class="n">f</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">handles</span><span class="o">.</span><span class="n">handle</span>
-
-<span class="nn">File /opt/hostedtoolcache/Python/3.10.14/x64/lib/python3.10/site-packages/pandas/io/common.py:873,</span> in <span class="ni">get_handle</span><span class="nt">(path_or_buf, mode, encoding, compression, memory_map, is_text, errors, storage_options)</span>
-<span class="g g-Whitespace">    </span><span class="mi">868</span> <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-<span class="g g-Whitespace">    </span><span class="mi">869</span>     <span class="c1"># Check whether the filename is to be opened in binary mode.</span>
-<span class="g g-Whitespace">    </span><span class="mi">870</span>     <span class="c1"># Binary mode does not support &#39;encoding&#39; and &#39;newline&#39;.</span>
-<span class="g g-Whitespace">    </span><span class="mi">871</span>     <span class="k">if</span> <span class="n">ioargs</span><span class="o">.</span><span class="n">encoding</span> <span class="ow">and</span> <span class="s2">&quot;b&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">ioargs</span><span class="o">.</span><span class="n">mode</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">872</span>         <span class="c1"># Encoding</span>
-<span class="ne">--&gt; </span><span class="mi">873</span>         <span class="n">handle</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">874</span>             <span class="n">handle</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">875</span>             <span class="n">ioargs</span><span class="o">.</span><span class="n">mode</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">876</span>             <span class="n">encoding</span><span class="o">=</span><span class="n">ioargs</span><span class="o">.</span><span class="n">encoding</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">877</span>             <span class="n">errors</span><span class="o">=</span><span class="n">errors</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">878</span>             <span class="n">newline</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">879</span>         <span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">880</span>     <span class="k">else</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">881</span>         <span class="c1"># Binary mode</span>
-<span class="g g-Whitespace">    </span><span class="mi">882</span>         <span class="n">handle</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="n">ioargs</span><span class="o">.</span><span class="n">mode</span><span class="p">)</span>
-
-<span class="ne">FileNotFoundError</span>: [Errno 2] No such file or directory: &#39;/home/wb411133/data/Projects/MR_Novel_Urbanization/Data/COG_URBAN_DATA_new_naming/HBS_GPS.csv&#39;
-</pre></div>
-</div>
-</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Run zonal stats</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Run zonal stats</span>
 <span class="n">constrained_WP_folder</span> <span class="o">=</span> <span class="s2">&quot;/home/public/Data/GLOBAL/Population/RF_SSA_2015-2020&quot;</span>
 <span class="n">worldPop_2015</span> <span class="o">=</span> <span class="p">(</span>
     <span class="s2">&quot;/home/public/Data/GLOBAL/Population/WorldPop_PPP_2015/worldPop_2015.vrt&quot;</span>
@@ -836,25 +610,13 @@ b. Set everything to 16bit</p></li>
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">9</span><span class="p">],</span> <span class="n">line</span> <span class="mi">15</span>
-<span class="g g-Whitespace">     </span><span class="mi">12</span> <span class="n">pop_files</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">c_WP_15</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">iso3</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="si">}</span><span class="s2">_cpo15.tif&quot;</span><span class="p">])</span>
-<span class="g g-Whitespace">     </span><span class="mi">13</span> <span class="n">pop_files</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">c_WP_20</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">iso3</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="si">}</span><span class="s2">_cpo20.tif&quot;</span><span class="p">])</span>
-<span class="ne">---&gt; </span><span class="mi">15</span> <span class="n">nu</span><span class="o">.</span><span class="n">run_zonal</span><span class="p">(</span><span class="n">iso3</span><span class="p">,</span> <span class="n">output_folder</span><span class="p">,</span> <span class="n">inG</span><span class="p">,</span> <span class="n">pop_files</span><span class="p">,</span> <span class="n">ea_file</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
-
-<span class="ne">NameError</span>: name &#39;nu&#39; is not defined
-</pre></div>
-</div>
-</div>
 </div>
 </section>
 <section class="tex2jax_ignore mathjax_ignore" id="compile-and-copy-mapping-data">
 <h1>Compile and copy mapping data<a class="headerlink" href="#compile-and-copy-mapping-data" title="Permalink to this heading">#</a></h1>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">countries</span> <span class="o">=</span> <span class="p">{</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">countries</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s2">&quot;AGO&quot;</span><span class="p">:</span> <span class="s2">&quot;angola&quot;</span><span class="p">,</span>
     <span class="s2">&quot;BGD&quot;</span><span class="p">:</span> <span class="s2">&quot;bangladesh&quot;</span><span class="p">,</span>
     <span class="s2">&quot;EGY&quot;</span><span class="p">:</span> <span class="s2">&quot;egypt&quot;</span><span class="p">,</span>
@@ -886,43 +648,13 @@ b. Set everything to 16bit</p></li>
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>AGO: False
-</pre></div>
-</div>
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">FileNotFoundError</span><span class="g g-Whitespace">                         </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">10</span><span class="p">],</span> <span class="n">line</span> <span class="mi">29</span>
-<span class="g g-Whitespace">     </span><span class="mi">27</span> <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">iso3</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">uFile</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">28</span> <span class="n">out_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">out_folder</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">uFile</span><span class="p">))</span>
-<span class="ne">---&gt; </span><span class="mi">29</span> <span class="n">shutil</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">uFile</span><span class="p">,</span> <span class="n">out_file</span><span class="p">)</span>
-
-<span class="nn">File /opt/hostedtoolcache/Python/3.10.14/x64/lib/python3.10/shutil.py:417,</span> in <span class="ni">copy</span><span class="nt">(src, dst, follow_symlinks)</span>
-<span class="g g-Whitespace">    </span><span class="mi">415</span> <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">dst</span><span class="p">):</span>
-<span class="g g-Whitespace">    </span><span class="mi">416</span>     <span class="n">dst</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dst</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">src</span><span class="p">))</span>
-<span class="ne">--&gt; </span><span class="mi">417</span> <span class="n">copyfile</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">dst</span><span class="p">,</span> <span class="n">follow_symlinks</span><span class="o">=</span><span class="n">follow_symlinks</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">418</span> <span class="n">copymode</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">dst</span><span class="p">,</span> <span class="n">follow_symlinks</span><span class="o">=</span><span class="n">follow_symlinks</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">419</span> <span class="k">return</span> <span class="n">dst</span>
-
-<span class="nn">File /opt/hostedtoolcache/Python/3.10.14/x64/lib/python3.10/shutil.py:254,</span> in <span class="ni">copyfile</span><span class="nt">(src, dst, follow_symlinks)</span>
-<span class="g g-Whitespace">    </span><span class="mi">252</span>     <span class="n">os</span><span class="o">.</span><span class="n">symlink</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">readlink</span><span class="p">(</span><span class="n">src</span><span class="p">),</span> <span class="n">dst</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">253</span> <span class="k">else</span><span class="p">:</span>
-<span class="ne">--&gt; </span><span class="mi">254</span>     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fsrc</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">255</span>         <span class="k">try</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">256</span>             <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">dst</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fdst</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">257</span>                 <span class="c1"># macOS</span>
-
-<span class="ne">FileNotFoundError</span>: [Errno 2] No such file or directory: &#39;/home/wb411133/data/Projects/MR_Novel_Urbanization/Data/AGO_URBAN_DATA_new_naming/FINAL_STANDARD/ago_upo15_urban.tif&#39;
-</pre></div>
-</div>
-</div>
 </div>
 </section>
 <section class="tex2jax_ignore mathjax_ignore" id="compile-zonal-results">
 <h1>Compile zonal results<a class="headerlink" href="#compile-zonal-results" title="Permalink to this heading">#</a></h1>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># copy only the zonal stats with ea defs</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># copy only the zonal stats with ea defs</span>
 <span class="n">cur_countries</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">nu</span><span class="o">.</span><span class="n">EA_DEFS</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
 
 <span class="n">in_folder</span> <span class="o">=</span> <span class="s2">&quot;/home/wb411133/data/Projects/MR_Novel_Urbanization/Data/&quot;</span>
@@ -950,23 +682,10 @@ b. Set everything to 16bit</p></li>
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">11</span><span class="p">],</span> <span class="n">line</span> <span class="mi">2</span>
-<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="c1"># copy only the zonal stats with ea defs</span>
-<span class="ne">----&gt; </span><span class="mi">2</span> <span class="n">cur_countries</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">nu</span><span class="o">.</span><span class="n">EA_DEFS</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
-<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="n">in_folder</span> <span class="o">=</span> <span class="s2">&quot;/home/wb411133/data/Projects/MR_Novel_Urbanization/Data/&quot;</span>
-<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="n">out_folder</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">in_folder</span><span class="p">,</span> <span class="s2">&quot;URBAN_ZONAL_RESULTS_EAs&quot;</span><span class="p">)</span>
-
-<span class="ne">NameError</span>: name &#39;nu&#39; is not defined
-</pre></div>
-</div>
-</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">in_folder</span> <span class="o">=</span> <span class="s2">&quot;/home/wb411133/data/Projects/MR_Novel_Urbanization/Data/&quot;</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">in_folder</span> <span class="o">=</span> <span class="s2">&quot;/home/wb411133/data/Projects/MR_Novel_Urbanization/Data/&quot;</span>
 <span class="n">out_folder</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">in_folder</span><span class="p">,</span> <span class="s2">&quot;URBAN_ZONAL_RESULTS&quot;</span><span class="p">)</span>
 <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">out_folder</span><span class="p">):</span>
     <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">out_folder</span><span class="p">)</span>
@@ -991,76 +710,17 @@ b. Set everything to 16bit</p></li>
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">PermissionError</span><span class="g g-Whitespace">                           </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">12</span><span class="p">],</span> <span class="n">line</span> <span class="mi">4</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="n">out_folder</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">in_folder</span><span class="p">,</span> <span class="s2">&quot;URBAN_ZONAL_RESULTS&quot;</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">out_folder</span><span class="p">):</span>
-<span class="ne">----&gt; </span><span class="mi">4</span>     <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">out_folder</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">6</span> <span class="k">for</span> <span class="n">root</span><span class="p">,</span> <span class="n">dirs</span><span class="p">,</span> <span class="n">files</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">walk</span><span class="p">(</span><span class="n">in_folder</span><span class="p">):</span>
-<span class="g g-Whitespace">      </span><span class="mi">7</span>     <span class="k">if</span> <span class="s2">&quot;URBAN_DATA_new_naming&quot;</span> <span class="ow">in</span> <span class="n">root</span><span class="p">:</span>
-
-<span class="nn">File /opt/hostedtoolcache/Python/3.10.14/x64/lib/python3.10/os.py:215,</span> in <span class="ni">makedirs</span><span class="nt">(name, mode, exist_ok)</span>
-<span class="g g-Whitespace">    </span><span class="mi">213</span> <span class="k">if</span> <span class="n">head</span> <span class="ow">and</span> <span class="n">tail</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">head</span><span class="p">):</span>
-<span class="g g-Whitespace">    </span><span class="mi">214</span>     <span class="k">try</span><span class="p">:</span>
-<span class="ne">--&gt; </span><span class="mi">215</span>         <span class="n">makedirs</span><span class="p">(</span><span class="n">head</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="n">exist_ok</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">216</span>     <span class="k">except</span> <span class="ne">FileExistsError</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">217</span>         <span class="c1"># Defeats race condition when another thread created the path</span>
-<span class="g g-Whitespace">    </span><span class="mi">218</span>         <span class="k">pass</span>
-
-<span class="nn">File /opt/hostedtoolcache/Python/3.10.14/x64/lib/python3.10/os.py:215,</span> in <span class="ni">makedirs</span><span class="nt">(name, mode, exist_ok)</span>
-<span class="g g-Whitespace">    </span><span class="mi">213</span> <span class="k">if</span> <span class="n">head</span> <span class="ow">and</span> <span class="n">tail</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">head</span><span class="p">):</span>
-<span class="g g-Whitespace">    </span><span class="mi">214</span>     <span class="k">try</span><span class="p">:</span>
-<span class="ne">--&gt; </span><span class="mi">215</span>         <span class="n">makedirs</span><span class="p">(</span><span class="n">head</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="n">exist_ok</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">216</span>     <span class="k">except</span> <span class="ne">FileExistsError</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">217</span>         <span class="c1"># Defeats race condition when another thread created the path</span>
-<span class="g g-Whitespace">    </span><span class="mi">218</span>         <span class="k">pass</span>
-
-    <span class="p">[</span><span class="o">...</span> <span class="n">skipping</span> <span class="n">similar</span> <span class="n">frames</span><span class="p">:</span> <span class="n">makedirs</span> <span class="n">at</span> <span class="n">line</span> <span class="mi">215</span> <span class="p">(</span><span class="mi">2</span> <span class="n">times</span><span class="p">)]</span>
-
-<span class="nn">File /opt/hostedtoolcache/Python/3.10.14/x64/lib/python3.10/os.py:215,</span> in <span class="ni">makedirs</span><span class="nt">(name, mode, exist_ok)</span>
-<span class="g g-Whitespace">    </span><span class="mi">213</span> <span class="k">if</span> <span class="n">head</span> <span class="ow">and</span> <span class="n">tail</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">head</span><span class="p">):</span>
-<span class="g g-Whitespace">    </span><span class="mi">214</span>     <span class="k">try</span><span class="p">:</span>
-<span class="ne">--&gt; </span><span class="mi">215</span>         <span class="n">makedirs</span><span class="p">(</span><span class="n">head</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="n">exist_ok</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">216</span>     <span class="k">except</span> <span class="ne">FileExistsError</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">217</span>         <span class="c1"># Defeats race condition when another thread created the path</span>
-<span class="g g-Whitespace">    </span><span class="mi">218</span>         <span class="k">pass</span>
-
-<span class="nn">File /opt/hostedtoolcache/Python/3.10.14/x64/lib/python3.10/os.py:225,</span> in <span class="ni">makedirs</span><span class="nt">(name, mode, exist_ok)</span>
-<span class="g g-Whitespace">    </span><span class="mi">223</span>         <span class="k">return</span>
-<span class="g g-Whitespace">    </span><span class="mi">224</span> <span class="k">try</span><span class="p">:</span>
-<span class="ne">--&gt; </span><span class="mi">225</span>     <span class="n">mkdir</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">mode</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">226</span> <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">227</span>     <span class="c1"># Cannot rely on checking for EEXIST, since the operating system</span>
-<span class="g g-Whitespace">    </span><span class="mi">228</span>     <span class="c1"># could give priority to other errors like EACCES or EROFS</span>
-<span class="g g-Whitespace">    </span><span class="mi">229</span>     <span class="k">if</span> <span class="ow">not</span> <span class="n">exist_ok</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
-
-<span class="ne">PermissionError</span>: [Errno 13] Permission denied: &#39;/home/wb411133&#39;
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">datetime</span><span class="p">(</span><span class="mi">2021</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">datetime</span><span class="p">(</span><span class="mi">2021</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">TypeError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">13</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">datetime</span><span class="p">(</span><span class="mi">2021</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-
-<span class="ne">TypeError</span>: &#39;module&#39; object is not callable
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Delete all zonal stats</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Delete all zonal stats</span>
 <span class="k">for</span> <span class="n">root</span><span class="p">,</span> <span class="n">dirs</span><span class="p">,</span> <span class="n">files</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">walk</span><span class="p">(</span><span class="n">in_folder</span><span class="p">):</span>
     <span class="k">if</span> <span class="s2">&quot;URBAN_DATA_new_naming&quot;</span> <span class="ow">in</span> <span class="n">root</span><span class="p">:</span>
         <span class="n">country</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">root</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
@@ -1078,77 +738,16 @@ b. Set everything to 16bit</p></li>
 <h1>Generate Metadata<a class="headerlink" href="#generate-metadata" title="Permalink to this heading">#</a></h1>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">template_metadata</span> <span class="o">=</span> <span class="s2">&quot;/home/wb411133/data/Projects/MR_Novel_Urbanization/Data/LSO_URBAN_DATA_new_naming/METADATA/metadata.xlsx&quot;</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">template_metadata</span> <span class="o">=</span> <span class="s2">&quot;/home/wb411133/data/Projects/MR_Novel_Urbanization/Data/LSO_URBAN_DATA_new_naming/METADATA/metadata.xlsx&quot;</span>
 <span class="n">dataset_info</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="n">template_metadata</span><span class="p">,</span> <span class="n">sheet_name</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 <span class="n">layer_info</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="n">template_metadata</span><span class="p">,</span> <span class="n">sheet_name</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">FileNotFoundError</span><span class="g g-Whitespace">                         </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">15</span><span class="p">],</span> <span class="n">line</span> <span class="mi">2</span>
-<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="n">template_metadata</span> <span class="o">=</span> <span class="s2">&quot;/home/wb411133/data/Projects/MR_Novel_Urbanization/Data/LSO_URBAN_DATA_new_naming/METADATA/metadata.xlsx&quot;</span>
-<span class="ne">----&gt; </span><span class="mi">2</span> <span class="n">dataset_info</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="n">template_metadata</span><span class="p">,</span> <span class="n">sheet_name</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="n">layer_info</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="n">template_metadata</span><span class="p">,</span> <span class="n">sheet_name</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-
-<span class="nn">File /opt/hostedtoolcache/Python/3.10.14/x64/lib/python3.10/site-packages/pandas/io/excel/_base.py:495,</span> in <span class="ni">read_excel</span><span class="nt">(io, sheet_name, header, names, index_col, usecols, dtype, engine, converters, true_values, false_values, skiprows, nrows, na_values, keep_default_na, na_filter, verbose, parse_dates, date_parser, date_format, thousands, decimal, comment, skipfooter, storage_options, dtype_backend, engine_kwargs)</span>
-<span class="g g-Whitespace">    </span><span class="mi">493</span> <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">io</span><span class="p">,</span> <span class="n">ExcelFile</span><span class="p">):</span>
-<span class="g g-Whitespace">    </span><span class="mi">494</span>     <span class="n">should_close</span> <span class="o">=</span> <span class="kc">True</span>
-<span class="ne">--&gt; </span><span class="mi">495</span>     <span class="n">io</span> <span class="o">=</span> <span class="n">ExcelFile</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">496</span>         <span class="n">io</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">497</span>         <span class="n">storage_options</span><span class="o">=</span><span class="n">storage_options</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">498</span>         <span class="n">engine</span><span class="o">=</span><span class="n">engine</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">499</span>         <span class="n">engine_kwargs</span><span class="o">=</span><span class="n">engine_kwargs</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">500</span>     <span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">501</span> <span class="k">elif</span> <span class="n">engine</span> <span class="ow">and</span> <span class="n">engine</span> <span class="o">!=</span> <span class="n">io</span><span class="o">.</span><span class="n">engine</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">502</span>     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">503</span>         <span class="s2">&quot;Engine should not be specified when passing &quot;</span>
-<span class="g g-Whitespace">    </span><span class="mi">504</span>         <span class="s2">&quot;an ExcelFile - ExcelFile already has the engine set&quot;</span>
-<span class="g g-Whitespace">    </span><span class="mi">505</span>     <span class="p">)</span>
-
-<span class="nn">File /opt/hostedtoolcache/Python/3.10.14/x64/lib/python3.10/site-packages/pandas/io/excel/_base.py:1550,</span> in <span class="ni">ExcelFile.__init__</span><span class="nt">(self, path_or_buffer, engine, storage_options, engine_kwargs)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1548</span>     <span class="n">ext</span> <span class="o">=</span> <span class="s2">&quot;xls&quot;</span>
-<span class="g g-Whitespace">   </span><span class="mi">1549</span> <span class="k">else</span><span class="p">:</span>
-<span class="ne">-&gt; </span><span class="mi">1550</span>     <span class="n">ext</span> <span class="o">=</span> <span class="n">inspect_excel_format</span><span class="p">(</span>
-<span class="g g-Whitespace">   </span><span class="mi">1551</span>         <span class="n">content_or_path</span><span class="o">=</span><span class="n">path_or_buffer</span><span class="p">,</span> <span class="n">storage_options</span><span class="o">=</span><span class="n">storage_options</span>
-<span class="g g-Whitespace">   </span><span class="mi">1552</span>     <span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1553</span>     <span class="k">if</span> <span class="n">ext</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-<span class="g g-Whitespace">   </span><span class="mi">1554</span>         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-<span class="g g-Whitespace">   </span><span class="mi">1555</span>             <span class="s2">&quot;Excel file format cannot be determined, you must specify &quot;</span>
-<span class="g g-Whitespace">   </span><span class="mi">1556</span>             <span class="s2">&quot;an engine manually.&quot;</span>
-<span class="g g-Whitespace">   </span><span class="mi">1557</span>         <span class="p">)</span>
-
-<span class="nn">File /opt/hostedtoolcache/Python/3.10.14/x64/lib/python3.10/site-packages/pandas/io/excel/_base.py:1402,</span> in <span class="ni">inspect_excel_format</span><span class="nt">(content_or_path, storage_options)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1399</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">content_or_path</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">):</span>
-<span class="g g-Whitespace">   </span><span class="mi">1400</span>     <span class="n">content_or_path</span> <span class="o">=</span> <span class="n">BytesIO</span><span class="p">(</span><span class="n">content_or_path</span><span class="p">)</span>
-<span class="ne">-&gt; </span><span class="mi">1402</span> <span class="k">with</span> <span class="n">get_handle</span><span class="p">(</span>
-<span class="g g-Whitespace">   </span><span class="mi">1403</span>     <span class="n">content_or_path</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">,</span> <span class="n">storage_options</span><span class="o">=</span><span class="n">storage_options</span><span class="p">,</span> <span class="n">is_text</span><span class="o">=</span><span class="kc">False</span>
-<span class="g g-Whitespace">   </span><span class="mi">1404</span> <span class="p">)</span> <span class="k">as</span> <span class="n">handle</span><span class="p">:</span>
-<span class="g g-Whitespace">   </span><span class="mi">1405</span>     <span class="n">stream</span> <span class="o">=</span> <span class="n">handle</span><span class="o">.</span><span class="n">handle</span>
-<span class="g g-Whitespace">   </span><span class="mi">1406</span>     <span class="n">stream</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-
-<span class="nn">File /opt/hostedtoolcache/Python/3.10.14/x64/lib/python3.10/site-packages/pandas/io/common.py:882,</span> in <span class="ni">get_handle</span><span class="nt">(path_or_buf, mode, encoding, compression, memory_map, is_text, errors, storage_options)</span>
-<span class="g g-Whitespace">    </span><span class="mi">873</span>         <span class="n">handle</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">874</span>             <span class="n">handle</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">875</span>             <span class="n">ioargs</span><span class="o">.</span><span class="n">mode</span><span class="p">,</span>
-   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">878</span>             <span class="n">newline</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">879</span>         <span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">880</span>     <span class="k">else</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">881</span>         <span class="c1"># Binary mode</span>
-<span class="ne">--&gt; </span><span class="mi">882</span>         <span class="n">handle</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="n">ioargs</span><span class="o">.</span><span class="n">mode</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">883</span>     <span class="n">handles</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">885</span> <span class="c1"># Convert BytesIO or file objects passed with an encoding</span>
-
-<span class="ne">FileNotFoundError</span>: [Errno 2] No such file or directory: &#39;/home/wb411133/data/Projects/MR_Novel_Urbanization/Data/LSO_URBAN_DATA_new_naming/METADATA/metadata.xlsx&#39;
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">base_folder</span> <span class="o">=</span> <span class="s2">&quot;/home/wb411133/data/Projects/MR_Novel_Urbanization/Data/</span><span class="si">{ISO3}</span><span class="s2">_URBAN_DATA_new_naming&quot;</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">base_folder</span> <span class="o">=</span> <span class="s2">&quot;/home/wb411133/data/Projects/MR_Novel_Urbanization/Data/</span><span class="si">{ISO3}</span><span class="s2">_URBAN_DATA_new_naming&quot;</span>
 <span class="n">country_name</span> <span class="o">=</span> <span class="s2">&quot;Angola&quot;</span>
 <span class="n">iso3</span> <span class="o">=</span> <span class="s2">&quot;AGO&quot;</span>
 <span class="n">in_folder</span> <span class="o">=</span> <span class="n">base_folder</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ISO3</span><span class="o">=</span><span class="n">iso3</span><span class="p">)</span>
@@ -1160,45 +759,19 @@ b. Set everything to 16bit</p></li>
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">16</span><span class="p">],</span> <span class="n">line</span> <span class="mi">7</span>
-<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="n">in_folder</span> <span class="o">=</span> <span class="n">base_folder</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ISO3</span><span class="o">=</span><span class="n">iso3</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="n">out_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">in_folder</span><span class="p">,</span> <span class="s2">&quot;metadata&quot;</span><span class="p">)</span>
-<span class="ne">----&gt; </span><span class="mi">7</span> <span class="n">make_meta</span> <span class="o">=</span> <span class="n">meta</span><span class="o">.</span><span class="n">metadata_gost</span><span class="p">(</span><span class="n">in_folder</span><span class="p">,</span> <span class="n">out_dir</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">8</span> <span class="n">layers</span> <span class="o">=</span> <span class="n">make_meta</span><span class="o">.</span><span class="n">get_layers</span><span class="p">()</span>
-<span class="g g-Whitespace">      </span><span class="mi">9</span> <span class="n">metadata</span> <span class="o">=</span> <span class="n">make_meta</span><span class="o">.</span><span class="n">generate_metadata</span><span class="p">()</span>
-
-<span class="ne">NameError</span>: name &#39;meta&#39; is not defined
-</pre></div>
-</div>
-</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">layer_info</span><span class="p">[</span><span class="s2">&quot;layer_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">layer_info</span><span class="p">[</span><span class="s2">&quot;layer_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
     <span class="n">p</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;lso&quot;</span><span class="p">,</span> <span class="n">iso3</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">layer_info</span><span class="p">[</span><span class="s2">&quot;layer_name&quot;</span><span class="p">]</span>
 <span class="p">]</span>
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">17</span><span class="p">],</span> <span class="n">line</span> <span class="mi">2</span>
-<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="n">layer_info</span><span class="p">[</span><span class="s2">&quot;layer_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
-<span class="ne">----&gt; </span><span class="mi">2</span>     <span class="n">p</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;lso&quot;</span><span class="p">,</span> <span class="n">iso3</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">layer_info</span><span class="p">[</span><span class="s2">&quot;layer_name&quot;</span><span class="p">]</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="p">]</span>
-
-<span class="ne">NameError</span>: name &#39;layer_info&#39; is not defined
-</pre></div>
-</div>
-</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sel_info</span> <span class="o">=</span> <span class="n">layer_info</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">sel_info</span> <span class="o">=</span> <span class="n">layer_info</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span>
     <span class="p">:,</span>
     <span class="p">[</span>
         <span class="s2">&quot;layer_name&quot;</span><span class="p">,</span>
@@ -1213,31 +786,10 @@ b. Set everything to 16bit</p></li>
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">18</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">sel_info</span> <span class="o">=</span> <span class="n">layer_info</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span>     <span class="p">:,</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span>     <span class="p">[</span>
-<span class="g g-Whitespace">      </span><span class="mi">4</span>         <span class="s2">&quot;layer_name&quot;</span><span class="p">,</span>
-<span class="g g-Whitespace">      </span><span class="mi">5</span>         <span class="s2">&quot;layer_label&quot;</span><span class="p">,</span>
-<span class="g g-Whitespace">      </span><span class="mi">6</span>         <span class="s2">&quot;description&quot;</span><span class="p">,</span>
-<span class="g g-Whitespace">      </span><span class="mi">7</span>         <span class="s2">&quot;source_name&quot;</span><span class="p">,</span>
-<span class="g g-Whitespace">      </span><span class="mi">8</span>         <span class="s2">&quot;source_url&quot;</span><span class="p">,</span>
-<span class="g g-Whitespace">      </span><span class="mi">9</span>         <span class="s2">&quot;data_process_summary&quot;</span><span class="p">,</span>
-<span class="g g-Whitespace">     </span><span class="mi">10</span>     <span class="p">],</span>
-<span class="g g-Whitespace">     </span><span class="mi">11</span> <span class="p">]</span>
-<span class="g g-Whitespace">     </span><span class="mi">12</span> <span class="n">sel_info</span>
-
-<span class="ne">NameError</span>: name &#39;layer_info&#39; is not defined
-</pre></div>
-</div>
-</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">final_meta</span> <span class="o">=</span> <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;metadata&quot;</span><span class="p">]</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">final_meta</span> <span class="o">=</span> <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;metadata&quot;</span><span class="p">]</span>
 <span class="n">final_meta</span> <span class="o">=</span> <span class="n">final_meta</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span>
     <span class="p">:,</span>
     <span class="o">~</span><span class="n">final_meta</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span>
@@ -1254,27 +806,10 @@ b. Set everything to 16bit</p></li>
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">19</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">final_meta</span> <span class="o">=</span> <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;metadata&quot;</span><span class="p">]</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="n">final_meta</span> <span class="o">=</span> <span class="n">final_meta</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span>     <span class="p">:,</span>
-<span class="g g-Whitespace">      </span><span class="mi">4</span>     <span class="o">~</span><span class="n">final_meta</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span>
-   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">12</span>     <span class="p">),</span>
-<span class="g g-Whitespace">     </span><span class="mi">13</span> <span class="p">]</span>
-<span class="g g-Whitespace">     </span><span class="mi">14</span> <span class="n">final_meta</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">sel_info</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s2">&quot;layer_name&quot;</span><span class="p">)</span>
-
-<span class="ne">NameError</span>: name &#39;metadata&#39; is not defined
-</pre></div>
-</div>
-</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">make_meta</span><span class="o">.</span><span class="n">write_metadata</span><span class="p">(</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">make_meta</span><span class="o">.</span><span class="n">write_metadata</span><span class="p">(</span>
     <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">out_dir</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">iso3</span><span class="si">}</span><span class="s2">_novel_urbanization_metadata.xlsx&quot;</span><span class="p">),</span>
     <span class="n">layer_metadata</span><span class="o">=</span><span class="n">final_meta</span><span class="p">,</span>
     <span class="n">field_metadata</span><span class="o">=</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;fields&quot;</span><span class="p">],</span>
@@ -1291,38 +826,10 @@ b. Set everything to 16bit</p></li>
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">20</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">make_meta</span><span class="o">.</span><span class="n">write_metadata</span><span class="p">(</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span>     <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">out_dir</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">iso3</span><span class="si">}</span><span class="s2">_novel_urbanization_metadata.xlsx&quot;</span><span class="p">),</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span>     <span class="n">layer_metadata</span><span class="o">=</span><span class="n">final_meta</span><span class="p">,</span>
-<span class="g g-Whitespace">      </span><span class="mi">4</span>     <span class="n">field_metadata</span><span class="o">=</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;fields&quot;</span><span class="p">],</span>
-<span class="g g-Whitespace">      </span><span class="mi">5</span>     <span class="n">dataset_id</span><span class="o">=</span><span class="n">dataset_info</span><span class="o">.</span><span class="n">Definition</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ISO3</span><span class="o">=</span><span class="n">iso3</span><span class="p">,</span> <span class="n">Country</span><span class="o">=</span><span class="n">country_name</span><span class="p">),</span>
-<span class="g g-Whitespace">      </span><span class="mi">6</span>     <span class="n">dataset_title</span><span class="o">=</span><span class="n">dataset_info</span><span class="o">.</span><span class="n">Definition</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ISO3</span><span class="o">=</span><span class="n">iso3</span><span class="p">,</span> <span class="n">Country</span><span class="o">=</span><span class="n">country_name</span><span class="p">),</span>
-<span class="g g-Whitespace">      </span><span class="mi">7</span>     <span class="n">country</span><span class="o">=</span><span class="n">dataset_info</span><span class="o">.</span><span class="n">Definition</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ISO3</span><span class="o">=</span><span class="n">iso3</span><span class="p">,</span> <span class="n">Country</span><span class="o">=</span><span class="n">country_name</span><span class="p">),</span>
-<span class="g g-Whitespace">      </span><span class="mi">8</span>     <span class="n">abstract</span><span class="o">=</span><span class="n">dataset_info</span><span class="o">.</span><span class="n">Definition</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ISO3</span><span class="o">=</span><span class="n">iso3</span><span class="p">,</span> <span class="n">Country</span><span class="o">=</span><span class="n">country_name</span><span class="p">),</span>
-<span class="g g-Whitespace">      </span><span class="mi">9</span>     <span class="n">purpose</span><span class="o">=</span><span class="n">dataset_info</span><span class="o">.</span><span class="n">Definition</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ISO3</span><span class="o">=</span><span class="n">iso3</span><span class="p">,</span> <span class="n">Country</span><span class="o">=</span><span class="n">country_name</span><span class="p">),</span>
-<span class="g g-Whitespace">     </span><span class="mi">10</span>     <span class="n">creation_date</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">today</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">),</span>
-<span class="g g-Whitespace">     </span><span class="mi">11</span>     <span class="n">release_date</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">today</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">),</span>
-<span class="g g-Whitespace">     </span><span class="mi">12</span>     <span class="n">owner</span><span class="o">=</span><span class="n">dataset_info</span><span class="o">.</span><span class="n">Definition</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ISO3</span><span class="o">=</span><span class="n">iso3</span><span class="p">,</span> <span class="n">Country</span><span class="o">=</span><span class="n">country_name</span><span class="p">),</span>
-<span class="g g-Whitespace">     </span><span class="mi">13</span>     <span class="n">email</span><span class="o">=</span><span class="n">dataset_info</span><span class="o">.</span><span class="n">Definition</span><span class="p">[</span><span class="mi">8</span><span class="p">]</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ISO3</span><span class="o">=</span><span class="n">iso3</span><span class="p">,</span> <span class="n">Country</span><span class="o">=</span><span class="n">country_name</span><span class="p">),</span>
-<span class="g g-Whitespace">     </span><span class="mi">14</span> <span class="p">)</span>
-
-<span class="ne">NameError</span>: name &#39;make_meta&#39; is not defined
-</pre></div>
-</div>
-</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">out_dir</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&#39;/home/wb411133/data/Projects/MR_Novel_Urbanization/Data/AGO_URBAN_DATA_new_naming/metadata&#39;
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">out_dir</span>
 </pre></div>
 </div>
 </div>
@@ -1332,7 +839,7 @@ b. Set everything to 16bit</p></li>
 <h1>Generating zip commands<a class="headerlink" href="#generating-zip-commands" title="Permalink to this heading">#</a></h1>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Delete existing files</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Delete existing files</span>
 <span class="n">in_folder</span> <span class="o">=</span> <span class="s2">&quot;/home/wb411133/temp&quot;</span>
 <span class="k">for</span> <span class="n">root</span><span class="p">,</span> <span class="n">dirs</span><span class="p">,</span> <span class="n">files</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">walk</span><span class="p">(</span><span class="n">in_folder</span><span class="p">):</span>
     <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">dirs</span><span class="p">:</span>
@@ -1357,7 +864,7 @@ b. Set everything to 16bit</p></li>
 <h1>Debugging<a class="headerlink" href="#debugging" title="Permalink to this heading">#</a></h1>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># there is an error in scaling a new population dataset; testing out why</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># there is an error in scaling a new population dataset; testing out why</span>
 <span class="n">pop_raster</span> <span class="o">=</span> <span class="s2">&quot;/home/wb411133/data/Projects/MR_Novel_Urbanization/Data/COG_URBAN_DATA_new_naming/cog_cpo20_WB.tif&quot;</span>
 <span class="n">template_raster</span> <span class="o">=</span> <span class="s2">&quot;/home/wb411133/data/Projects/MR_Novel_Urbanization/Data/COG_URBAN_DATA_new_naming/FINAL_STANDARD/cog_gpo.tif&quot;</span>
 
@@ -1370,121 +877,39 @@ b. Set everything to 16bit</p></li>
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">CPLE_OpenFailedError</span><span class="g g-Whitespace">                      </span>Traceback (most recent call last)
-<span class="nn">File rasterio/_base.pyx:310,</span> in <span class="ni">rasterio._base.DatasetBase.__init__</span><span class="nt">()</span>
-
-<span class="nn">File rasterio/_base.pyx:221,</span> in <span class="ni">rasterio._base.open_dataset</span><span class="nt">()</span>
-
-<span class="nn">File rasterio/_err.pyx:221,</span> in <span class="ni">rasterio._err.exc_wrap_pointer</span><span class="nt">()</span>
-
-<span class="ne">CPLE_OpenFailedError</span>: /home/wb411133/data/Projects/MR_Novel_Urbanization/Data/COG_URBAN_DATA_new_naming/cog_cpo20_WB.tif: No such file or directory
-
-<span class="n">During</span> <span class="n">handling</span> <span class="n">of</span> <span class="n">the</span> <span class="n">above</span> <span class="n">exception</span><span class="p">,</span> <span class="n">another</span> <span class="n">exception</span> <span class="n">occurred</span><span class="p">:</span>
-
-<span class="ne">RasterioIOError</span><span class="g g-Whitespace">                           </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">23</span><span class="p">],</span> <span class="n">line</span> <span class="mi">5</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="n">pop_raster</span> <span class="o">=</span> <span class="s2">&quot;/home/wb411133/data/Projects/MR_Novel_Urbanization/Data/COG_URBAN_DATA_new_naming/cog_cpo20_WB.tif&quot;</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="n">template_raster</span> <span class="o">=</span> <span class="s2">&quot;/home/wb411133/data/Projects/MR_Novel_Urbanization/Data/COG_URBAN_DATA_new_naming/FINAL_STANDARD/cog_gpo.tif&quot;</span>
-<span class="ne">----&gt; </span><span class="mi">5</span> <span class="n">in_raster</span> <span class="o">=</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">pop_raster</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">6</span> <span class="n">in_r</span> <span class="o">=</span> <span class="n">in_raster</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
-<span class="g g-Whitespace">      </span><span class="mi">7</span> <span class="n">in_r</span><span class="p">[</span><span class="n">in_r</span> <span class="o">==</span> <span class="n">in_raster</span><span class="o">.</span><span class="n">meta</span><span class="p">[</span><span class="s2">&quot;nodata&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="mi">0</span>
-
-<span class="nn">File /opt/hostedtoolcache/Python/3.10.14/x64/lib/python3.10/site-packages/rasterio/env.py:451,</span> in <span class="ni">ensure_env_with_credentials.&lt;locals&gt;.wrapper</span><span class="nt">(*args, **kwds)</span>
-<span class="g g-Whitespace">    </span><span class="mi">448</span>     <span class="n">session</span> <span class="o">=</span> <span class="n">DummySession</span><span class="p">()</span>
-<span class="g g-Whitespace">    </span><span class="mi">450</span> <span class="k">with</span> <span class="n">env_ctor</span><span class="p">(</span><span class="n">session</span><span class="o">=</span><span class="n">session</span><span class="p">):</span>
-<span class="ne">--&gt; </span><span class="mi">451</span>     <span class="k">return</span> <span class="n">f</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">)</span>
-
-<span class="nn">File /opt/hostedtoolcache/Python/3.10.14/x64/lib/python3.10/site-packages/rasterio/__init__.py:304,</span> in <span class="ni">open</span><span class="nt">(fp, mode, driver, width, height, count, crs, transform, dtype, nodata, sharing, **kwargs)</span>
-<span class="g g-Whitespace">    </span><span class="mi">301</span> <span class="n">path</span> <span class="o">=</span> <span class="n">_parse_path</span><span class="p">(</span><span class="n">raw_dataset_path</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">303</span> <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;r&quot;</span><span class="p">:</span>
-<span class="ne">--&gt; </span><span class="mi">304</span>     <span class="n">dataset</span> <span class="o">=</span> <span class="n">DatasetReader</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">driver</span><span class="o">=</span><span class="n">driver</span><span class="p">,</span> <span class="n">sharing</span><span class="o">=</span><span class="n">sharing</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">305</span> <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;r+&quot;</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">306</span>     <span class="n">dataset</span> <span class="o">=</span> <span class="n">get_writer_for_path</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">driver</span><span class="o">=</span><span class="n">driver</span><span class="p">)(</span>
-<span class="g g-Whitespace">    </span><span class="mi">307</span>         <span class="n">path</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">driver</span><span class="o">=</span><span class="n">driver</span><span class="p">,</span> <span class="n">sharing</span><span class="o">=</span><span class="n">sharing</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
-<span class="g g-Whitespace">    </span><span class="mi">308</span>     <span class="p">)</span>
-
-<span class="nn">File rasterio/_base.pyx:312,</span> in <span class="ni">rasterio._base.DatasetBase.__init__</span><span class="nt">()</span>
-
-<span class="ne">RasterioIOError</span>: /home/wb411133/data/Projects/MR_Novel_Urbanization/Data/COG_URBAN_DATA_new_naming/cog_cpo20_WB.tif: No such file or directory
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">in_r</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">in_raster</span><span class="o">.</span><span class="n">meta</span><span class="p">[</span><span class="s2">&quot;nodata&quot;</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">in_r</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">in_raster</span><span class="o">.</span><span class="n">meta</span><span class="p">[</span><span class="s2">&quot;nodata&quot;</span><span class="p">]</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">24</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">in_r</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">in_raster</span><span class="o">.</span><span class="n">meta</span><span class="p">[</span><span class="s2">&quot;nodata&quot;</span><span class="p">]</span>
-
-<span class="ne">NameError</span>: name &#39;in_r&#39; is not defined
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">in_r</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="vm">__class__</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">in_r</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="vm">__class__</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">25</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">in_r</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="vm">__class__</span>
-
-<span class="ne">NameError</span>: name &#39;in_r&#39; is not defined
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">temp_nodata</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">in_r</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])(</span><span class="n">in_raster</span><span class="o">.</span><span class="n">meta</span><span class="p">[</span><span class="s2">&quot;nodata&quot;</span><span class="p">])</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">temp_nodata</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">in_r</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])(</span><span class="n">in_raster</span><span class="o">.</span><span class="n">meta</span><span class="p">[</span><span class="s2">&quot;nodata&quot;</span><span class="p">])</span>
 <span class="n">in_r</span> <span class="o">==</span> <span class="n">temp_nodata</span>
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">26</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">temp_nodata</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">in_r</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])(</span><span class="n">in_raster</span><span class="o">.</span><span class="n">meta</span><span class="p">[</span><span class="s2">&quot;nodata&quot;</span><span class="p">])</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="n">in_r</span> <span class="o">==</span> <span class="n">temp_nodata</span>
-
-<span class="ne">NameError</span>: name &#39;in_r&#39; is not defined
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">in_r</span> <span class="o">==</span> <span class="n">in_raster</span><span class="o">.</span><span class="n">meta</span><span class="p">[</span><span class="s2">&quot;nodata&quot;</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">in_r</span> <span class="o">==</span> <span class="n">in_raster</span><span class="o">.</span><span class="n">meta</span><span class="p">[</span><span class="s2">&quot;nodata&quot;</span><span class="p">]</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">27</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">in_r</span> <span class="o">==</span> <span class="n">in_raster</span><span class="o">.</span><span class="n">meta</span><span class="p">[</span><span class="s2">&quot;nodata&quot;</span><span class="p">]</span>
-
-<span class="ne">NameError</span>: name &#39;in_r&#39; is not defined
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># in_r[in_r &lt; 0] = 0</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># in_r[in_r &lt; 0] = 0</span>
 <span class="n">rSample</span> <span class="o">=</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">warp</span><span class="o">.</span><span class="n">Resampling</span><span class="o">.</span><span class="n">bilinear</span>
 <span class="n">rasterio</span><span class="o">.</span><span class="n">warp</span><span class="o">.</span><span class="n">reproject</span><span class="p">(</span>
     <span class="n">in_r</span><span class="p">,</span>
@@ -1501,52 +926,18 @@ b. Set everything to 16bit</p></li>
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">28</span><span class="p">],</span> <span class="n">line</span> <span class="mi">4</span>
-<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="c1"># in_r[in_r &lt; 0] = 0</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="n">rSample</span> <span class="o">=</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">warp</span><span class="o">.</span><span class="n">Resampling</span><span class="o">.</span><span class="n">bilinear</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">warp</span><span class="o">.</span><span class="n">reproject</span><span class="p">(</span>
-<span class="ne">----&gt; </span><span class="mi">4</span>     <span class="n">in_r</span><span class="p">,</span>
-<span class="g g-Whitespace">      </span><span class="mi">5</span>     <span class="n">out_array</span><span class="p">,</span>
-<span class="g g-Whitespace">      </span><span class="mi">6</span>     <span class="n">src_transform</span><span class="o">=</span><span class="n">in_raster</span><span class="o">.</span><span class="n">meta</span><span class="p">[</span><span class="s2">&quot;transform&quot;</span><span class="p">],</span>
-<span class="g g-Whitespace">      </span><span class="mi">7</span>     <span class="n">dst_transform</span><span class="o">=</span><span class="n">ghs_R</span><span class="o">.</span><span class="n">meta</span><span class="p">[</span><span class="s2">&quot;transform&quot;</span><span class="p">],</span>
-<span class="g g-Whitespace">      </span><span class="mi">8</span>     <span class="n">src_crs</span><span class="o">=</span><span class="n">in_raster</span><span class="o">.</span><span class="n">crs</span><span class="p">,</span>
-<span class="g g-Whitespace">      </span><span class="mi">9</span>     <span class="n">dst_crs</span><span class="o">=</span><span class="n">ghs_R</span><span class="o">.</span><span class="n">crs</span><span class="p">,</span>
-<span class="g g-Whitespace">     </span><span class="mi">10</span>     <span class="n">src_nodata</span><span class="o">=</span><span class="n">in_raster</span><span class="o">.</span><span class="n">meta</span><span class="p">[</span><span class="s2">&quot;nodata&quot;</span><span class="p">],</span>
-<span class="g g-Whitespace">     </span><span class="mi">11</span>     <span class="n">dst_nodata</span><span class="o">=</span><span class="n">ghs_R</span><span class="o">.</span><span class="n">meta</span><span class="p">[</span><span class="s2">&quot;nodata&quot;</span><span class="p">],</span>
-<span class="g g-Whitespace">     </span><span class="mi">12</span>     <span class="n">resampling</span><span class="o">=</span><span class="n">rSample</span><span class="p">,</span>
-<span class="g g-Whitespace">     </span><span class="mi">13</span> <span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">14</span> <span class="n">out_array</span><span class="p">[</span><span class="n">out_array</span> <span class="o">==</span> <span class="n">ghs_R</span><span class="o">.</span><span class="n">meta</span><span class="p">[</span><span class="s2">&quot;nodata&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="mf">0.0</span>
-
-<span class="ne">NameError</span>: name &#39;in_r&#39; is not defined
-</pre></div>
-</div>
-</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">out_array_sum</span> <span class="o">=</span> <span class="n">out_array</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">out_array_sum</span> <span class="o">=</span> <span class="n">out_array</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
 <span class="n">original_sum</span> <span class="o">=</span> <span class="n">in_r</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">29</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">out_array_sum</span> <span class="o">=</span> <span class="n">out_array</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="n">original_sum</span> <span class="o">=</span> <span class="n">in_r</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
-
-<span class="ne">NameError</span>: name &#39;out_array&#39; is not defined
-</pre></div>
-</div>
-</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">math</span><span class="o">.</span><span class="n">isinf</span><span class="p">(</span><span class="n">original_sum</span><span class="p">):</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">math</span><span class="o">.</span><span class="n">isinf</span><span class="p">(</span><span class="n">original_sum</span><span class="p">):</span>
     <span class="n">in_r</span><span class="p">[</span><span class="n">in_r</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="n">original_sum</span> <span class="o">=</span> <span class="n">in_r</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
 <span class="n">total_ratio</span> <span class="o">=</span> <span class="n">original_sum</span> <span class="o">/</span> <span class="n">out_array_sum</span>
@@ -1556,100 +947,38 @@ b. Set everything to 16bit</p></li>
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">30</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="k">if</span> <span class="n">math</span><span class="o">.</span><span class="n">isinf</span><span class="p">(</span><span class="n">original_sum</span><span class="p">):</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span>     <span class="n">in_r</span><span class="p">[</span><span class="n">in_r</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span>     <span class="n">original_sum</span> <span class="o">=</span> <span class="n">in_r</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
-
-<span class="ne">NameError</span>: name &#39;original_sum&#39; is not defined
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">out_array_sum</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">out_array_sum</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">31</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">out_array_sum</span>
-
-<span class="ne">NameError</span>: name &#39;out_array_sum&#39; is not defined
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">total_ratio</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">total_ratio</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">32</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">total_ratio</span>
-
-<span class="ne">NameError</span>: name &#39;total_ratio&#39; is not defined
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">in_raster</span><span class="o">.</span><span class="n">meta</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">in_raster</span><span class="o">.</span><span class="n">meta</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">33</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">in_raster</span><span class="o">.</span><span class="n">meta</span>
-
-<span class="ne">NameError</span>: name &#39;in_raster&#39; is not defined
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">in_r</span> <span class="o">==</span> <span class="nb">float</span><span class="p">(</span><span class="n">in_raster</span><span class="o">.</span><span class="n">meta</span><span class="p">[</span><span class="s2">&quot;nodata&quot;</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">in_r</span> <span class="o">==</span> <span class="nb">float</span><span class="p">(</span><span class="n">in_raster</span><span class="o">.</span><span class="n">meta</span><span class="p">[</span><span class="s2">&quot;nodata&quot;</span><span class="p">])</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">34</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">in_r</span> <span class="o">==</span> <span class="nb">float</span><span class="p">(</span><span class="n">in_raster</span><span class="o">.</span><span class="n">meta</span><span class="p">[</span><span class="s2">&quot;nodata&quot;</span><span class="p">])</span>
-
-<span class="ne">NameError</span>: name &#39;in_r&#39; is not defined
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">in_raster</span><span class="o">.</span><span class="n">meta</span><span class="p">[</span><span class="s2">&quot;nodata&quot;</span><span class="p">]</span><span class="o">.</span><span class="vm">__class__</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">35</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">in_raster</span><span class="o">.</span><span class="n">meta</span><span class="p">[</span><span class="s2">&quot;nodata&quot;</span><span class="p">]</span><span class="o">.</span><span class="vm">__class__</span>
-
-<span class="ne">NameError</span>: name &#39;in_raster&#39; is not defined
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">in_raster</span><span class="o">.</span><span class="n">meta</span><span class="p">[</span><span class="s2">&quot;nodata&quot;</span><span class="p">]</span><span class="o">.</span><span class="vm">__class__</span>
 </pre></div>
 </div>
 </div>

@@ -181,14 +181,9 @@
                 </a>
             </li>
         </ul>
-        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Novel Urbanization</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../../../api/GOSTurban.html">GOSTurban package</a></li>
-</ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Novel Urbanization</span></p>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../../../novel_context.html">Novel Urbanization</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../urbanization_comparison.html">Comparing urban methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Map_Extents.html">Mapping and comparing urban extents</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
 <ul class="nav bd-sidenav">
@@ -337,7 +332,9 @@ document.write(`
   </button>
 `);
 </script>
-
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
 </div></div>
       
     </div>
@@ -353,6 +350,21 @@ document.write(`
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Benchmarking cities in MENA</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#adjust-for-flaring">Adjust for flaring</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#create-mapping-and-debugging-data">Create mapping and debugging data</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#combine-ntl-results">Combine NTL results</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#debugging">DEBUGGING</a></li>
+</ul>
+
+            </nav>
         </div>
     </div>
 </div>
@@ -377,184 +389,253 @@ document.write(`
 <p>The unit of analysis is the Functional Urban Areas (FUAs) from the <a class="reference external" href="https://human-settlement.emergency.copernicus.eu/ghs_stat_ucdb2015mt_r2019a.php">UCDB Database</a>. For each FUA, we need to grab the associated urban periphary (lower threshold urban areas)</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
-<span class="kn">import</span> <span class="nn">os</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">itertools</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">rasterio</span>
 
-<span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">geopandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">gpd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.spatial</span><span class="w"> </span><span class="kn">import</span> <span class="n">cKDTree</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">shapely.geometry</span><span class="w"> </span><span class="kn">import</span> <span class="n">Point</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">operator</span><span class="w"> </span><span class="kn">import</span> <span class="n">itemgetter</span>
 
-<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;C:/WBG/Work/Code/GOSTrocks/src&quot;</span><span class="p">)</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;C:/WBG/Work/Code/GOSTrocks/src&quot;</span><span class="p">)</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">GOSTrocks.ntlMisc</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ntlMisc</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">GOSTrocks.rasterMisc</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">rMisc</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data_folder</span> <span class="o">=</span> <span class="s2">&quot;C:/WBG/Work/data&quot;</span>
-<span class="n">ucdb_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-    <span class="n">data_folder</span><span class="p">,</span>
-    <span class="s2">&quot;URBAN&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;GHS_STAT_UCDB2015MT_GLOBE_R2019A&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;GHS_STAT_UCDB2015MT_GLOBE_R2019A_V1_2.gpkg&quot;</span><span class="p">,</span>
-<span class="p">)</span>
-<span class="n">fua_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-    <span class="n">data_folder</span><span class="p">,</span> <span class="s2">&quot;URBAN&quot;</span><span class="p">,</span> <span class="s2">&quot;GHS_FUA_UCDB2015_GLOBE_R2019A_54009_1K_V1_0.gpkg&quot;</span>
-<span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">data_folder</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;C:\WBG\Work\data\URBAN&quot;</span>
+<span class="n">ucdb_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_folder</span><span class="p">,</span> <span class="s2">&quot;GHS_UCDB_GLOBE_R2024A.gpkg&quot;</span><span class="p">)</span>
+<span class="n">fua_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_folder</span><span class="p">,</span> <span class="s2">&quot;GHS_FUA_UCDB2015_GLOBE_R2019A_54009_1K_V1_0.gpkg&quot;</span><span class="p">)</span>
+<span class="n">fua_peripheries</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_folder</span><span class="p">,</span> <span class="s2">&quot;FUA_peripheries.gpkg&quot;</span><span class="p">)</span>
+<span class="n">oxford_extents</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data_folder</span><span class="p">,</span> <span class="s2">&quot;OE_FUA_SHAPEFILE&quot;</span><span class="p">,</span> <span class="s2">&quot;OE_FUA_SHAPEFILE.shp&quot;</span><span class="p">)</span>
 
-<span class="n">out_folder</span> <span class="o">=</span> <span class="s2">&quot;C:/WBG/Work/MENA_Urban/&quot;</span>
-<span class="n">urban_res_folder</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">out_folder</span><span class="p">,</span> <span class="s2">&quot;urban_data&quot;</span><span class="p">)</span>
+<span class="n">flaring_locations_file</span> <span class="o">=</span> <span class="s2">&quot;https://thedocs.worldbank.org/en/doc/d01b4aebd8a10513c0e341de5e1f652e-0400072024/related/2012-2023-individual-flare-volume-estimates.xlsx?_gl=1*19fhic5*_gcl_au*MzM5MTcxNjUwLjE3MTg2NTk5ODU.&quot;</span>
 
-<span class="k">for</span> <span class="n">out_folder</span> <span class="ow">in</span> <span class="p">[</span><span class="n">urban_res_folder</span><span class="p">]:</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">out_folder</span><span class="p">):</span>
-        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">out_folder</span><span class="p">)</span>
-
-<span class="n">urban_periphary_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">urban_res_folder</span><span class="p">,</span> <span class="s2">&quot;urban_periphary.gpkg&quot;</span><span class="p">)</span>
-<span class="n">urban_core_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">urban_res_folder</span><span class="p">,</span> <span class="s2">&quot;urban_core.gpkg&quot;</span><span class="p">)</span>
+<span class="n">out_folder</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;C:\WBG\Work\Projects\MENA_Urban\RESULTS\ZONAL_RES\NTL&quot;</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">inD</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">ucdb_file</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">flaring_d</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="n">flaring_locations_file</span><span class="p">)</span>
+<span class="n">flaring_d</span><span class="p">[</span><span class="s2">&quot;ID&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">flaring_d</span><span class="o">.</span><span class="n">index</span>
+<span class="n">flaring_geoms</span> <span class="o">=</span> <span class="p">[</span><span class="n">Point</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">flaring_d</span><span class="p">[</span><span class="s2">&quot;Longitude&quot;</span><span class="p">],</span> <span class="n">flaring_d</span><span class="p">[</span><span class="s2">&quot;Latitude&quot;</span><span class="p">])]</span>
+<span class="n">flaring_d</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">(</span><span class="n">flaring_d</span><span class="p">,</span> <span class="n">geometry</span><span class="o">=</span><span class="n">flaring_geoms</span><span class="p">,</span> <span class="n">crs</span><span class="o">=</span><span class="mi">4326</span><span class="p">)</span>
+<span class="n">all_flares</span> <span class="o">=</span> <span class="n">flaring_d</span><span class="o">.</span><span class="n">unary_union</span>
+<span class="n">flaring_d</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">inU</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">ucdb_file</span><span class="p">)</span>
 <span class="n">inF</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">fua_file</span><span class="p">)</span>
-<span class="n">inD</span> <span class="o">=</span> <span class="n">inD</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="n">inF</span><span class="o">.</span><span class="n">crs</span><span class="p">)</span>
+<span class="n">m_crs</span> <span class="o">=</span> <span class="n">inF</span><span class="o">.</span><span class="n">crs</span>
+<span class="n">inF</span> <span class="o">=</span> <span class="n">inF</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="n">inU</span><span class="o">.</span><span class="n">crs</span><span class="p">)</span>
+<span class="n">inO</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">oxford_extents</span><span class="p">)</span>
+<span class="n">inO</span> <span class="o">=</span> <span class="n">inO</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="n">inU</span><span class="o">.</span><span class="n">crs</span><span class="p">)</span>
+
+<span class="n">inU</span><span class="p">[</span><span class="s2">&quot;geometry&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">inU</span><span class="o">.</span><span class="n">buffer</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">inF</span><span class="p">[</span><span class="s2">&quot;geometry&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">inF</span><span class="o">.</span><span class="n">buffer</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">DataSourceError</span><span class="g g-Whitespace">                           </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">inD</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">ucdb_file</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="n">inF</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">fua_file</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="n">inD</span> <span class="o">=</span> <span class="n">inD</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="n">inF</span><span class="o">.</span><span class="n">crs</span><span class="p">)</span>
+</div>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="adjust-for-flaring">
+<h1>Adjust for flaring<a class="headerlink" href="#adjust-for-flaring" title="Permalink to this heading">#</a></h1>
+<p>Two steps to adjust the nighttime lights data for flaring:</p>
+<ol class="arabic simple">
+<li><p>Mute the nighttime lights data within a buffer zone of each flaring location</p></li>
+<li><p>Determine distances between city extents (FUA) and nearest flaring location</p></li>
+</ol>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># 2 Distance calculations</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">ckdnearest</span><span class="p">(</span><span class="n">gdfA</span><span class="p">,</span> <span class="n">gdfB</span><span class="p">,</span> <span class="n">gdfB_cols</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;ID&quot;</span><span class="p">]):</span>
+    <span class="n">A</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">geom</span><span class="o">.</span><span class="n">coords</span><span class="p">)</span> <span class="k">for</span> <span class="n">geom</span> <span class="ow">in</span> <span class="n">gdfA</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">to_list</span><span class="p">()])</span>
+    <span class="n">B</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">geom</span><span class="o">.</span><span class="n">coords</span><span class="p">)</span> <span class="k">for</span> <span class="n">geom</span> <span class="ow">in</span> <span class="n">gdfB</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">to_list</span><span class="p">()]</span>
+    <span class="n">B_ix</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span>
+        <span class="n">itertools</span><span class="o">.</span><span class="n">chain</span><span class="o">.</span><span class="n">from_iterable</span><span class="p">(</span>
+            <span class="p">[</span><span class="n">itertools</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">len</span><span class="p">,</span> <span class="n">B</span><span class="p">)))]</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+    <span class="n">B</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">B</span><span class="p">)</span>
+    <span class="n">ckd_tree</span> <span class="o">=</span> <span class="n">cKDTree</span><span class="p">(</span><span class="n">B</span><span class="p">)</span>
+    <span class="n">dist</span><span class="p">,</span> <span class="n">idx</span> <span class="o">=</span> <span class="n">ckd_tree</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">idx</span> <span class="o">=</span> <span class="n">itemgetter</span><span class="p">(</span><span class="o">*</span><span class="n">idx</span><span class="p">)(</span><span class="n">B_ix</span><span class="p">)</span>
+    <span class="n">gdf</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span>
+        <span class="p">[</span>
+            <span class="n">gdfA</span><span class="p">,</span>
+            <span class="n">gdfB</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="n">gdfB_cols</span><span class="p">]</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+            <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">dist</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;dist&quot;</span><span class="p">),</span>
+        <span class="p">],</span>
+        <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">gdf</span>
 
-<span class="nn">File /opt/hostedtoolcache/Python/3.10.14/x64/lib/python3.10/site-packages/geopandas/io/file.py:294,</span> in <span class="ni">_read_file</span><span class="nt">(filename, bbox, mask, columns, rows, engine, **kwargs)</span>
-<span class="g g-Whitespace">    </span><span class="mi">291</span>             <span class="n">from_bytes</span> <span class="o">=</span> <span class="kc">True</span>
-<span class="g g-Whitespace">    </span><span class="mi">293</span> <span class="k">if</span> <span class="n">engine</span> <span class="o">==</span> <span class="s2">&quot;pyogrio&quot;</span><span class="p">:</span>
-<span class="ne">--&gt; </span><span class="mi">294</span>     <span class="k">return</span> <span class="n">_read_file_pyogrio</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">295</span>         <span class="n">filename</span><span class="p">,</span> <span class="n">bbox</span><span class="o">=</span><span class="n">bbox</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">mask</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">columns</span><span class="p">,</span> <span class="n">rows</span><span class="o">=</span><span class="n">rows</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
-<span class="g g-Whitespace">    </span><span class="mi">296</span>     <span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">298</span> <span class="k">elif</span> <span class="n">engine</span> <span class="o">==</span> <span class="s2">&quot;fiona&quot;</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">299</span>     <span class="k">if</span> <span class="n">pd</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">types</span><span class="o">.</span><span class="n">is_file_like</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
 
-<span class="nn">File /opt/hostedtoolcache/Python/3.10.14/x64/lib/python3.10/site-packages/geopandas/io/file.py:547,</span> in <span class="ni">_read_file_pyogrio</span><span class="nt">(path_or_bytes, bbox, mask, rows, **kwargs)</span>
-<span class="g g-Whitespace">    </span><span class="mi">538</span>     <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">539</span>         <span class="s2">&quot;The &#39;include_fields&#39; and &#39;ignore_fields&#39; keywords are deprecated, and &quot;</span>
-<span class="g g-Whitespace">    </span><span class="mi">540</span>         <span class="s2">&quot;will be removed in a future release. You can use the &#39;columns&#39; keyword &quot;</span>
-   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">543</span>         <span class="n">stacklevel</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">544</span>     <span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">545</span>     <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;columns&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;include_fields&quot;</span><span class="p">)</span>
-<span class="ne">--&gt; </span><span class="mi">547</span> <span class="k">return</span> <span class="n">pyogrio</span><span class="o">.</span><span class="n">read_dataframe</span><span class="p">(</span><span class="n">path_or_bytes</span><span class="p">,</span> <span class="n">bbox</span><span class="o">=</span><span class="n">bbox</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+<span class="n">inF_centroid</span> <span class="o">=</span> <span class="n">inF</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">inF_centroid</span><span class="p">[</span><span class="s2">&quot;geometry&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">inF_centroid</span><span class="p">[</span><span class="s2">&quot;geometry&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">centroid</span>
+<span class="n">inF_centroid</span> <span class="o">=</span> <span class="n">inF_centroid</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="n">m_crs</span><span class="p">)</span>
+<span class="n">flaring_d</span> <span class="o">=</span> <span class="n">flaring_d</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="n">m_crs</span><span class="p">)</span>
 
-<span class="nn">File /opt/hostedtoolcache/Python/3.10.14/x64/lib/python3.10/site-packages/pyogrio/geopandas.py:261,</span> in <span class="ni">read_dataframe</span><span class="nt">(path_or_buffer, layer, encoding, columns, read_geometry, force_2d, skip_features, max_features, where, bbox, mask, fids, sql, sql_dialect, fid_as_index, use_arrow, on_invalid, arrow_to_pandas_kwargs, **kwargs)</span>
-<span class="g g-Whitespace">    </span><span class="mi">256</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">use_arrow</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">257</span>     <span class="c1"># For arrow, datetimes are read as is.</span>
-<span class="g g-Whitespace">    </span><span class="mi">258</span>     <span class="c1"># For numpy IO, datetimes are read as string values to preserve timezone info</span>
-<span class="g g-Whitespace">    </span><span class="mi">259</span>     <span class="c1"># as numpy does not directly support timezones.</span>
-<span class="g g-Whitespace">    </span><span class="mi">260</span>     <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;datetime_as_string&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
-<span class="ne">--&gt; </span><span class="mi">261</span> <span class="n">result</span> <span class="o">=</span> <span class="n">read_func</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">262</span>     <span class="n">path_or_buffer</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">263</span>     <span class="n">layer</span><span class="o">=</span><span class="n">layer</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">264</span>     <span class="n">encoding</span><span class="o">=</span><span class="n">encoding</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">265</span>     <span class="n">columns</span><span class="o">=</span><span class="n">columns</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">266</span>     <span class="n">read_geometry</span><span class="o">=</span><span class="n">read_geometry</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">267</span>     <span class="n">force_2d</span><span class="o">=</span><span class="n">gdal_force_2d</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">268</span>     <span class="n">skip_features</span><span class="o">=</span><span class="n">skip_features</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">269</span>     <span class="n">max_features</span><span class="o">=</span><span class="n">max_features</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">270</span>     <span class="n">where</span><span class="o">=</span><span class="n">where</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">271</span>     <span class="n">bbox</span><span class="o">=</span><span class="n">bbox</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">272</span>     <span class="n">mask</span><span class="o">=</span><span class="n">mask</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">273</span>     <span class="n">fids</span><span class="o">=</span><span class="n">fids</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">274</span>     <span class="n">sql</span><span class="o">=</span><span class="n">sql</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">275</span>     <span class="n">sql_dialect</span><span class="o">=</span><span class="n">sql_dialect</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">276</span>     <span class="n">return_fids</span><span class="o">=</span><span class="n">fid_as_index</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">277</span>     <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">278</span> <span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">280</span> <span class="k">if</span> <span class="n">use_arrow</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">281</span>     <span class="n">meta</span><span class="p">,</span> <span class="n">table</span> <span class="o">=</span> <span class="n">result</span>
-
-<span class="nn">File /opt/hostedtoolcache/Python/3.10.14/x64/lib/python3.10/site-packages/pyogrio/raw.py:196,</span> in <span class="ni">read</span><span class="nt">(path_or_buffer, layer, encoding, columns, read_geometry, force_2d, skip_features, max_features, where, bbox, mask, fids, sql, sql_dialect, return_fids, datetime_as_string, **kwargs)</span>
-<span class="g g-Whitespace">     </span><span class="mi">56</span><span class="w"> </span><span class="sd">&quot;&quot;&quot;Read OGR data source into numpy arrays.</span>
-<span class="g g-Whitespace">     </span><span class="mi">57</span><span class="sd"> </span>
-<span class="g g-Whitespace">     </span><span class="mi">58</span><span class="sd"> IMPORTANT: non-linear geometry types (e.g., MultiSurface) are converted</span>
-<span class="sd">   (...)</span>
-<span class="g g-Whitespace">    </span><span class="mi">191</span><span class="sd"> </span>
-<span class="g g-Whitespace">    </span><span class="mi">192</span><span class="sd"> &quot;&quot;&quot;</span>
-<span class="g g-Whitespace">    </span><span class="mi">194</span> <span class="n">dataset_kwargs</span> <span class="o">=</span> <span class="n">_preprocess_options_key_value</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span> <span class="k">if</span> <span class="n">kwargs</span> <span class="k">else</span> <span class="p">{}</span>
-<span class="ne">--&gt; </span><span class="mi">196</span> <span class="k">return</span> <span class="n">ogr_read</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">197</span>     <span class="n">get_vsi_path_or_buffer</span><span class="p">(</span><span class="n">path_or_buffer</span><span class="p">),</span>
-<span class="g g-Whitespace">    </span><span class="mi">198</span>     <span class="n">layer</span><span class="o">=</span><span class="n">layer</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">199</span>     <span class="n">encoding</span><span class="o">=</span><span class="n">encoding</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">200</span>     <span class="n">columns</span><span class="o">=</span><span class="n">columns</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">201</span>     <span class="n">read_geometry</span><span class="o">=</span><span class="n">read_geometry</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">202</span>     <span class="n">force_2d</span><span class="o">=</span><span class="n">force_2d</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">203</span>     <span class="n">skip_features</span><span class="o">=</span><span class="n">skip_features</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">204</span>     <span class="n">max_features</span><span class="o">=</span><span class="n">max_features</span> <span class="ow">or</span> <span class="mi">0</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">205</span>     <span class="n">where</span><span class="o">=</span><span class="n">where</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">206</span>     <span class="n">bbox</span><span class="o">=</span><span class="n">bbox</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">207</span>     <span class="n">mask</span><span class="o">=</span><span class="n">_mask_to_wkb</span><span class="p">(</span><span class="n">mask</span><span class="p">),</span>
-<span class="g g-Whitespace">    </span><span class="mi">208</span>     <span class="n">fids</span><span class="o">=</span><span class="n">fids</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">209</span>     <span class="n">sql</span><span class="o">=</span><span class="n">sql</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">210</span>     <span class="n">sql_dialect</span><span class="o">=</span><span class="n">sql_dialect</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">211</span>     <span class="n">return_fids</span><span class="o">=</span><span class="n">return_fids</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">212</span>     <span class="n">dataset_kwargs</span><span class="o">=</span><span class="n">dataset_kwargs</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">213</span>     <span class="n">datetime_as_string</span><span class="o">=</span><span class="n">datetime_as_string</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">214</span> <span class="p">)</span>
-
-<span class="nn">File /opt/hostedtoolcache/Python/3.10.14/x64/lib/python3.10/site-packages/pyogrio/_io.pyx:1239,</span> in <span class="ni">pyogrio._io.ogr_read</span><span class="nt">()</span>
-
-<span class="nn">File /opt/hostedtoolcache/Python/3.10.14/x64/lib/python3.10/site-packages/pyogrio/_io.pyx:219,</span> in <span class="ni">pyogrio._io.ogr_open</span><span class="nt">()</span>
-
-<span class="ne">DataSourceError</span>: C:/WBG/Work/data/URBAN/GHS_STAT_UCDB2015MT_GLOBE_R2019A/GHS_STAT_UCDB2015MT_GLOBE_R2019A_V1_2.gpkg: No such file or directory
+<span class="n">nearest_calc</span> <span class="o">=</span> <span class="n">ckdnearest</span><span class="p">(</span><span class="n">inF_centroid</span><span class="p">,</span> <span class="n">flaring_d</span><span class="p">)</span>
+<span class="n">inF</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">inF</span><span class="p">,</span> <span class="n">nearest_calc</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,[</span><span class="s1">&#39;eFUA_ID&#39;</span><span class="p">,</span> <span class="s1">&#39;dist&#39;</span><span class="p">]],</span> <span class="n">on</span><span class="o">=</span><span class="s2">&quot;eFUA_ID&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">inF</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">inF</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ntl_image</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;C:\WBG\Work\data\NTL\VNL_v21_npp_2019_global_vcmslcfg_c202205302300.average.dat.tif&quot;</span> <span class="c1">#ntl_images[0]</span>
+<span class="c1"># 1 Mute nighttime lights data within a mask</span>
+<span class="c1">### Buffer the flare locations by the defined distance</span>
+<span class="n">buffer_dist</span> <span class="o">=</span> <span class="mi">5000</span>  <span class="c1"># (metres)</span>
+<span class="n">buffered_flare</span> <span class="o">=</span> <span class="n">flaring_d</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">buffered_flare</span><span class="p">[</span><span class="s2">&quot;geometry&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">buffered_flare</span><span class="p">[</span><span class="s2">&quot;geometry&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
+    <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">buffer</span><span class="p">(</span><span class="n">buffer_dist</span><span class="p">)</span>
+<span class="p">)</span>
+<span class="n">buffered_flare</span> <span class="o">=</span> <span class="n">buffered_flare</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="mi">4326</span><span class="p">)</span>
 
-<span class="ne">NameError</span>: name &#39;inF&#39; is not defined
+<span class="c1">### create a mask raster using the buffered flare locations</span>
+<span class="c1">#ntl_images = ntlMisc.aws_search_ntl()</span>
+<span class="n">flare_mask</span> <span class="o">=</span> <span class="n">rMisc</span><span class="o">.</span><span class="n">rasterizeDataFrame</span><span class="p">(</span>
+    <span class="n">buffered_flare</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">templateRaster</span><span class="o">=</span><span class="n">ntl_image</span><span class="p">,</span> <span class="n">nodata</span><span class="o">=</span><span class="mi">0</span>
+<span class="p">)</span>
+<span class="n">flare_mask</span> <span class="o">=</span> <span class="p">(</span><span class="o">~</span><span class="n">flare_mask</span><span class="p">[</span><span class="s2">&quot;vals&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">bool</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fua_peripheries</span> <span class="o">=</span> <span class="n">inF</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-<span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">inF</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
-    <span class="c1"># grab the related UCDBs</span>
-    <span class="n">ucdb_ids</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;UC_IDs&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;;&quot;</span><span class="p">)</span>
-    <span class="n">ucdb_ids</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">ucdb_ids</span><span class="p">]</span>
-    <span class="n">sel_cores</span> <span class="o">=</span> <span class="n">inD</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">inD</span><span class="p">[</span><span class="s2">&quot;ID_HDC_G0&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">ucdb_ids</span><span class="p">)]</span>
-    <span class="n">periphery_geom</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;geometry&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">difference</span><span class="p">(</span><span class="n">sel_cores</span><span class="o">.</span><span class="n">unary_union</span><span class="p">)</span>
-    <span class="n">fua_peripheries</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="s2">&quot;geometry&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">periphery_geom</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">### Use the mask in the zonal calculation</span>
+<span class="n">finalF</span> <span class="o">=</span> <span class="n">inF</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span> <span class="c1">#inF.copy()</span>
+<span class="n">prefix</span> <span class="o">=</span> <span class="s2">&quot;FUA&quot;</span>
+<span class="n">date</span> <span class="o">=</span> <span class="mi">2019</span> <span class="c1">#os.path.basename(ntl_image).split(&quot;_&quot;)[2][:6]</span>
+<span class="n">raw_ntl</span> <span class="o">=</span> <span class="n">rMisc</span><span class="o">.</span><span class="n">zonalStats</span><span class="p">(</span><span class="n">finalF</span><span class="p">,</span> <span class="n">ntl_image</span><span class="p">,</span> <span class="n">minVal</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">reProj</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">raw_ntl</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">raw_ntl</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;SUM&quot;</span><span class="p">,</span> <span class="s2">&quot;MIN&quot;</span><span class="p">,</span> <span class="s2">&quot;MAX&quot;</span><span class="p">,</span> <span class="s2">&quot;MEAN&quot;</span><span class="p">])</span>
+<span class="n">finalF</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;raw_</span><span class="si">{</span><span class="n">date</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">raw_ntl</span><span class="p">[</span><span class="s2">&quot;SUM&quot;</span><span class="p">]</span>
 
-<span class="n">fua_peripheries</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">out_folder</span><span class="p">,</span> <span class="s2">&quot;FUA_peripheries.gpkg&quot;</span><span class="p">),</span> <span class="n">driver</span><span class="o">=</span><span class="s2">&quot;GPKG&quot;</span><span class="p">)</span>
+<span class="n">ntl_r</span> <span class="o">=</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">ntl_image</span><span class="p">)</span>
+<span class="n">ntl_data</span> <span class="o">=</span> <span class="n">ntl_r</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+<span class="n">masked_ntl_data</span> <span class="o">=</span> <span class="n">ntl_data</span> <span class="o">*</span> <span class="n">flare_mask</span>
+<span class="k">with</span> <span class="n">rMisc</span><span class="o">.</span><span class="n">create_rasterio_inmemory</span><span class="p">(</span><span class="n">ntl_r</span><span class="o">.</span><span class="n">profile</span><span class="p">,</span> <span class="n">masked_ntl_data</span><span class="p">)</span> <span class="k">as</span> <span class="n">masked_ntl_raster</span><span class="p">:</span>
+    <span class="n">masked_ntl</span> <span class="o">=</span> <span class="n">rMisc</span><span class="o">.</span><span class="n">zonalStats</span><span class="p">(</span><span class="n">finalF</span><span class="p">,</span> <span class="n">masked_ntl_raster</span><span class="p">,</span> <span class="n">minVal</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">reProj</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">masked_ntl</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">masked_ntl</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;SUM&quot;</span><span class="p">,</span> <span class="s2">&quot;MIN&quot;</span><span class="p">,</span> <span class="s2">&quot;MAX&quot;</span><span class="p">,</span> <span class="s2">&quot;MEAN&quot;</span><span class="p">])</span>
+    <span class="n">finalF</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;mask_</span><span class="si">{</span><span class="n">date</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">masked_ntl</span><span class="p">[</span><span class="s2">&quot;SUM&quot;</span><span class="p">]</span>
+
+<span class="n">finalF</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span>
+    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">out_folder</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">prefix</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">date</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">buffer_dist</span><span class="si">}</span><span class="s2">_zonal_ntl.gpkg&quot;</span><span class="p">,</span> <span class="n">driver</span><span class="o">=</span><span class="s2">&quot;GPKG&quot;</span>
+<span class="p">)</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">finalF</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="s2">&quot;geometry&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">out_folder</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">prefix</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">date</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">buffer_dist</span><span class="si">}</span><span class="s2">_zonal_ntl.csv&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">fua_peripheries</span> <span class="o">=</span> <span class="n">inF</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">inF</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span>     <span class="c1"># grab the related UCDBs</span>
-<span class="g g-Whitespace">      </span><span class="mi">4</span>     <span class="n">ucdb_ids</span> <span class="o">=</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;UC_IDs&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;;&quot;</span><span class="p">)</span>
+</div>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="create-mapping-and-debugging-data">
+<h1>Create mapping and debugging data<a class="headerlink" href="#create-mapping-and-debugging-data" title="Permalink to this heading">#</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Write flare mask to disk</span>
+<span class="n">flare_mask_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;/home/wb411133/temp&quot;</span><span class="p">,</span> <span class="s2">&quot;flare_mask.tif&quot;</span><span class="p">)</span>
+<span class="n">flare_profile</span> <span class="o">=</span> <span class="n">ntl_r</span><span class="o">.</span><span class="n">profile</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">flare_mask</span> <span class="o">=</span> <span class="n">flare_mask</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;int16&quot;</span><span class="p">)</span>
+<span class="n">flare_profile</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="n">flare_mask</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
 
-<span class="ne">NameError</span>: name &#39;inF&#39; is not defined
+<span class="k">with</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">flare_mask_file</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">flare_profile</span><span class="p">)</span> <span class="k">as</span> <span class="n">out_flare</span><span class="p">:</span>
+    <span class="n">out_flare</span><span class="o">.</span><span class="n">write_band</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">flare_mask</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Combine raw and masked ntl results with urban extents</span>
+<span class="n">outF</span> <span class="o">=</span> <span class="n">nearest_calc</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">outF</span><span class="p">[</span><span class="s2">&quot;rawNTL&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">raw_ntl_df</span><span class="p">[</span><span class="s2">&quot;SUM&quot;</span><span class="p">]</span>
+<span class="n">outF</span><span class="p">[</span><span class="s2">&quot;maskedNTL&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">masked_ntl_df</span><span class="p">[</span><span class="s2">&quot;SUM&quot;</span><span class="p">]</span>
+<span class="n">outF</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;/home/wb411133/temp&quot;</span><span class="p">,</span> <span class="s2">&quot;urban_extents_ntl_flaring.gpkg&quot;</span><span class="p">),</span> <span class="n">driver</span><span class="o">=</span><span class="s2">&quot;GPKG&quot;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="combine-ntl-results">
+<h2>Combine NTL results<a class="headerlink" href="#combine-ntl-results" title="Permalink to this heading">#</a></h2>
+<p>We have zonal results for the entire FUA and for the core as monthly results; there is a two step process to create the final results:</p>
+<ol class="arabic simple">
+<li><p>Combine monthly results into annual results</p></li>
+<li><p>Use FUA and cores to generate three stats: FUA SoL, Core SoL, and Periphery SoL</p></li>
+</ol>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">combine_ntl_annual</span><span class="p">(</span><span class="n">curD</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;curD is a data frame of ntl zonal results&quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">yr</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2012</span><span class="p">,</span> <span class="mi">2024</span><span class="p">):</span>
+        <span class="n">cur_columns</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">curD</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="sa">f</span><span class="s2">&quot;ntl_</span><span class="si">{</span><span class="n">yr</span><span class="si">}</span><span class="s2">&quot;</span> <span class="ow">in</span> <span class="n">x</span><span class="p">]</span>
+        <span class="n">sel_d</span> <span class="o">=</span> <span class="n">curD</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">cur_columns</span><span class="p">]</span>
+        <span class="n">curD</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;ntl</span><span class="si">{</span><span class="n">yr</span><span class="si">}</span><span class="s2">_SoL&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sel_d</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">cur_columns</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">curD</span>
+
+
+<span class="n">out_folder</span> <span class="o">=</span> <span class="s2">&quot;s3://wbg-geography01/URBANIZATION/MENA/ZONAL_RES/NTL/&quot;</span>
+<span class="n">combine_ntl_annual</span><span class="p">(</span><span class="n">fua_zonal</span><span class="p">)</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">out_folder</span><span class="p">,</span> <span class="s2">&quot;fua_VIIRS_SoL.csv&quot;</span><span class="p">))</span>
+<span class="n">combine_ntl_annual</span><span class="p">(</span><span class="n">core_zonal</span><span class="p">)</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">out_folder</span><span class="p">,</span> <span class="s2">&quot;core_VIIRS_SoL.csv&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">combine_ntl_annual</span><span class="p">(</span><span class="n">core_zonal</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="debugging">
+<h1>DEBUGGING<a class="headerlink" href="#debugging" title="Permalink to this heading">#</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">tempF</span> <span class="o">=</span> <span class="n">inF</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">inF</span><span class="p">[</span><span class="s2">&quot;eFUA_ID&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1281</span><span class="p">]</span>
+<span class="n">tempF</span><span class="p">[</span><span class="s2">&quot;geometry&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tempF</span><span class="p">[</span><span class="s2">&quot;geometry&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">buffer</span><span class="p">(</span><span class="mf">0.001</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">rMisc</span><span class="o">.</span><span class="n">zonalStats</span><span class="p">(</span><span class="n">tempF</span><span class="p">,</span> <span class="n">ntl_images</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">minVal</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">reProj</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">allTouched</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">tempF</span><span class="p">[</span><span class="s2">&quot;geometry&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">buffer</span><span class="p">(</span><span class="mf">0.001</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">tempF</span>
 </pre></div>
 </div>
 </div>
@@ -597,6 +678,28 @@ document.write(`
             </div>
             
             
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Benchmarking cities in MENA</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#adjust-for-flaring">Adjust for flaring</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#create-mapping-and-debugging-data">Create mapping and debugging data</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#combine-ntl-results">Combine NTL results</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#debugging">DEBUGGING</a></li>
+</ul>
+
+  </nav></div>
+
+</div></div>
               
             
           </div>

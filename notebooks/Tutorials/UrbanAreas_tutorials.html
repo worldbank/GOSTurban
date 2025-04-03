@@ -63,7 +63,7 @@
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Landscape Expansion Index" href="LEI_Example.html" />
-    <link rel="prev" title="Comparing urban methods" href="../../urbanization_comparison.html" />
+    <link rel="prev" title="Mapping and comparing urban extents" href="../Implementations/MENA_Benchmarking/Map_Extents.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -181,14 +181,9 @@
                 </a>
             </li>
         </ul>
-        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Novel Urbanization</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../../api/GOSTurban.html">GOSTurban package</a></li>
-</ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Novel Urbanization</span></p>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../../novel_context.html">Novel Urbanization</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../urbanization_comparison.html">Comparing urban methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Implementations/MENA_Benchmarking/Map_Extents.html">Mapping and comparing urban extents</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
 <ul class="current nav bd-sidenav">
@@ -386,34 +381,22 @@ document.write(`
 <p>The Degree of Urbanization (DoU) is a method for quantifying urbanization using thresholds applied to gridded population data. More information on the DoU can be <a class="reference external" href="https://ghsl.jrc.ec.europa.eu/degurbaDefinitions.php">found here</a>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">rasterio</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">rasterio</span>
 
-<span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">geopandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">gpd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 
-<span class="kn">import</span> <span class="nn">GOSTurban.UrbanRaster</span> <span class="k">as</span> <span class="nn">urban</span>
-<span class="kn">import</span> <span class="nn">GOSTRocks.mapMisc</span> <span class="k">as</span> <span class="nn">mapMisc</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">line</span> <span class="mi">9</span>
-<span class="g g-Whitespace">      </span><span class="mi">6</span> <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="g g-Whitespace">      </span><span class="mi">8</span> <span class="kn">import</span> <span class="nn">GOSTurban.UrbanRaster</span> <span class="k">as</span> <span class="nn">urban</span>
-<span class="ne">----&gt; </span><span class="mi">9</span> <span class="kn">import</span> <span class="nn">GOSTRocks.mapMisc</span> <span class="k">as</span> <span class="nn">mapMisc</span>
-
-<span class="ne">ModuleNotFoundError</span>: No module named &#39;GOSTRocks&#39;
+<span class="kn">import</span><span class="w"> </span><span class="nn">GOSTurban.UrbanRaster</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">urban</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">GOSTRocks.mapMisc</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">mapMisc</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define input population raster</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define input population raster</span>
 <span class="n">tutorial_folder</span> <span class="o">=</span> <span class="s2">&quot;../../data/tutorial_data&quot;</span>
 <span class="n">aoi_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tutorial_folder</span><span class="p">,</span> <span class="s2">&quot;AOI.geojson&quot;</span><span class="p">)</span>
 <span class="n">pop_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tutorial_folder</span><span class="p">,</span> <span class="s2">&quot;wp_2020_1k_AOI.tif&quot;</span><span class="p">)</span>
@@ -428,7 +411,7 @@ document.write(`
 <span class="c1">#    you will need to find a global population to extract from</span>
 <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">pop_file</span><span class="p">):</span>
     <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;../../../gostrocks/src&quot;</span><span class="p">)</span>
-    <span class="kn">import</span> <span class="nn">GOSTRocks.rasterMisc</span> <span class="k">as</span> <span class="nn">rMisc</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">GOSTRocks.rasterMisc</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">rMisc</span>
 
     <span class="n">global_population</span> <span class="o">=</span> <span class="s2">&quot;/path/to/global/pop_layer/ppp_2020_1km_Aggregated.tif&quot;</span>
     <span class="n">inR</span> <span class="o">=</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">global_population</span><span class="p">)</span>
@@ -445,17 +428,7 @@ document.write(`
 <h2>Map of population density in study area<a class="headerlink" href="#map-of-population-density-in-study-area" title="Permalink to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mapMisc</span><span class="o">.</span><span class="n">static_map_raster</span><span class="p">(</span><span class="n">inR</span><span class="p">,</span> <span class="n">thresh</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">300</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="mi">3000</span><span class="p">])</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">mapMisc</span><span class="o">.</span><span class="n">static_map_raster</span><span class="p">(</span><span class="n">inR</span><span class="p">,</span> <span class="n">thresh</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">300</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="mi">3000</span><span class="p">])</span>
-
-<span class="ne">NameError</span>: name &#39;mapMisc&#39; is not defined
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">mapMisc</span><span class="o">.</span><span class="n">static_map_raster</span><span class="p">(</span><span class="n">inR</span><span class="p">,</span> <span class="n">thresh</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">300</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="mi">3000</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
@@ -466,7 +439,7 @@ document.write(`
 <h1>Extract and map urban clusters<a class="headerlink" href="#extract-and-map-urban-clusters" title="Permalink to this heading">#</a></h1>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Extract the urban extents (minimum density 300/km2, minimum total population 5000)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Extract the urban extents (minimum density 300/km2, minimum total population 5000)</span>
 <span class="n">urban_extents</span> <span class="o">=</span> <span class="n">urban_calculator</span><span class="o">.</span><span class="n">calculateUrban</span><span class="p">(</span>
     <span class="n">densVal</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">totalPopThresh</span><span class="o">=</span><span class="mi">5000</span><span class="p">,</span> <span class="n">smooth</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">queen</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span>
 <span class="p">)</span>
@@ -475,111 +448,11 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>00:23:33	: Read in urban data
-00:23:33	: Creating Shape 0
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>00:23:37	: Creating Shape 1000
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>00:23:40	: Creating Shape 2000
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>00:23:44	: Creating Shape 3000
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>00:23:47	: Creating Shape 4000
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>00:23:50	: Creating Shape 5000
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>00:23:53	: Creating Shape 6000
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>00:23:55	: Creating Shape 7000
-</pre></div>
-</div>
-<div class="output text_html"><div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>ID</th>
-      <th>Pop</th>
-      <th>geometry</th>
-      <th>Type</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>6044</td>
-      <td>18641.011719</td>
-      <td>POLYGON ((-78.75958 44.38292, -78.75958 44.349...</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>6045</td>
-      <td>147162.718750</td>
-      <td>POLYGON ((-79.71792 44.42458, -79.71792 44.416...</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>6046</td>
-      <td>8065.728516</td>
-      <td>POLYGON ((-79.90958 44.33292, -79.90958 44.324...</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>6047</td>
-      <td>18561.923828</td>
-      <td>POLYGON ((-79.55125 44.36625, -79.55125 44.357...</td>
-      <td>1</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>6049</td>
-      <td>11521.957031</td>
-      <td>POLYGON ((-69.78458 44.34125, -69.78458 44.316...</td>
-      <td>1</td>
-    </tr>
-  </tbody>
-</table>
-</div></div></div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Map of urban extents</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Map of urban extents</span>
 <span class="n">mapMisc</span><span class="o">.</span><span class="n">static_map_vector</span><span class="p">(</span><span class="n">urban_extents</span><span class="p">,</span> <span class="s2">&quot;Type&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span> <span class="n">line</span> <span class="mi">2</span>
-<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="c1"># Map of urban extents</span>
-<span class="ne">----&gt; </span><span class="mi">2</span> <span class="n">mapMisc</span><span class="o">.</span><span class="n">static_map_vector</span><span class="p">(</span><span class="n">urban_extents</span><span class="p">,</span> <span class="s2">&quot;Type&quot;</span><span class="p">)</span>
-
-<span class="ne">NameError</span>: name &#39;mapMisc&#39; is not defined
 </pre></div>
 </div>
 </div>
@@ -589,7 +462,7 @@ document.write(`
 <h1>Extract and map high-density urban extents<a class="headerlink" href="#extract-and-map-high-density-urban-extents" title="Permalink to this heading">#</a></h1>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Extract the high density urban extents (minimum density 1500/km2, minimum total population 50000)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Extract the high density urban extents (minimum density 1500/km2, minimum total population 50000)</span>
 <span class="n">hd_urban_extents</span> <span class="o">=</span> <span class="n">urban_calculator</span><span class="o">.</span><span class="n">calculateUrban</span><span class="p">(</span>
     <span class="n">densVal</span><span class="o">=</span><span class="mi">1500</span><span class="p">,</span>
     <span class="n">totalPopThresh</span><span class="o">=</span><span class="mi">50000</span><span class="p">,</span>
@@ -602,105 +475,10 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>00:23:56	: Read in urban data
-00:23:56	: Creating Shape 0
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>00:24:01	: Creating Shape 1000
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/opt/hostedtoolcache/Python/3.10.14/x64/lib/python3.10/site-packages/numpy/core/_methods.py:49: RuntimeWarning: overflow encountered in reduce
-  return umr_sum(a, axis, dtype, out, keepdims, initial, where)
-/opt/hostedtoolcache/Python/3.10.14/x64/lib/python3.10/site-packages/GOSTurban/UrbanRaster.py:404: UserWarning: Geometry is in a geographic CRS. Results from &#39;buffer&#39; are likely incorrect. Use &#39;GeoSeries.to_crs()&#39; to re-project geometries to a projected CRS before this operation.
-
-  xxGeom[&quot;geometry&quot;] = xxGeom.buffer((popRaster.res[0] / 2))
-</pre></div>
-</div>
-<div class="output text_html"><div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>geometry</th>
-      <th>ID</th>
-      <th>Pop</th>
-      <th>Type</th>
-    </tr>
-    <tr>
-      <th>group</th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>POLYGON ((-79.47625 44.07875, -79.43458 44.078...</td>
-      <td>1920</td>
-      <td>8.631687e+04</td>
-      <td>2</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>POLYGON ((-78.87625 43.95375, -78.83458 43.953...</td>
-      <td>1921</td>
-      <td>2.058095e+05</td>
-      <td>2</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>POLYGON ((-79.04292 43.90375, -79.00958 43.903...</td>
-      <td>1922</td>
-      <td>1.838872e+05</td>
-      <td>2</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>POLYGON ((-79.45958 43.93708, -79.45125 43.937...</td>
-      <td>1924</td>
-      <td>4.903070e+06</td>
-      <td>2</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>POLYGON ((-79.87625 43.54542, -79.85958 43.545...</td>
-      <td>1925</td>
-      <td>8.413600e+04</td>
-      <td>2</td>
-    </tr>
-  </tbody>
-</table>
-</div></div></div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">mapMisc</span><span class="o">.</span><span class="n">static_map_vector</span><span class="p">(</span><span class="n">hd_urban_extents</span><span class="p">,</span> <span class="s2">&quot;Type&quot;</span><span class="p">,</span> <span class="n">colormap</span><span class="o">=</span><span class="s2">&quot;Blues&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">7</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">mapMisc</span><span class="o">.</span><span class="n">static_map_vector</span><span class="p">(</span><span class="n">hd_urban_extents</span><span class="p">,</span> <span class="s2">&quot;Type&quot;</span><span class="p">,</span> <span class="n">colormap</span><span class="o">=</span><span class="s2">&quot;Blues&quot;</span><span class="p">)</span>
-
-<span class="ne">NameError</span>: name &#39;mapMisc&#39; is not defined
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">mapMisc</span><span class="o">.</span><span class="n">static_map_vector</span><span class="p">(</span><span class="n">hd_urban_extents</span><span class="p">,</span> <span class="s2">&quot;Type&quot;</span><span class="p">,</span> <span class="n">colormap</span><span class="o">=</span><span class="s2">&quot;Blues&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -709,26 +487,15 @@ document.write(`
 <h2>Map combined extents and write output<a class="headerlink" href="#map-combined-extents-and-write-output" title="Permalink to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">combo_extents</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">urban_extents</span><span class="p">,</span> <span class="n">hd_urban_extents</span><span class="p">])</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">combo_extents</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">urban_extents</span><span class="p">,</span> <span class="n">hd_urban_extents</span><span class="p">])</span>
 <span class="n">mapMisc</span><span class="o">.</span><span class="n">static_map_vector</span><span class="p">(</span><span class="n">combo_extents</span><span class="p">,</span> <span class="s2">&quot;Type&quot;</span><span class="p">,</span> <span class="n">colormap</span><span class="o">=</span><span class="s2">&quot;magma&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">8</span><span class="p">],</span> <span class="n">line</span> <span class="mi">2</span>
-<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="n">combo_extents</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">urban_extents</span><span class="p">,</span> <span class="n">hd_urban_extents</span><span class="p">])</span>
-<span class="ne">----&gt; </span><span class="mi">2</span> <span class="n">mapMisc</span><span class="o">.</span><span class="n">static_map_vector</span><span class="p">(</span><span class="n">combo_extents</span><span class="p">,</span> <span class="s2">&quot;Type&quot;</span><span class="p">,</span> <span class="n">colormap</span><span class="o">=</span><span class="s2">&quot;magma&quot;</span><span class="p">)</span>
-
-<span class="ne">NameError</span>: name &#39;mapMisc&#39; is not defined
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">urban_extents</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="n">out_urban</span><span class="p">,</span> <span class="n">driver</span><span class="o">=</span><span class="s2">&quot;GeoJSON&quot;</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">urban_extents</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="n">out_urban</span><span class="p">,</span> <span class="n">driver</span><span class="o">=</span><span class="s2">&quot;GeoJSON&quot;</span><span class="p">)</span>
 <span class="n">hd_urban_extents</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="n">out_hd_urban</span><span class="p">,</span> <span class="n">driver</span><span class="o">=</span><span class="s2">&quot;GeoJSON&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -768,12 +535,12 @@ document.write(`
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="../../urbanization_comparison.html"
+       href="../Implementations/MENA_Benchmarking/Map_Extents.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Comparing urban methods</p>
+        <p class="prev-next-title">Mapping and comparing urban extents</p>
       </div>
     </a>
     <a class="right-next"

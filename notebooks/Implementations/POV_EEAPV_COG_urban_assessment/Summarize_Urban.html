@@ -181,14 +181,9 @@
                 </a>
             </li>
         </ul>
-        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Novel Urbanization</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../../../api/GOSTurban.html">GOSTurban package</a></li>
-</ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Novel Urbanization</span></p>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../../../novel_context.html">Novel Urbanization</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../urbanization_comparison.html">Comparing urban methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../MENA_Benchmarking/Map_Extents.html">Mapping and comparing urban extents</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
 <ul class="nav bd-sidenav">
@@ -364,44 +359,30 @@ document.write(`
                   
   <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">rasterio</span>
-<span class="kn">import</span> <span class="nn">rasterio.warp</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">rasterio</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">rasterio.warp</span>
 
 
 <span class="c1"># Import raster helpers</span>
 <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;/home/wb411133/Code/gostrocks/src&quot;</span><span class="p">)</span>
 
-<span class="kn">import</span> <span class="nn">GOSTRocks.dataMisc</span> <span class="k">as</span> <span class="nn">dataMisc</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">GOSTRocks.dataMisc</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">dataMisc</span>
 
 <span class="c1"># Import GOST urban functions</span>
 <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;../../../src&quot;</span><span class="p">)</span>
-<span class="kn">import</span> <span class="nn">GOST_Urban.urban_helper</span> <span class="k">as</span> <span class="nn">helper</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">GOST_Urban.urban_helper</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">helper</span>
 
-<span class="o">%</span><span class="k">load_ext</span> autoreload
-<span class="o">%</span><span class="k">autoreload</span> 2
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">line</span> <span class="mi">10</span>
-<span class="g g-Whitespace">      </span><span class="mi">7</span> <span class="c1"># Import raster helpers</span>
-<span class="g g-Whitespace">      </span><span class="mi">8</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;/home/wb411133/Code/gostrocks/src&quot;</span><span class="p">)</span>
-<span class="ne">---&gt; </span><span class="mi">10</span> <span class="kn">import</span> <span class="nn">GOSTRocks.dataMisc</span> <span class="k">as</span> <span class="nn">dataMisc</span>
-<span class="g g-Whitespace">     </span><span class="mi">12</span> <span class="c1"># Import GOST urban functions</span>
-<span class="g g-Whitespace">     </span><span class="mi">13</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;../../../src&quot;</span><span class="p">)</span>
-
-<span class="ne">ModuleNotFoundError</span>: No module named &#39;GOSTRocks&#39;
+<span class="o">%</span><span class="n">load_ext</span> <span class="n">autoreload</span>
+<span class="o">%</span><span class="n">autoreload</span> <span class="mi">2</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pop_urban_folder</span> <span class="o">=</span> <span class="p">(</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pop_urban_folder</span> <span class="o">=</span> <span class="p">(</span>
     <span class="s2">&quot;/home/wb411133/data/Projects/MR_Novel_Urbanization/Data/COG_URBAN_DATA_new_naming&quot;</span>
 <span class="p">)</span>
 <span class="n">in_bounds</span> <span class="o">=</span> <span class="n">dataMisc</span><span class="o">.</span><span class="n">get_geoboundaries</span><span class="p">(</span><span class="s2">&quot;COG&quot;</span><span class="p">,</span> <span class="s2">&quot;ADM1&quot;</span><span class="p">)</span>
@@ -410,26 +391,12 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">line</span> <span class="mi">4</span>
-<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="n">pop_urban_folder</span> <span class="o">=</span> <span class="p">(</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span>     <span class="s2">&quot;/home/wb411133/data/Projects/MR_Novel_Urbanization/Data/COG_URBAN_DATA_new_naming&quot;</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="p">)</span>
-<span class="ne">----&gt; </span><span class="mi">4</span> <span class="n">in_bounds</span> <span class="o">=</span> <span class="n">dataMisc</span><span class="o">.</span><span class="n">get_geoboundaries</span><span class="p">(</span><span class="s2">&quot;COG&quot;</span><span class="p">,</span> <span class="s2">&quot;ADM1&quot;</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">6</span> <span class="n">out_folder</span> <span class="o">=</span> <span class="s2">&quot;/home/wb411133/temp&quot;</span>
-
-<span class="ne">NameError</span>: name &#39;dataMisc&#39; is not defined
-</pre></div>
-</div>
-</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># summarize worldpop urbanization and population</span>
-<span class="k">class</span> <span class="nc">urban_summary</span><span class="p">:</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f_base</span><span class="p">,</span> <span class="n">in_folder</span><span class="p">):</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># summarize worldpop urbanization and population</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">urban_summary</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f_base</span><span class="p">,</span> <span class="n">in_folder</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">f_base</span> <span class="o">=</span> <span class="n">f_base</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">in_folder</span> <span class="o">=</span> <span class="n">in_folder</span>
 
@@ -437,7 +404,7 @@ document.write(`
         <span class="bp">self</span><span class="o">.</span><span class="n">hd_layer</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">in_folder</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">f_base</span><span class="si">}</span><span class="s2">_urban_hd.tif&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">urb_layer</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">in_folder</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">f_base</span><span class="si">}</span><span class="s2">_urban.tif&quot;</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">compare_populations</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">boundaries</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">compare_populations</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">boundaries</span><span class="p">):</span>
         <span class="n">calculator</span> <span class="o">=</span> <span class="n">helper</span><span class="o">.</span><span class="n">summarize_population</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">pop_layer</span><span class="p">,</span> <span class="n">boundaries</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">urb_layer</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">hd_layer</span>
         <span class="p">)</span>
@@ -449,7 +416,7 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">source_folder</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">pop_urban_folder</span><span class="p">,</span> <span class="s2">&quot;FINAL_STANDARD&quot;</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">source_folder</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">pop_urban_folder</span><span class="p">,</span> <span class="s2">&quot;FINAL_STANDARD&quot;</span><span class="p">)</span>
 <span class="n">comp1_base</span> <span class="o">=</span> <span class="s2">&quot;cog_cpo20&quot;</span>
 <span class="n">comp2_base</span> <span class="o">=</span> <span class="s2">&quot;cog_cpo20_WB&quot;</span>
 
@@ -466,41 +433,17 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="n">line</span> <span class="mi">6</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="n">comp2_base</span> <span class="o">=</span> <span class="s2">&quot;cog_cpo20_WB&quot;</span>
-<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="n">calculator</span> <span class="o">=</span> <span class="n">urban_summary</span><span class="p">(</span><span class="n">comp1_base</span><span class="p">,</span> <span class="n">source_folder</span><span class="p">)</span>
-<span class="ne">----&gt; </span><span class="mi">6</span> <span class="n">cpo20_pop_res</span> <span class="o">=</span> <span class="n">calculator</span><span class="o">.</span><span class="n">compare_populations</span><span class="p">(</span><span class="n">in_bounds</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">8</span> <span class="n">calculator</span> <span class="o">=</span> <span class="n">urban_summary</span><span class="p">(</span><span class="n">comp2_base</span><span class="p">,</span> <span class="n">source_folder</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">9</span> <span class="n">cpo20WB_pop_res</span> <span class="o">=</span> <span class="n">calculator</span><span class="o">.</span><span class="n">compare_populations</span><span class="p">(</span><span class="n">in_bounds</span><span class="p">)</span>
-
-<span class="ne">NameError</span>: name &#39;in_bounds&#39; is not defined
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">cpo20WB_pop_res</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cpo20WB_pop_res</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">cpo20WB_pop_res</span>
-
-<span class="ne">NameError</span>: name &#39;cpo20WB_pop_res&#39; is not defined
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">source_folder</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">pop_urban_folder</span><span class="p">,</span> <span class="s2">&quot;FINAL_STANDARD_1KM&quot;</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">source_folder</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">pop_urban_folder</span><span class="p">,</span> <span class="s2">&quot;FINAL_STANDARD_1KM&quot;</span><span class="p">)</span>
 <span class="n">comp1_base</span> <span class="o">=</span> <span class="s2">&quot;cog1k_cpo20&quot;</span>
 <span class="n">comp2_base</span> <span class="o">=</span> <span class="s2">&quot;cog1k_cpo20_WB&quot;</span>
 
@@ -517,26 +460,12 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span> <span class="n">line</span> <span class="mi">6</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="n">comp2_base</span> <span class="o">=</span> <span class="s2">&quot;cog1k_cpo20_WB&quot;</span>
-<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="n">calculator</span> <span class="o">=</span> <span class="n">urban_summary</span><span class="p">(</span><span class="n">comp1_base</span><span class="p">,</span> <span class="n">source_folder</span><span class="p">)</span>
-<span class="ne">----&gt; </span><span class="mi">6</span> <span class="n">cpo20_pop_res</span> <span class="o">=</span> <span class="n">calculator</span><span class="o">.</span><span class="n">compare_populations</span><span class="p">(</span><span class="n">in_bounds</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">8</span> <span class="n">calculator</span> <span class="o">=</span> <span class="n">urban_summary</span><span class="p">(</span><span class="n">comp2_base</span><span class="p">,</span> <span class="n">source_folder</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">9</span> <span class="n">cpo20WB_pop_res</span> <span class="o">=</span> <span class="n">calculator</span><span class="o">.</span><span class="n">compare_populations</span><span class="p">(</span><span class="n">in_bounds</span><span class="p">)</span>
-
-<span class="ne">NameError</span>: name &#39;in_bounds&#39; is not defined
-</pre></div>
-</div>
-</div>
 </div>
 <section class="tex2jax_ignore mathjax_ignore" id="reasonable-ness-test">
 <h1>Reasonable-ness test<a class="headerlink" href="#reasonable-ness-test" title="Permalink to this heading">#</a></h1>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">source_folder</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">pop_urban_folder</span><span class="p">,</span> <span class="s2">&quot;FINAL_STANDARD&quot;</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">source_folder</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">pop_urban_folder</span><span class="p">,</span> <span class="s2">&quot;FINAL_STANDARD&quot;</span><span class="p">)</span>
 <span class="n">comp1_base</span> <span class="o">=</span> <span class="s2">&quot;cog_cpo20&quot;</span>
 <span class="n">comp2_base</span> <span class="o">=</span> <span class="s2">&quot;cog_cpo20_WB&quot;</span>
 
@@ -545,77 +474,17 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">CPLE_OpenFailedError</span><span class="g g-Whitespace">                      </span>Traceback (most recent call last)
-<span class="nn">File rasterio/_base.pyx:310,</span> in <span class="ni">rasterio._base.DatasetBase.__init__</span><span class="nt">()</span>
-
-<span class="nn">File rasterio/_base.pyx:221,</span> in <span class="ni">rasterio._base.open_dataset</span><span class="nt">()</span>
-
-<span class="nn">File rasterio/_err.pyx:221,</span> in <span class="ni">rasterio._err.exc_wrap_pointer</span><span class="nt">()</span>
-
-<span class="ne">CPLE_OpenFailedError</span>: /home/wb411133/data/Projects/MR_Novel_Urbanization/Data/COG_URBAN_DATA_new_naming/FINAL_STANDARD/cog_cpo20.tif: No such file or directory
-
-<span class="n">During</span> <span class="n">handling</span> <span class="n">of</span> <span class="n">the</span> <span class="n">above</span> <span class="n">exception</span><span class="p">,</span> <span class="n">another</span> <span class="n">exception</span> <span class="n">occurred</span><span class="p">:</span>
-
-<span class="ne">RasterioIOError</span><span class="g g-Whitespace">                           </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">7</span><span class="p">],</span> <span class="n">line</span> <span class="mi">5</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="n">comp1_base</span> <span class="o">=</span> <span class="s2">&quot;cog_cpo20&quot;</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="n">comp2_base</span> <span class="o">=</span> <span class="s2">&quot;cog_cpo20_WB&quot;</span>
-<span class="ne">----&gt; </span><span class="mi">5</span> <span class="n">com1_pop</span> <span class="o">=</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">source_folder</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">comp1_base</span><span class="si">}</span><span class="s2">.tif&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
-<span class="g g-Whitespace">      </span><span class="mi">6</span> <span class="n">com2_pop</span> <span class="o">=</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">source_folder</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">comp2_base</span><span class="si">}</span><span class="s2">.tif&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
-
-<span class="nn">File /opt/hostedtoolcache/Python/3.10.14/x64/lib/python3.10/site-packages/rasterio/env.py:451,</span> in <span class="ni">ensure_env_with_credentials.&lt;locals&gt;.wrapper</span><span class="nt">(*args, **kwds)</span>
-<span class="g g-Whitespace">    </span><span class="mi">448</span>     <span class="n">session</span> <span class="o">=</span> <span class="n">DummySession</span><span class="p">()</span>
-<span class="g g-Whitespace">    </span><span class="mi">450</span> <span class="k">with</span> <span class="n">env_ctor</span><span class="p">(</span><span class="n">session</span><span class="o">=</span><span class="n">session</span><span class="p">):</span>
-<span class="ne">--&gt; </span><span class="mi">451</span>     <span class="k">return</span> <span class="n">f</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">)</span>
-
-<span class="nn">File /opt/hostedtoolcache/Python/3.10.14/x64/lib/python3.10/site-packages/rasterio/__init__.py:304,</span> in <span class="ni">open</span><span class="nt">(fp, mode, driver, width, height, count, crs, transform, dtype, nodata, sharing, **kwargs)</span>
-<span class="g g-Whitespace">    </span><span class="mi">301</span> <span class="n">path</span> <span class="o">=</span> <span class="n">_parse_path</span><span class="p">(</span><span class="n">raw_dataset_path</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">303</span> <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;r&quot;</span><span class="p">:</span>
-<span class="ne">--&gt; </span><span class="mi">304</span>     <span class="n">dataset</span> <span class="o">=</span> <span class="n">DatasetReader</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">driver</span><span class="o">=</span><span class="n">driver</span><span class="p">,</span> <span class="n">sharing</span><span class="o">=</span><span class="n">sharing</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">305</span> <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;r+&quot;</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">306</span>     <span class="n">dataset</span> <span class="o">=</span> <span class="n">get_writer_for_path</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">driver</span><span class="o">=</span><span class="n">driver</span><span class="p">)(</span>
-<span class="g g-Whitespace">    </span><span class="mi">307</span>         <span class="n">path</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">driver</span><span class="o">=</span><span class="n">driver</span><span class="p">,</span> <span class="n">sharing</span><span class="o">=</span><span class="n">sharing</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
-<span class="g g-Whitespace">    </span><span class="mi">308</span>     <span class="p">)</span>
-
-<span class="nn">File rasterio/_base.pyx:312,</span> in <span class="ni">rasterio._base.DatasetBase.__init__</span><span class="nt">()</span>
-
-<span class="ne">RasterioIOError</span>: /home/wb411133/data/Projects/MR_Novel_Urbanization/Data/COG_URBAN_DATA_new_naming/FINAL_STANDARD/cog_cpo20.tif: No such file or directory
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">com1_pop</span><span class="p">[</span><span class="n">com1_pop</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">com1_pop</span><span class="p">[</span><span class="n">com1_pop</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">8</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">com1_pop</span><span class="p">[</span><span class="n">com1_pop</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
-
-<span class="ne">NameError</span>: name &#39;com1_pop&#39; is not defined
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">com2_pop</span><span class="p">[</span><span class="n">com1_pop</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">9</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">com2_pop</span><span class="p">[</span><span class="n">com1_pop</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
-
-<span class="ne">NameError</span>: name &#39;com2_pop&#39; is not defined
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">com2_pop</span><span class="p">[</span><span class="n">com1_pop</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>

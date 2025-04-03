@@ -181,14 +181,9 @@
                 </a>
             </li>
         </ul>
-        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Novel Urbanization</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../../../api/GOSTurban.html">GOSTurban package</a></li>
-</ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Novel Urbanization</span></p>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../../../novel_context.html">Novel Urbanization</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../urbanization_comparison.html">Comparing urban methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../MENA_Benchmarking/Map_Extents.html">Mapping and comparing urban extents</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
 <ul class="nav bd-sidenav">
@@ -375,20 +370,20 @@ a. Which population source</p></li>
 </ol>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">rasterio</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">rasterio</span>
 
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">geopandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">gpd</span>
 
-<span class="kn">import</span> <span class="nn">GOSTurban.UrbanRaster</span> <span class="k">as</span> <span class="nn">urban</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">GOSTurban.UrbanRaster</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">urban</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">base_folder</span> <span class="o">=</span> <span class="s2">&quot;C:/WBG/Work/LKA_URB_CCDR/Data&quot;</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">base_folder</span> <span class="o">=</span> <span class="s2">&quot;C:/WBG/Work/LKA_URB_CCDR/Data&quot;</span>
 <span class="n">urban_folder</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">base_folder</span><span class="p">,</span> <span class="s2">&quot;Urban_extents&quot;</span><span class="p">)</span>
 <span class="n">population_folder</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">base_folder</span><span class="p">,</span> <span class="s2">&quot;Population&quot;</span><span class="p">)</span>
 
@@ -400,7 +395,7 @@ a. Which population source</p></li>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Combine all the urban extents into a single file</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Combine all the urban extents into a single file</span>
 <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">combo_extents</span><span class="p">):</span>
     <span class="n">urban_extents</span> <span class="o">=</span> <span class="p">[</span>
         <span class="n">x</span>
@@ -427,28 +422,10 @@ a. Which population source</p></li>
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">FileNotFoundError</span><span class="g g-Whitespace">                         </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">line</span> <span class="mi">5</span>
-<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="c1"># Combine all the urban extents into a single file</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">combo_extents</span><span class="p">):</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span>     <span class="n">urban_extents</span> <span class="o">=</span> <span class="p">[</span>
-<span class="g g-Whitespace">      </span><span class="mi">4</span>         <span class="n">x</span>
-<span class="nn">----&gt; 5         for x</span> in <span class="ni">os.listdir(os.path.join</span><span class="nt">(urban_folder, &quot;Final_AoI&quot;))</span>
-<span class="g g-Whitespace">      </span><span class="mi">6</span>         <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.shp&quot;</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">7</span>     <span class="p">]</span>
-<span class="g g-Whitespace">      </span><span class="mi">8</span>     <span class="n">all_extents</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="g g-Whitespace">      </span><span class="mi">9</span>     <span class="k">for</span> <span class="n">urban_extent</span> <span class="ow">in</span> <span class="n">urban_extents</span><span class="p">:</span>
-
-<span class="ne">FileNotFoundError</span>: [Errno 2] No such file or directory: &#39;C:/WBG/Work/LKA_URB_CCDR/Data/Urban_extents/Final_AoI&#39;
-</pre></div>
-</div>
-</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># extract urban extents from population grids</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># extract urban extents from population grids</span>
 <span class="k">for</span> <span class="n">pop_layer</span><span class="p">,</span> <span class="n">name</span> <span class="ow">in</span> <span class="p">[[</span><span class="n">worldpop_file</span><span class="p">,</span> <span class="s2">&quot;WorldPop&quot;</span><span class="p">]]:</span>
     <span class="n">urb_out_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">urban_folder</span><span class="p">,</span> <span class="s2">&quot;DOU_urb_extent_</span><span class="si">%s</span><span class="s2">.shp&quot;</span> <span class="o">%</span> <span class="n">name</span><span class="p">)</span>
     <span class="n">hd_out_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">urban_folder</span><span class="p">,</span> <span class="s2">&quot;DOU_hd_extent_</span><span class="si">%s</span><span class="s2">.shp&quot;</span> <span class="o">%</span> <span class="n">name</span><span class="p">)</span>
@@ -473,63 +450,10 @@ a. Which population source</p></li>
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">CPLE_OpenFailedError</span><span class="g g-Whitespace">                      </span>Traceback (most recent call last)
-<span class="nn">File rasterio/_base.pyx:310,</span> in <span class="ni">rasterio._base.DatasetBase.__init__</span><span class="nt">()</span>
-
-<span class="nn">File rasterio/_base.pyx:221,</span> in <span class="ni">rasterio._base.open_dataset</span><span class="nt">()</span>
-
-<span class="nn">File rasterio/_err.pyx:221,</span> in <span class="ni">rasterio._err.exc_wrap_pointer</span><span class="nt">()</span>
-
-<span class="ne">CPLE_OpenFailedError</span>: C:/WBG/Work/LKA_URB_CCDR/Data/Population/lka_ppp_2020_UNadj.tif: No such file or directory
-
-<span class="n">During</span> <span class="n">handling</span> <span class="n">of</span> <span class="n">the</span> <span class="n">above</span> <span class="n">exception</span><span class="p">,</span> <span class="n">another</span> <span class="n">exception</span> <span class="n">occurred</span><span class="p">:</span>
-
-<span class="ne">RasterioIOError</span><span class="g g-Whitespace">                           </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="n">line</span> <span class="mi">6</span>
-<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="n">hd_out_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">urban_folder</span><span class="p">,</span> <span class="s2">&quot;DOU_hd_extent_</span><span class="si">%s</span><span class="s2">.shp&quot;</span> <span class="o">%</span> <span class="n">name</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">hd_out_file</span><span class="p">):</span>
-<span class="ne">----&gt; </span><span class="mi">6</span>     <span class="n">curPop</span> <span class="o">=</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">pop_layer</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">7</span>     <span class="n">urban_calculator</span> <span class="o">=</span> <span class="n">urban</span><span class="o">.</span><span class="n">urbanGriddedPop</span><span class="p">(</span><span class="n">curPop</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">8</span>     <span class="n">urban_extents</span> <span class="o">=</span> <span class="n">urban_calculator</span><span class="o">.</span><span class="n">calculateUrban</span><span class="p">(</span>
-<span class="g g-Whitespace">      </span><span class="mi">9</span>         <span class="n">densVal</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">totalPopThresh</span><span class="o">=</span><span class="mi">5000</span><span class="p">,</span> <span class="n">smooth</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">queen</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span>
-<span class="g g-Whitespace">     </span><span class="mi">10</span>     <span class="p">)</span>
-
-<span class="nn">File /opt/hostedtoolcache/Python/3.10.14/x64/lib/python3.10/site-packages/rasterio/env.py:451,</span> in <span class="ni">ensure_env_with_credentials.&lt;locals&gt;.wrapper</span><span class="nt">(*args, **kwds)</span>
-<span class="g g-Whitespace">    </span><span class="mi">448</span>     <span class="n">session</span> <span class="o">=</span> <span class="n">DummySession</span><span class="p">()</span>
-<span class="g g-Whitespace">    </span><span class="mi">450</span> <span class="k">with</span> <span class="n">env_ctor</span><span class="p">(</span><span class="n">session</span><span class="o">=</span><span class="n">session</span><span class="p">):</span>
-<span class="ne">--&gt; </span><span class="mi">451</span>     <span class="k">return</span> <span class="n">f</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">)</span>
-
-<span class="nn">File /opt/hostedtoolcache/Python/3.10.14/x64/lib/python3.10/site-packages/rasterio/__init__.py:304,</span> in <span class="ni">open</span><span class="nt">(fp, mode, driver, width, height, count, crs, transform, dtype, nodata, sharing, **kwargs)</span>
-<span class="g g-Whitespace">    </span><span class="mi">301</span> <span class="n">path</span> <span class="o">=</span> <span class="n">_parse_path</span><span class="p">(</span><span class="n">raw_dataset_path</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">303</span> <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;r&quot;</span><span class="p">:</span>
-<span class="ne">--&gt; </span><span class="mi">304</span>     <span class="n">dataset</span> <span class="o">=</span> <span class="n">DatasetReader</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">driver</span><span class="o">=</span><span class="n">driver</span><span class="p">,</span> <span class="n">sharing</span><span class="o">=</span><span class="n">sharing</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">305</span> <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;r+&quot;</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">306</span>     <span class="n">dataset</span> <span class="o">=</span> <span class="n">get_writer_for_path</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">driver</span><span class="o">=</span><span class="n">driver</span><span class="p">)(</span>
-<span class="g g-Whitespace">    </span><span class="mi">307</span>         <span class="n">path</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">driver</span><span class="o">=</span><span class="n">driver</span><span class="p">,</span> <span class="n">sharing</span><span class="o">=</span><span class="n">sharing</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
-<span class="g g-Whitespace">    </span><span class="mi">308</span>     <span class="p">)</span>
-
-<span class="nn">File rasterio/_base.pyx:312,</span> in <span class="ni">rasterio._base.DatasetBase.__init__</span><span class="nt">()</span>
-
-<span class="ne">RasterioIOError</span>: C:/WBG/Work/LKA_URB_CCDR/Data/Population/lka_ppp_2020_UNadj.tif: No such file or directory
-</pre></div>
-</div>
-</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">dir</span><span class="p">(</span><span class="n">GOSTurban</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="nb">dir</span><span class="p">(</span><span class="n">GOSTurban</span><span class="p">)</span>
-
-<span class="ne">NameError</span>: name &#39;GOSTurban&#39; is not defined
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">dir</span><span class="p">(</span><span class="n">GOSTurban</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>

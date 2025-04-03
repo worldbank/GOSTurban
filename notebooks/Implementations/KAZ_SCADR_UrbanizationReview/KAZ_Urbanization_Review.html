@@ -181,14 +181,9 @@
                 </a>
             </li>
         </ul>
-        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Novel Urbanization</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../../../api/GOSTurban.html">GOSTurban package</a></li>
-</ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Novel Urbanization</span></p>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../../../novel_context.html">Novel Urbanization</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../urbanization_comparison.html">Comparing urban methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../MENA_Benchmarking/Map_Extents.html">Mapping and comparing urban extents</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
 <ul class="nav bd-sidenav">
@@ -397,39 +392,39 @@ document.write(`
 </ol>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">importlib</span>
-<span class="kn">import</span> <span class="nn">json</span>
-<span class="kn">import</span> <span class="nn">boto3</span>
-<span class="kn">import</span> <span class="nn">rasterio</span>
-<span class="kn">import</span> <span class="nn">folium</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">importlib</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">boto3</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">rasterio</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">folium</span>
 
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">skimage.graph</span> <span class="k">as</span> <span class="nn">graph</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">geopandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">gpd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">skimage.graph</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">graph</span>
 
-<span class="kn">from</span> <span class="nn">botocore.config</span> <span class="kn">import</span> <span class="n">Config</span>
-<span class="kn">from</span> <span class="nn">botocore</span> <span class="kn">import</span> <span class="n">UNSIGNED</span>
-<span class="kn">from</span> <span class="nn">shapely.geometry</span> <span class="kn">import</span> <span class="n">Point</span><span class="p">,</span> <span class="n">mapping</span>
-<span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">ndimage</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">botocore.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">Config</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">botocore</span><span class="w"> </span><span class="kn">import</span> <span class="n">UNSIGNED</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">shapely.geometry</span><span class="w"> </span><span class="kn">import</span> <span class="n">Point</span><span class="p">,</span> <span class="n">mapping</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy</span><span class="w"> </span><span class="kn">import</span> <span class="n">ndimage</span>
 
 <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;/home/wb411133/Code/GOSTNets_Raster/src&quot;</span><span class="p">)</span>
-<span class="kn">import</span> <span class="nn">GOSTNetsRaster.market_access</span> <span class="k">as</span> <span class="nn">ma</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">GOSTNetsRaster.market_access</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ma</span>
 <span class="c1"># import GOSTNetsRaster.conversion_tables as speed_tables</span>
 
 <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;/home/wb411133/Code/gostrocks/src&quot;</span><span class="p">)</span>
-<span class="kn">import</span> <span class="nn">GOSTRocks.rasterMisc</span> <span class="k">as</span> <span class="nn">rMisc</span>
-<span class="kn">import</span> <span class="nn">GOSTRocks.ntlMisc</span> <span class="k">as</span> <span class="nn">ntl</span>
-<span class="kn">from</span> <span class="nn">GOSTRocks.misc</span> <span class="kn">import</span> <span class="n">tPrint</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">GOSTRocks.rasterMisc</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">rMisc</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">GOSTRocks.ntlMisc</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ntl</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">GOSTRocks.misc</span><span class="w"> </span><span class="kn">import</span> <span class="n">tPrint</span>
 
 <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;../../../src&quot;</span><span class="p">)</span>
-<span class="kn">import</span> <span class="nn">GOST_Urban.UrbanRaster</span> <span class="k">as</span> <span class="nn">urban</span>
-<span class="kn">import</span> <span class="nn">GOST_Urban.urban_helper</span> <span class="k">as</span> <span class="nn">clippy</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">GOST_Urban.UrbanRaster</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">urban</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">GOST_Urban.urban_helper</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">clippy</span>
 
-<span class="o">%</span><span class="k">load_ext</span> autoreload
-<span class="o">%</span><span class="k">autoreload</span> 2
+<span class="o">%</span><span class="n">load_ext</span> <span class="n">autoreload</span>
+<span class="o">%</span><span class="n">autoreload</span> <span class="mi">2</span>
 
 <span class="c1"># read in local important parameters</span>
 <span class="n">local_json</span> <span class="o">=</span> <span class="s2">&quot;/home/wb411133/Code/urbanParameters.json&quot;</span>
@@ -440,24 +435,10 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">line</span> <span class="mi">5</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="kn">import</span> <span class="nn">importlib</span>
-<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="kn">import</span> <span class="nn">json</span>
-<span class="ne">----&gt; </span><span class="mi">5</span> <span class="kn">import</span> <span class="nn">boto3</span>
-<span class="g g-Whitespace">      </span><span class="mi">6</span> <span class="kn">import</span> <span class="nn">rasterio</span>
-<span class="g g-Whitespace">      </span><span class="mi">7</span> <span class="kn">import</span> <span class="nn">folium</span>
-
-<span class="ne">ModuleNotFoundError</span>: No module named &#39;boto3&#39;
-</pre></div>
-</div>
-</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define input data</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define input data</span>
 <span class="n">iso3</span> <span class="o">=</span> <span class="s2">&quot;KAZ&quot;</span>
 <span class="n">global_population_file</span> <span class="o">=</span> <span class="p">(</span>
     <span class="s2">&quot;/home/public/Data/GLOBAL/Population/WorldPop_PPP_2020/ppp_2020_1km_Aggregated.tif&quot;</span>
@@ -525,59 +506,10 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">PermissionError</span><span class="g g-Whitespace">                           </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">line</span> <span class="mi">19</span>
-<span class="g g-Whitespace">     </span><span class="mi">16</span> <span class="n">ma_folder</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_data</span><span class="p">,</span> <span class="s2">&quot;MARKET_ACCESS&quot;</span><span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">18</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">ma_folder</span><span class="p">):</span>
-<span class="ne">---&gt; </span><span class="mi">19</span>     <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">ma_folder</span><span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">21</span> <span class="c1"># Define output files</span>
-<span class="g g-Whitespace">     </span><span class="mi">22</span> <span class="n">local_population</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_data</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">iso3</span><span class="si">}</span><span class="s2">_ppp_2020_1km_aggregated.tif&quot;</span><span class="p">)</span>
-
-<span class="nn">File /opt/hostedtoolcache/Python/3.10.14/x64/lib/python3.10/os.py:215,</span> in <span class="ni">makedirs</span><span class="nt">(name, mode, exist_ok)</span>
-<span class="g g-Whitespace">    </span><span class="mi">213</span> <span class="k">if</span> <span class="n">head</span> <span class="ow">and</span> <span class="n">tail</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">head</span><span class="p">):</span>
-<span class="g g-Whitespace">    </span><span class="mi">214</span>     <span class="k">try</span><span class="p">:</span>
-<span class="ne">--&gt; </span><span class="mi">215</span>         <span class="n">makedirs</span><span class="p">(</span><span class="n">head</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="n">exist_ok</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">216</span>     <span class="k">except</span> <span class="ne">FileExistsError</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">217</span>         <span class="c1"># Defeats race condition when another thread created the path</span>
-<span class="g g-Whitespace">    </span><span class="mi">218</span>         <span class="k">pass</span>
-
-<span class="nn">File /opt/hostedtoolcache/Python/3.10.14/x64/lib/python3.10/os.py:215,</span> in <span class="ni">makedirs</span><span class="nt">(name, mode, exist_ok)</span>
-<span class="g g-Whitespace">    </span><span class="mi">213</span> <span class="k">if</span> <span class="n">head</span> <span class="ow">and</span> <span class="n">tail</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">head</span><span class="p">):</span>
-<span class="g g-Whitespace">    </span><span class="mi">214</span>     <span class="k">try</span><span class="p">:</span>
-<span class="ne">--&gt; </span><span class="mi">215</span>         <span class="n">makedirs</span><span class="p">(</span><span class="n">head</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="n">exist_ok</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">216</span>     <span class="k">except</span> <span class="ne">FileExistsError</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">217</span>         <span class="c1"># Defeats race condition when another thread created the path</span>
-<span class="g g-Whitespace">    </span><span class="mi">218</span>         <span class="k">pass</span>
-
-    <span class="p">[</span><span class="o">...</span> <span class="n">skipping</span> <span class="n">similar</span> <span class="n">frames</span><span class="p">:</span> <span class="n">makedirs</span> <span class="n">at</span> <span class="n">line</span> <span class="mi">215</span> <span class="p">(</span><span class="mi">1</span> <span class="n">times</span><span class="p">)]</span>
-
-<span class="nn">File /opt/hostedtoolcache/Python/3.10.14/x64/lib/python3.10/os.py:215,</span> in <span class="ni">makedirs</span><span class="nt">(name, mode, exist_ok)</span>
-<span class="g g-Whitespace">    </span><span class="mi">213</span> <span class="k">if</span> <span class="n">head</span> <span class="ow">and</span> <span class="n">tail</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">head</span><span class="p">):</span>
-<span class="g g-Whitespace">    </span><span class="mi">214</span>     <span class="k">try</span><span class="p">:</span>
-<span class="ne">--&gt; </span><span class="mi">215</span>         <span class="n">makedirs</span><span class="p">(</span><span class="n">head</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="n">exist_ok</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">216</span>     <span class="k">except</span> <span class="ne">FileExistsError</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">217</span>         <span class="c1"># Defeats race condition when another thread created the path</span>
-<span class="g g-Whitespace">    </span><span class="mi">218</span>         <span class="k">pass</span>
-
-<span class="nn">File /opt/hostedtoolcache/Python/3.10.14/x64/lib/python3.10/os.py:225,</span> in <span class="ni">makedirs</span><span class="nt">(name, mode, exist_ok)</span>
-<span class="g g-Whitespace">    </span><span class="mi">223</span>         <span class="k">return</span>
-<span class="g g-Whitespace">    </span><span class="mi">224</span> <span class="k">try</span><span class="p">:</span>
-<span class="ne">--&gt; </span><span class="mi">225</span>     <span class="n">mkdir</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">mode</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">226</span> <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">227</span>     <span class="c1"># Cannot rely on checking for EEXIST, since the operating system</span>
-<span class="g g-Whitespace">    </span><span class="mi">228</span>     <span class="c1"># could give priority to other errors like EACCES or EROFS</span>
-<span class="g g-Whitespace">    </span><span class="mi">229</span>     <span class="k">if</span> <span class="ow">not</span> <span class="n">exist_ok</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
-
-<span class="ne">PermissionError</span>: [Errno 13] Permission denied: &#39;/home/wb411133&#39;
-</pre></div>
-</div>
-</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">inAdmin</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">admin_bounds</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">inAdmin</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">admin_bounds</span><span class="p">)</span>
 
 <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">local_population</span><span class="p">):</span>
     <span class="n">globalP</span> <span class="o">=</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">global_population_file</span><span class="p">)</span>
@@ -589,18 +521,6 @@ document.write(`
 
 <span class="n">inP</span> <span class="o">=</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">local_population</span><span class="p">)</span>
 <span class="n">inP_ghs</span> <span class="o">=</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">local_ghs_population</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">inAdmin</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">admin_bounds</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">local_population</span><span class="p">):</span>
-<span class="g g-Whitespace">      </span><span class="mi">4</span>     <span class="n">globalP</span> <span class="o">=</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">global_population_file</span><span class="p">)</span>
-
-<span class="ne">NameError</span>: name &#39;gpd&#39; is not defined
 </pre></div>
 </div>
 </div>
@@ -616,7 +536,7 @@ document.write(`
 </ol>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 1. Create urban extents for WorldPop</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># 1. Create urban extents for WorldPop</span>
 <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">urban_extents_file</span><span class="p">):</span>
     <span class="n">urban_calculator</span> <span class="o">=</span> <span class="n">urban</span><span class="o">.</span><span class="n">urbanGriddedPop</span><span class="p">(</span><span class="n">inP</span><span class="p">)</span>
     <span class="n">urban_extents</span> <span class="o">=</span> <span class="n">urban_calculator</span><span class="o">.</span><span class="n">calculateUrban</span><span class="p">(</span>
@@ -646,28 +566,10 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="n">line</span> <span class="mi">2</span>
-<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="c1"># 1. Create urban extents for WorldPop</span>
-<span class="ne">----&gt; </span><span class="mi">2</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">urban_extents_file</span><span class="p">):</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span>     <span class="n">urban_calculator</span> <span class="o">=</span> <span class="n">urban</span><span class="o">.</span><span class="n">urbanGriddedPop</span><span class="p">(</span><span class="n">inP</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">4</span>     <span class="n">urban_extents</span> <span class="o">=</span> <span class="n">urban_calculator</span><span class="o">.</span><span class="n">calculateUrban</span><span class="p">(</span>
-<span class="g g-Whitespace">      </span><span class="mi">5</span>         <span class="n">densVal</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span>
-<span class="g g-Whitespace">      </span><span class="mi">6</span>         <span class="n">totalPopThresh</span><span class="o">=</span><span class="mi">5000</span><span class="p">,</span>
-   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">10</span>         <span class="n">raster</span><span class="o">=</span><span class="n">urban_extents_raster_file</span><span class="p">,</span>
-<span class="g g-Whitespace">     </span><span class="mi">11</span>     <span class="p">)</span>
-
-<span class="ne">NameError</span>: name &#39;urban_extents_file&#39; is not defined
-</pre></div>
-</div>
-</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 1b. Create urban extents for GHS_Pop</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># 1b. Create urban extents for GHS_Pop</span>
 <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">urban_extents_file</span><span class="p">):</span>
     <span class="n">urban_calculator</span> <span class="o">=</span> <span class="n">urban</span><span class="o">.</span><span class="n">urbanGriddedPop</span><span class="p">(</span><span class="n">inP_ghs</span><span class="p">)</span>
     <span class="n">urban_extents</span> <span class="o">=</span> <span class="n">urban_calculator</span><span class="o">.</span><span class="n">calculateUrban</span><span class="p">(</span>
@@ -702,28 +604,10 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span> <span class="n">line</span> <span class="mi">2</span>
-<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="c1"># 1b. Create urban extents for GHS_Pop</span>
-<span class="ne">----&gt; </span><span class="mi">2</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">urban_extents_file</span><span class="p">):</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span>     <span class="n">urban_calculator</span> <span class="o">=</span> <span class="n">urban</span><span class="o">.</span><span class="n">urbanGriddedPop</span><span class="p">(</span><span class="n">inP_ghs</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">4</span>     <span class="n">urban_extents</span> <span class="o">=</span> <span class="n">urban_calculator</span><span class="o">.</span><span class="n">calculateUrban</span><span class="p">(</span>
-<span class="g g-Whitespace">      </span><span class="mi">5</span>         <span class="n">densVal</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span>
-<span class="g g-Whitespace">      </span><span class="mi">6</span>         <span class="n">totalPopThresh</span><span class="o">=</span><span class="mi">5000</span><span class="p">,</span>
-   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">10</span>         <span class="n">raster</span><span class="o">=</span><span class="n">urban_extents_raster_file</span><span class="p">,</span>
-<span class="g g-Whitespace">     </span><span class="mi">11</span>     <span class="p">)</span>
-
-<span class="ne">NameError</span>: name &#39;urban_extents_file&#39; is not defined
-</pre></div>
-</div>
-</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 2. Calculate urban population in admin areas</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># 2. Calculate urban population in admin areas</span>
 <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">urban_admin_summary</span><span class="p">):</span>
     <span class="n">pop_worker</span> <span class="o">=</span> <span class="n">clippy</span><span class="o">.</span><span class="n">summarize_population</span><span class="p">(</span>
         <span class="n">local_ghs_population</span><span class="p">,</span>
@@ -742,28 +626,10 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span> <span class="n">line</span> <span class="mi">2</span>
-<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="c1"># 2. Calculate urban population in admin areas</span>
-<span class="ne">----&gt; </span><span class="mi">2</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">urban_admin_summary</span><span class="p">):</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span>     <span class="n">pop_worker</span> <span class="o">=</span> <span class="n">clippy</span><span class="o">.</span><span class="n">summarize_population</span><span class="p">(</span>
-<span class="g g-Whitespace">      </span><span class="mi">4</span>         <span class="n">local_ghs_population</span><span class="p">,</span>
-<span class="g g-Whitespace">      </span><span class="mi">5</span>         <span class="n">inAdmin</span><span class="p">,</span>
-<span class="g g-Whitespace">      </span><span class="mi">6</span>         <span class="n">urban_extents_raster_file</span><span class="p">,</span>
-<span class="g g-Whitespace">      </span><span class="mi">7</span>         <span class="n">urban_extents_hd_raster_file</span><span class="p">,</span>
-<span class="g g-Whitespace">      </span><span class="mi">8</span>     <span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">9</span>     <span class="n">summarized_urban</span> <span class="o">=</span> <span class="n">pop_worker</span><span class="o">.</span><span class="n">calculate_zonal</span><span class="p">()</span>
-
-<span class="ne">NameError</span>: name &#39;urban_admin_summary&#39; is not defined
-</pre></div>
-</div>
-</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 3. summarize nighttime lights</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># 3. summarize nighttime lights</span>
 <span class="n">ntl_files</span> <span class="o">=</span> <span class="n">ntl</span><span class="o">.</span><span class="n">aws_search_ntl</span><span class="p">()</span>
 
 <span class="n">viirs_folder</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_data</span><span class="p">,</span> <span class="s2">&quot;NTL_ZONAL_RES&quot;</span><span class="p">)</span>
@@ -802,23 +668,10 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">7</span><span class="p">],</span> <span class="n">line</span> <span class="mi">2</span>
-<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="c1"># 3. summarize nighttime lights</span>
-<span class="ne">----&gt; </span><span class="mi">2</span> <span class="n">ntl_files</span> <span class="o">=</span> <span class="n">ntl</span><span class="o">.</span><span class="n">aws_search_ntl</span><span class="p">()</span>
-<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="n">viirs_folder</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_data</span><span class="p">,</span> <span class="s2">&quot;NTL_ZONAL_RES&quot;</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">viirs_folder</span><span class="p">):</span>
-
-<span class="ne">NameError</span>: name &#39;ntl&#39; is not defined
-</pre></div>
-</div>
-</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Compile VIIRS results</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Compile VIIRS results</span>
 <span class="n">urb_files</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">viirs_folder</span><span class="p">)</span> <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;URBAN&quot;</span><span class="p">)]</span>
 <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">urb_files</span><span class="p">:</span>
     <span class="n">tempD</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">viirs_folder</span><span class="p">,</span> <span class="n">x</span><span class="p">),</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
@@ -840,26 +693,13 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">8</span><span class="p">],</span> <span class="n">line</span> <span class="mi">2</span>
-<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="c1"># Compile VIIRS results</span>
-<span class="ne">----&gt; </span><span class="mi">2</span> <span class="n">urb_files</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">viirs_folder</span><span class="p">)</span> <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;URBAN&quot;</span><span class="p">)]</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">urb_files</span><span class="p">:</span>
-<span class="g g-Whitespace">      </span><span class="mi">4</span>     <span class="n">tempD</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">viirs_folder</span><span class="p">,</span> <span class="n">x</span><span class="p">),</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-
-<span class="ne">NameError</span>: name &#39;viirs_folder&#39; is not defined
-</pre></div>
-</div>
-</div>
 </div>
 </section>
 <section class="tex2jax_ignore mathjax_ignore" id="summarize-ghsl">
 <h1>Summarize GHSL<a class="headerlink" href="#summarize-ghsl" title="Permalink to this heading">#</a></h1>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># List all files in ghsl folder</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># List all files in ghsl folder</span>
 <span class="n">ghsl_files</span> <span class="o">=</span> <span class="p">[</span>
     <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">global_ghsl_folder</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">global_ghsl_folder</span><span class="p">)</span>
@@ -889,34 +729,13 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">FileNotFoundError</span><span class="g g-Whitespace">                         </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">9</span><span class="p">],</span> <span class="n">line</span> <span class="mi">4</span>
-<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="c1"># List all files in ghsl folder</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="n">ghsl_files</span> <span class="o">=</span> <span class="p">[</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span>     <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">global_ghsl_folder</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
-<span class="nn">----&gt; 4     for x</span> in <span class="ni">os.listdir</span><span class="nt">(global_ghsl_folder)</span>
-<span class="g g-Whitespace">      </span><span class="mi">5</span>     <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.tif&quot;</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">6</span> <span class="p">]</span>
-<span class="g g-Whitespace">      </span><span class="mi">8</span> <span class="k">for</span> <span class="n">file_def</span> <span class="ow">in</span> <span class="p">[</span>
-<span class="g g-Whitespace">      </span><span class="mi">9</span>     <span class="c1"># [admin_bounds, admin_ghsl_summary],</span>
-<span class="g g-Whitespace">     </span><span class="mi">10</span>     <span class="p">[</span><span class="n">urban_extents_file</span><span class="p">,</span> <span class="n">urban_ghsl_summary</span><span class="p">],</span>
-<span class="g g-Whitespace">     </span><span class="mi">11</span>     <span class="p">[</span><span class="n">urban_extents_file</span><span class="p">,</span> <span class="n">urban_ghsl_summary</span><span class="p">],</span>
-<span class="g g-Whitespace">     </span><span class="mi">12</span> <span class="p">]:</span>
-<span class="g g-Whitespace">     </span><span class="mi">13</span>     <span class="n">resG</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">file_def</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-
-<span class="ne">FileNotFoundError</span>: [Errno 2] No such file or directory: &#39;/home/public/Data/GLOBAL/GHSL/v2022/&#39;
-</pre></div>
-</div>
-</div>
 </div>
 </section>
 <section class="tex2jax_ignore mathjax_ignore" id="join-urban-clusters-and-districts">
 <h1>Join urban clusters and districts<a class="headerlink" href="#join-urban-clusters-and-districts" title="Permalink to this heading">#</a></h1>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">inUrban</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">urban_extents_file</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">inUrban</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">urban_extents_file</span><span class="p">)</span>
 <span class="n">inHD</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">urban_extents_hd_file</span><span class="p">)</span>
 <span class="n">inAdmin</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">admin_bounds</span><span class="p">)</span>
 <span class="n">inAdmin</span> <span class="o">=</span> <span class="n">inAdmin</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="n">inUrban</span><span class="o">.</span><span class="n">crs</span><span class="p">)</span>
@@ -925,22 +744,10 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">10</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">inUrban</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">urban_extents_file</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="n">inHD</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">urban_extents_hd_file</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="n">inAdmin</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">admin_bounds</span><span class="p">)</span>
-
-<span class="ne">NameError</span>: name &#39;gpd&#39; is not defined
-</pre></div>
-</div>
-</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_majority_polygon</span><span class="p">(</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">get_majority_polygon</span><span class="p">(</span>
     <span class="n">shp</span><span class="p">,</span> <span class="n">shp2</span><span class="p">,</span> <span class="n">pop_layer</span><span class="p">,</span> <span class="n">area_name</span><span class="o">=</span><span class="s2">&quot;zz_area&quot;</span><span class="p">,</span> <span class="n">zonal_sum_name</span><span class="o">=</span><span class="s2">&quot;zz_sum&quot;</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Intersect shp(single polygon) with shp2(GeoDataFrame) to determine which row in shp2 has</span>
@@ -975,7 +782,7 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">inUrban</span><span class="p">[</span><span class="s2">&quot;HD_ID&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">inUrban</span><span class="p">[</span><span class="s2">&quot;HD_ID&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
 <span class="n">inUrban</span><span class="p">[</span><span class="s2">&quot;Admin1_ID&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
 <span class="n">inUrban</span><span class="p">[</span><span class="s2">&quot;Admin1_Pop&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
 <span class="n">inUrban</span><span class="p">[</span><span class="s2">&quot;Admin2_ID&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
@@ -1005,53 +812,19 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">12</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">inUrban</span><span class="p">[</span><span class="s2">&quot;HD_ID&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="n">inUrban</span><span class="p">[</span><span class="s2">&quot;Admin1_ID&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="n">inUrban</span><span class="p">[</span><span class="s2">&quot;Admin1_Pop&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
-
-<span class="ne">NameError</span>: name &#39;inUrban&#39; is not defined
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">inUrban</span><span class="o">.</span><span class="n">to_file</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">inUrban</span><span class="o">.</span><span class="n">to_file</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">13</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">inUrban</span><span class="o">.</span><span class="n">to_file</span><span class="p">()</span>
-
-<span class="ne">NameError</span>: name &#39;inUrban&#39; is not defined
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">inUrban</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s2">&quot;geometry&quot;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">inUrban</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s2">&quot;geometry&quot;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span>
     <span class="n">urban_extents_file</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.geojson&quot;</span><span class="p">,</span> <span class="s2">&quot;_named.csv&quot;</span><span class="p">)</span>
 <span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">14</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">inUrban</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s2">&quot;geometry&quot;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span>     <span class="n">urban_extents_file</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.geojson&quot;</span><span class="p">,</span> <span class="s2">&quot;_named.csv&quot;</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="p">)</span>
-
-<span class="ne">NameError</span>: name &#39;pd&#39; is not defined
 </pre></div>
 </div>
 </div>
@@ -1061,7 +834,7 @@ document.write(`
 <h1>Calculate admin centroids<a class="headerlink" href="#calculate-admin-centroids" title="Permalink to this heading">#</a></h1>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">inAdmin_centroids</span> <span class="o">=</span> <span class="n">inAdmin</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">inAdmin_centroids</span> <span class="o">=</span> <span class="n">inAdmin</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">inAdmin</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
     <span class="c1"># create numpy array of intersecting population layer</span>
     <span class="n">curP</span><span class="p">,</span> <span class="n">transform</span> <span class="o">=</span> <span class="n">mask</span><span class="p">(</span><span class="n">inR</span><span class="p">,</span> <span class="p">[</span><span class="n">row</span><span class="o">.</span><span class="n">geometry</span><span class="p">],</span> <span class="n">crop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -1080,26 +853,13 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">15</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">inAdmin_centroids</span> <span class="o">=</span> <span class="n">inAdmin</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">inAdmin</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span>     <span class="c1"># create numpy array of intersecting population layer</span>
-<span class="g g-Whitespace">      </span><span class="mi">4</span>     <span class="n">curP</span><span class="p">,</span> <span class="n">transform</span> <span class="o">=</span> <span class="n">mask</span><span class="p">(</span><span class="n">inR</span><span class="p">,</span> <span class="p">[</span><span class="n">row</span><span class="o">.</span><span class="n">geometry</span><span class="p">],</span> <span class="n">crop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-<span class="ne">NameError</span>: name &#39;inAdmin&#39; is not defined
-</pre></div>
-</div>
-</div>
 </div>
 </section>
 <section class="tex2jax_ignore mathjax_ignore" id="calculate-travel-time">
 <h1>Calculate travel time<a class="headerlink" href="#calculate-travel-time" title="Permalink to this heading">#</a></h1>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">local_friction</span><span class="p">):</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">local_friction</span><span class="p">):</span>
     <span class="n">globalP</span> <span class="o">=</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">global_friction_surface</span><span class="p">)</span>
     <span class="n">rMisc</span><span class="o">.</span><span class="n">clipRaster</span><span class="p">(</span><span class="n">globalP</span><span class="p">,</span> <span class="n">inAdmin</span><span class="p">,</span> <span class="n">local_friction</span><span class="p">)</span>
 
@@ -1112,39 +872,17 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">16</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">local_friction</span><span class="p">):</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span>     <span class="n">globalP</span> <span class="o">=</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">global_friction_surface</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span>     <span class="n">rMisc</span><span class="o">.</span><span class="n">clipRaster</span><span class="p">(</span><span class="n">globalP</span><span class="p">,</span> <span class="n">inAdmin</span><span class="p">,</span> <span class="n">local_friction</span><span class="p">)</span>
-
-<span class="ne">NameError</span>: name &#39;local_friction&#39; is not defined
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">dests</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dests</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">17</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">dests</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
-
-<span class="ne">NameError</span>: name &#39;dests&#39; is not defined
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">importlib</span><span class="o">.</span><span class="n">reload</span><span class="p">(</span><span class="n">ma</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">importlib</span><span class="o">.</span><span class="n">reload</span><span class="p">(</span><span class="n">ma</span><span class="p">)</span>
 <span class="c1"># Calculate travel time between all urban areas</span>
 <span class="n">all_rts</span> <span class="o">=</span> <span class="n">ma</span><span class="o">.</span><span class="n">get_linear_routes</span><span class="p">(</span><span class="n">inR</span><span class="p">,</span> <span class="n">frictionD</span><span class="p">,</span> <span class="n">dests</span><span class="p">,</span> <span class="n">dests</span><span class="p">,</span> <span class="s2">&quot;ID&quot;</span><span class="p">,</span> <span class="s2">&quot;ID&quot;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">all_rts</span> <span class="o">=</span> <span class="n">all_rts</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="mi">3857</span><span class="p">)</span>
@@ -1152,60 +890,26 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">18</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">importlib</span><span class="o">.</span><span class="n">reload</span><span class="p">(</span><span class="n">ma</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="c1"># Calculate travel time between all urban areas</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="n">all_rts</span> <span class="o">=</span> <span class="n">ma</span><span class="o">.</span><span class="n">get_linear_routes</span><span class="p">(</span><span class="n">inR</span><span class="p">,</span> <span class="n">frictionD</span><span class="p">,</span> <span class="n">dests</span><span class="p">,</span> <span class="n">dests</span><span class="p">,</span> <span class="s2">&quot;ID&quot;</span><span class="p">,</span> <span class="s2">&quot;ID&quot;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-<span class="ne">NameError</span>: name &#39;ma&#39; is not defined
-</pre></div>
-</div>
-</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># all_rts.to_file(all_routes_file)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># all_rts.to_file(all_routes_file)</span>
 <span class="n">pd</span><span class="o">.</span><span class="n">pivot_table</span><span class="p">(</span><span class="n">all_rts</span><span class="p">,</span> <span class="s2">&quot;cost&quot;</span><span class="p">,</span> <span class="s2">&quot;origin&quot;</span><span class="p">,</span> <span class="s2">&quot;destination&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">time_matrix</span><span class="p">)</span>
 <span class="n">pd</span><span class="o">.</span><span class="n">pivot_table</span><span class="p">(</span><span class="n">all_rts</span><span class="p">,</span> <span class="s2">&quot;length_km&quot;</span><span class="p">,</span> <span class="s2">&quot;origin&quot;</span><span class="p">,</span> <span class="s2">&quot;destination&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">dist_matrix</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">19</span><span class="p">],</span> <span class="n">line</span> <span class="mi">2</span>
-<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="c1"># all_rts.to_file(all_routes_file)</span>
-<span class="ne">----&gt; </span><span class="mi">2</span> <span class="n">pd</span><span class="o">.</span><span class="n">pivot_table</span><span class="p">(</span><span class="n">all_rts</span><span class="p">,</span> <span class="s2">&quot;cost&quot;</span><span class="p">,</span> <span class="s2">&quot;origin&quot;</span><span class="p">,</span> <span class="s2">&quot;destination&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">time_matrix</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="n">pd</span><span class="o">.</span><span class="n">pivot_table</span><span class="p">(</span><span class="n">all_rts</span><span class="p">,</span> <span class="s2">&quot;length_km&quot;</span><span class="p">,</span> <span class="s2">&quot;origin&quot;</span><span class="p">,</span> <span class="s2">&quot;destination&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">dist_matrix</span><span class="p">)</span>
-
-<span class="ne">NameError</span>: name &#39;pd&#39; is not defined
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">inAdmin_centroids</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">inAdmin_centroids</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">20</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">inAdmin_centroids</span>
-
-<span class="ne">NameError</span>: name &#39;inAdmin_centroids&#39; is not defined
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">importlib</span><span class="o">.</span><span class="n">reload</span><span class="p">(</span><span class="n">ma</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">importlib</span><span class="o">.</span><span class="n">reload</span><span class="p">(</span><span class="n">ma</span><span class="p">)</span>
 <span class="c1"># Calculate travel time between all urban areas and district centroids</span>
 <span class="n">inAdmin_centroids</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">admin_final</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.shp&quot;</span><span class="p">,</span> <span class="s2">&quot;_centroids.shp&quot;</span><span class="p">))</span>
 <span class="n">dist_all_rts</span> <span class="o">=</span> <span class="n">ma</span><span class="o">.</span><span class="n">get_linear_routes_mp</span><span class="p">(</span>
@@ -1216,39 +920,17 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">21</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">importlib</span><span class="o">.</span><span class="n">reload</span><span class="p">(</span><span class="n">ma</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="c1"># Calculate travel time between all urban areas and district centroids</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="n">inAdmin_centroids</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">admin_final</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.shp&quot;</span><span class="p">,</span> <span class="s2">&quot;_centroids.shp&quot;</span><span class="p">))</span>
-
-<span class="ne">NameError</span>: name &#39;ma&#39; is not defined
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">dist_all_rts</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dist_all_rts</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">22</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">dist_all_rts</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
-
-<span class="ne">NameError</span>: name &#39;dist_all_rts&#39; is not defined
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># dist_all_rts.to_file(dist_all_routes_file)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># dist_all_rts.to_file(dist_all_routes_file)</span>
 <span class="n">pd</span><span class="o">.</span><span class="n">pivot_table</span><span class="p">(</span><span class="n">dist_all_rts</span><span class="p">,</span> <span class="s2">&quot;cost&quot;</span><span class="p">,</span> <span class="s2">&quot;origin&quot;</span><span class="p">,</span> <span class="s2">&quot;destination&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">dist_time_matrix</span><span class="p">)</span>
 <span class="n">pd</span><span class="o">.</span><span class="n">pivot_table</span><span class="p">(</span><span class="n">dist_all_rts</span><span class="p">,</span> <span class="s2">&quot;length_km&quot;</span><span class="p">,</span> <span class="s2">&quot;origin&quot;</span><span class="p">,</span> <span class="s2">&quot;destination&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span>
     <span class="n">dist_dist_matrix</span>
@@ -1256,24 +938,10 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">23</span><span class="p">],</span> <span class="n">line</span> <span class="mi">2</span>
-<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="c1"># dist_all_rts.to_file(dist_all_routes_file)</span>
-<span class="ne">----&gt; </span><span class="mi">2</span> <span class="n">pd</span><span class="o">.</span><span class="n">pivot_table</span><span class="p">(</span><span class="n">dist_all_rts</span><span class="p">,</span> <span class="s2">&quot;cost&quot;</span><span class="p">,</span> <span class="s2">&quot;origin&quot;</span><span class="p">,</span> <span class="s2">&quot;destination&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">dist_time_matrix</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="n">pd</span><span class="o">.</span><span class="n">pivot_table</span><span class="p">(</span><span class="n">dist_all_rts</span><span class="p">,</span> <span class="s2">&quot;length_km&quot;</span><span class="p">,</span> <span class="s2">&quot;origin&quot;</span><span class="p">,</span> <span class="s2">&quot;destination&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span>
-<span class="g g-Whitespace">      </span><span class="mi">4</span>     <span class="n">dist_dist_matrix</span>
-<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="p">)</span>
-
-<span class="ne">NameError</span>: name &#39;pd&#39; is not defined
-</pre></div>
-</div>
-</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># For each urban area, generate a travel time to the centroid, and then sample for all the other areas</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># For each urban area, generate a travel time to the centroid, and then sample for all the other areas</span>
 <span class="n">urban_output_matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">dests</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">dests</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span>
 <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">dests</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
     <span class="n">costs</span><span class="p">,</span> <span class="n">trace</span> <span class="o">=</span> <span class="n">ma</span><span class="o">.</span><span class="n">calculate_travel_time</span><span class="p">(</span><span class="n">inR</span><span class="p">,</span> <span class="n">mcp</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">to_frame</span><span class="p">()</span><span class="o">.</span><span class="n">transpose</span><span class="p">())</span>
@@ -1283,37 +951,12 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">24</span><span class="p">],</span> <span class="n">line</span> <span class="mi">2</span>
-<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="c1"># For each urban area, generate a travel time to the centroid, and then sample for all the other areas</span>
-<span class="ne">----&gt; </span><span class="mi">2</span> <span class="n">urban_output_matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">dests</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">dests</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">dests</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
-<span class="g g-Whitespace">      </span><span class="mi">4</span>     <span class="n">costs</span><span class="p">,</span> <span class="n">trace</span> <span class="o">=</span> <span class="n">ma</span><span class="o">.</span><span class="n">calculate_travel_time</span><span class="p">(</span><span class="n">inR</span><span class="p">,</span> <span class="n">mcp</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">to_frame</span><span class="p">()</span><span class="o">.</span><span class="n">transpose</span><span class="p">())</span>
-
-<span class="ne">NameError</span>: name &#39;np&#39; is not defined
-</pre></div>
-</div>
-</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">tt_res</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">output_matrix</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;urb_</span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">dests</span><span class="p">[</span><span class="s2">&quot;ID&quot;</span><span class="p">]])</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">tt_res</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">output_matrix</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;urb_</span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">dests</span><span class="p">[</span><span class="s2">&quot;ID&quot;</span><span class="p">]])</span>
 <span class="n">tt_res</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">dests</span><span class="p">[</span><span class="s2">&quot;ID&quot;</span><span class="p">]</span>
 <span class="n">tt_res</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">urban_tt_result</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">25</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">tt_res</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">output_matrix</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;urb_</span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">dests</span><span class="p">[</span><span class="s2">&quot;ID&quot;</span><span class="p">]])</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="n">tt_res</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">dests</span><span class="p">[</span><span class="s2">&quot;ID&quot;</span><span class="p">]</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="n">tt_res</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">urban_tt_result</span><span class="p">)</span>
-
-<span class="ne">NameError</span>: name &#39;pd&#39; is not defined
 </pre></div>
 </div>
 </div>
@@ -1323,7 +966,7 @@ document.write(`
 <h1>attach IDs from ECA database to KAZ database<a class="headerlink" href="#attach-ids-from-eca-database-to-kaz-database" title="Permalink to this heading">#</a></h1>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">urbanD</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">urban_extents_file</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">urbanD</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">urban_extents_file</span><span class="p">)</span>
 <span class="n">eca_kaz</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span>
     <span class="s2">&quot;/home/wb411133/projects/KAZ_SCADR_Urbanization/DATA/ECA_Extents/KAZ/KAZ_urban_extents.geojson&quot;</span>
 <span class="p">)</span>
@@ -1336,24 +979,10 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">26</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">urbanD</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">urban_extents_file</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="n">eca_kaz</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span>     <span class="s2">&quot;/home/wb411133/projects/KAZ_SCADR_Urbanization/DATA/ECA_Extents/KAZ/KAZ_urban_extents.geojson&quot;</span>
-<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="n">urbanD</span><span class="p">[</span><span class="s2">&quot;eca_id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
-
-<span class="ne">NameError</span>: name &#39;gpd&#39; is not defined
-</pre></div>
-</div>
-</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">urbanHD</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">urban_extents_hd_file</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">urbanHD</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">urban_extents_hd_file</span><span class="p">)</span>
 <span class="n">eca_kaz</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span>
     <span class="s2">&quot;/home/wb411133/projects/KAZ_SCADR_Urbanization/DATA/ECA_Extents/KAZ/KAZ_urban_extents_hd.geojson&quot;</span>
 <span class="p">)</span>
@@ -1366,27 +995,13 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">27</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">urbanHD</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">urban_extents_hd_file</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="n">eca_kaz</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span>     <span class="s2">&quot;/home/wb411133/projects/KAZ_SCADR_Urbanization/DATA/ECA_Extents/KAZ/KAZ_urban_extents_hd.geojson&quot;</span>
-<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="n">urbanHD</span><span class="p">[</span><span class="s2">&quot;eca_id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
-
-<span class="ne">NameError</span>: name &#39;gpd&#39; is not defined
-</pre></div>
-</div>
-</div>
 </div>
 </section>
 <section class="tex2jax_ignore mathjax_ignore" id="debugging">
 <h1>DEBUGGING<a class="headerlink" href="#debugging" title="Permalink to this heading">#</a></h1>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">world_filepath</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s2">&quot;naturalearth_lowres&quot;</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">world_filepath</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s2">&quot;naturalearth_lowres&quot;</span><span class="p">)</span>
 <span class="n">world</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">world_filepath</span><span class="p">)</span>
 <span class="n">sel_country</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">world</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Kenya&quot;</span><span class="p">]</span>
 
@@ -1405,44 +1020,20 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">28</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">world_filepath</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">get_path</span><span class="p">(</span><span class="s2">&quot;naturalearth_lowres&quot;</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="n">world</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">world_filepath</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="n">sel_country</span> <span class="o">=</span> <span class="n">world</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">world</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Kenya&quot;</span><span class="p">]</span>
-
-<span class="ne">NameError</span>: name &#39;gpd&#39; is not defined
-</pre></div>
-</div>
-</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">inR</span> <span class="o">=</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">local_friction</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">inR</span> <span class="o">=</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">local_friction</span><span class="p">)</span>
 <span class="n">frictionD</span> <span class="o">=</span> <span class="n">inR</span><span class="o">.</span><span class="n">read</span><span class="p">()[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span>
 <span class="n">frictionD</span> <span class="o">=</span> <span class="n">frictionD</span> <span class="o">*</span> <span class="mi">1000</span>
 <span class="n">mcp</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">MCP_Geometric</span><span class="p">(</span><span class="n">frictionD</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">29</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">inR</span> <span class="o">=</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">local_friction</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="n">frictionD</span> <span class="o">=</span> <span class="n">inR</span><span class="o">.</span><span class="n">read</span><span class="p">()[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="n">frictionD</span> <span class="o">=</span> <span class="n">frictionD</span> <span class="o">*</span> <span class="mi">1000</span>
-
-<span class="ne">NameError</span>: name &#39;rasterio&#39; is not defined
-</pre></div>
-</div>
-</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">importlib</span><span class="o">.</span><span class="n">reload</span><span class="p">(</span><span class="n">ma</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">importlib</span><span class="o">.</span><span class="n">reload</span><span class="p">(</span><span class="n">ma</span><span class="p">)</span>
 
 <span class="n">all_rts</span> <span class="o">=</span> <span class="n">ma</span><span class="o">.</span><span class="n">get_linear_routes</span><span class="p">(</span>
     <span class="n">inR</span><span class="p">,</span>
@@ -1458,27 +1049,10 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">30</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">importlib</span><span class="o">.</span><span class="n">reload</span><span class="p">(</span><span class="n">ma</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="n">all_rts</span> <span class="o">=</span> <span class="n">ma</span><span class="o">.</span><span class="n">get_linear_routes</span><span class="p">(</span>
-<span class="g g-Whitespace">      </span><span class="mi">4</span>     <span class="n">inR</span><span class="p">,</span>
-<span class="g g-Whitespace">      </span><span class="mi">5</span>     <span class="n">frictionD</span><span class="p">,</span>
-   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">10</span>     <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-<span class="g g-Whitespace">     </span><span class="mi">11</span> <span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">12</span> <span class="n">all_rts</span> <span class="o">=</span> <span class="n">all_rts</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="mi">3857</span><span class="p">)</span>
-
-<span class="ne">NameError</span>: name &#39;ma&#39; is not defined
-</pre></div>
-</div>
-</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Map resulting route</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Map resulting route</span>
 <span class="n">centre</span> <span class="o">=</span> <span class="n">sel_country</span><span class="o">.</span><span class="n">unary_union</span><span class="o">.</span><span class="n">centroid</span>
 <span class="n">m</span> <span class="o">=</span> <span class="n">folium</span><span class="o">.</span><span class="n">Map</span><span class="p">(</span><span class="n">location</span><span class="o">=</span><span class="p">[</span><span class="n">centre</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">centre</span><span class="o">.</span><span class="n">x</span><span class="p">],</span> <span class="n">zoom_start</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
 <span class="n">orig_map</span> <span class="o">=</span> <span class="n">inAdmin_centroids</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -1500,57 +1074,24 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">31</span><span class="p">],</span> <span class="n">line</span> <span class="mi">2</span>
-<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="c1"># Map resulting route</span>
-<span class="ne">----&gt; </span><span class="mi">2</span> <span class="n">centre</span> <span class="o">=</span> <span class="n">sel_country</span><span class="o">.</span><span class="n">unary_union</span><span class="o">.</span><span class="n">centroid</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="n">m</span> <span class="o">=</span> <span class="n">folium</span><span class="o">.</span><span class="n">Map</span><span class="p">(</span><span class="n">location</span><span class="o">=</span><span class="p">[</span><span class="n">centre</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">centre</span><span class="o">.</span><span class="n">x</span><span class="p">],</span> <span class="n">zoom_start</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="n">orig_map</span> <span class="o">=</span> <span class="n">inAdmin_centroids</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-
-<span class="ne">NameError</span>: name &#39;sel_country&#39; is not defined
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pd</span><span class="o">.</span><span class="n">pivot</span><span class="p">(</span><span class="n">all_rts</span><span class="p">,</span> <span class="s2">&quot;origin&quot;</span><span class="p">,</span> <span class="s2">&quot;destination&quot;</span><span class="p">,</span> <span class="s2">&quot;cost&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pd</span><span class="o">.</span><span class="n">pivot</span><span class="p">(</span><span class="n">all_rts</span><span class="p">,</span> <span class="s2">&quot;origin&quot;</span><span class="p">,</span> <span class="s2">&quot;destination&quot;</span><span class="p">,</span> <span class="s2">&quot;cost&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">32</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">pd</span><span class="o">.</span><span class="n">pivot</span><span class="p">(</span><span class="n">all_rts</span><span class="p">,</span> <span class="s2">&quot;origin&quot;</span><span class="p">,</span> <span class="s2">&quot;destination&quot;</span><span class="p">,</span> <span class="s2">&quot;cost&quot;</span><span class="p">)</span>
-
-<span class="ne">NameError</span>: name &#39;pd&#39; is not defined
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pd</span><span class="o">.</span><span class="n">pivot</span><span class="p">(</span><span class="n">all_rts</span><span class="p">,</span> <span class="s2">&quot;origin&quot;</span><span class="p">,</span> <span class="s2">&quot;destination&quot;</span><span class="p">,</span> <span class="s2">&quot;length_km&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pd</span><span class="o">.</span><span class="n">pivot</span><span class="p">(</span><span class="n">all_rts</span><span class="p">,</span> <span class="s2">&quot;origin&quot;</span><span class="p">,</span> <span class="s2">&quot;destination&quot;</span><span class="p">,</span> <span class="s2">&quot;length_km&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">33</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">pd</span><span class="o">.</span><span class="n">pivot</span><span class="p">(</span><span class="n">all_rts</span><span class="p">,</span> <span class="s2">&quot;origin&quot;</span><span class="p">,</span> <span class="s2">&quot;destination&quot;</span><span class="p">,</span> <span class="s2">&quot;length_km&quot;</span><span class="p">)</span>
-
-<span class="ne">NameError</span>: name &#39;pd&#39; is not defined
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Generate h3 grid around dedicated city</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Generate h3 grid around dedicated city</span>
 <span class="n">m</span> <span class="o">=</span> <span class="n">folium</span><span class="o">.</span><span class="n">Map</span><span class="p">(</span><span class="n">location</span><span class="o">=</span><span class="p">[</span><span class="n">row</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">x</span><span class="p">],</span> <span class="n">zoom_start</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
 
 <span class="n">folium</span><span class="o">.</span><span class="n">CircleMarker</span><span class="p">(</span>
@@ -1574,37 +1115,10 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">34</span><span class="p">],</span> <span class="n">line</span> <span class="mi">2</span>
-<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="c1"># Generate h3 grid around dedicated city</span>
-<span class="ne">----&gt; </span><span class="mi">2</span> <span class="n">m</span> <span class="o">=</span> <span class="n">folium</span><span class="o">.</span><span class="n">Map</span><span class="p">(</span><span class="n">location</span><span class="o">=</span><span class="p">[</span><span class="n">row</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">x</span><span class="p">],</span> <span class="n">zoom_start</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="n">folium</span><span class="o">.</span><span class="n">CircleMarker</span><span class="p">(</span>
-<span class="g g-Whitespace">      </span><span class="mi">5</span>     <span class="n">location</span><span class="o">=</span><span class="p">[</span><span class="n">y_range</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">x_range</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span> <span class="n">radius</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;red&quot;</span>
-<span class="g g-Whitespace">      </span><span class="mi">6</span> <span class="p">)</span><span class="o">.</span><span class="n">add_to</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">8</span> <span class="n">folium</span><span class="o">.</span><span class="n">CircleMarker</span><span class="p">(</span>
-<span class="g g-Whitespace">      </span><span class="mi">9</span>     <span class="n">location</span><span class="o">=</span><span class="p">[</span><span class="n">y_range</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">x_range</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]],</span> <span class="n">radius</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span>
-<span class="g g-Whitespace">     </span><span class="mi">10</span> <span class="p">)</span><span class="o">.</span><span class="n">add_to</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
-
-<span class="ne">NameError</span>: name &#39;folium&#39; is not defined
-</pre></div>
-</div>
-</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x_range</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">35</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">x_range</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-
-<span class="ne">NameError</span>: name &#39;x_range&#39; is not defined
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">x_range</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>

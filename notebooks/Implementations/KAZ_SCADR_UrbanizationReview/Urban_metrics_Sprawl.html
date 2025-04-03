@@ -181,14 +181,9 @@
                 </a>
             </li>
         </ul>
-        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Novel Urbanization</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../../../api/GOSTurban.html">GOSTurban package</a></li>
-</ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Novel Urbanization</span></p>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../../../novel_context.html">Novel Urbanization</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../urbanization_comparison.html">Comparing urban methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../MENA_Benchmarking/Map_Extents.html">Mapping and comparing urban extents</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
 <ul class="nav bd-sidenav">
@@ -382,70 +377,58 @@ document.write(`
 <p>To account for ‘rural clusters’ in metropolitan areas, grid cells with density below 200 persons per square mile are excluded (or 77 per square km).</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">load_ext</span> autoreload
-<span class="o">%</span><span class="k">autoreload</span> 2
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="n">load_ext</span> <span class="n">autoreload</span>
+<span class="o">%</span><span class="n">autoreload</span> <span class="mi">2</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
-<span class="kn">import</span> <span class="nn">time</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">geopandas</span> <span class="k">as</span> <span class="nn">gpd</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">geopandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">gpd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">shapely.geometry</span> <span class="kn">import</span> <span class="n">mapping</span>
-<span class="kn">from</span> <span class="nn">shapely.geometry</span> <span class="kn">import</span> <span class="n">Point</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">shapely.geometry</span><span class="w"> </span><span class="kn">import</span> <span class="n">mapping</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">shapely.geometry</span><span class="w"> </span><span class="kn">import</span> <span class="n">Point</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Get reference to GOSTNets</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Get reference to GOSTNets</span>
 <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;C:\repos\INFRA_SAP&quot;</span><span class="p">)</span>
-<span class="kn">from</span> <span class="nn">infrasap.urban_metrics</span> <span class="kn">import</span> <span class="o">*</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span> <span class="n">line</span> <span class="mi">3</span>
-<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="c1"># Get reference to GOSTNets</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;C:\repos\INFRA_SAP&quot;</span><span class="p">)</span>
-<span class="ne">----&gt; </span><span class="mi">3</span> <span class="kn">from</span> <span class="nn">infrasap.urban_metrics</span> <span class="kn">import</span> <span class="o">*</span>
-
-<span class="ne">ModuleNotFoundError</span>: No module named &#39;infrasap&#39;
+<span class="kn">from</span><span class="w"> </span><span class="nn">infrasap.urban_metrics</span><span class="w"> </span><span class="kn">import</span> <span class="o">*</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">rasterio</span>
-<span class="kn">from</span> <span class="nn">rasterio.mask</span> <span class="kn">import</span> <span class="n">mask</span>
-<span class="kn">from</span> <span class="nn">rasterio</span> <span class="kn">import</span> <span class="n">Affine</span>  <span class="c1"># or from affine import Affine</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">rasterio</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">rasterio.mask</span><span class="w"> </span><span class="kn">import</span> <span class="n">mask</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">rasterio</span><span class="w"> </span><span class="kn">import</span> <span class="n">Affine</span>  <span class="c1"># or from affine import Affine</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -455,7 +438,7 @@ document.write(`
 <p>Mollweide projection should work good because it is an equal-area projection</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">GHS_pop</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;C:\Users\war-machine\Documents\world_bank_work\UZB_project\GHS_POP_E2015_GLOBE_R2019A_54009_1K_V1_0\GHS_POP_E2015_GLOBE_R2019A_54009_1K_V1_0.tif&quot;</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">GHS_pop</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;C:\Users\war-machine\Documents\world_bank_work\UZB_project\GHS_POP_E2015_GLOBE_R2019A_54009_1K_V1_0\GHS_POP_E2015_GLOBE_R2019A_54009_1K_V1_0.tif&quot;</span>
 <span class="c1"># GHS_pop = r&quot;C:\Users\war-machine\Documents\world_bank_work\UZB_project\clipped_eca_no_russia_1km.tif&quot;</span>
 <span class="c1"># GHS_pop = r&quot;C:\Users\war-machine\Documents\world_bank_work\UZB_project\2015_1km_GHS_Pop\GHS_POP_2015_UZB_merged.tif&quot;</span>
 </pre></div>
@@ -464,7 +447,7 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># shpName = r&quot;C:\Users\war-machine\Documents\world_bank_work\UZB_project\metrics_shape_tool\Final_urban_extent_metrics\ECA_all_urban_extents_100k_mollweide.shp&quot;</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># shpName = r&quot;C:\Users\war-machine\Documents\world_bank_work\UZB_project\metrics_shape_tool\Final_urban_extent_metrics\ECA_all_urban_extents_100k_mollweide.shp&quot;</span>
 <span class="c1"># shpName = r&quot;C:\Users\war-machine\Documents\world_bank_work\UZB_project\metrics_shape_tool\russia_urban_extents_merged_mollweide.shp&quot;</span>
 <span class="c1"># shpName = r&quot;C:\repos\GOST_Urban\Notebooks\Implementations\eca_wo_rus_urban_clusters_ghs_pop_smooth_100k_mollweide2.shp&quot;</span>
 <span class="c1"># shpName = r&quot;C:\Users\war-machine\Documents\world_bank_work\UZB_project\metrics_shape_tool\UZB_only_FUAs_Project_Mollweide.shp&quot;</span>
@@ -481,7 +464,7 @@ document.write(`
 <h2>First find overall grid cell group median<a class="headerlink" href="#first-find-overall-grid-cell-group-median" title="Permalink to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Psuedocode</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Psuedocode</span>
 
 <span class="c1"># pop_values = []</span>
 <span class="c1"># For each Shape/FUA:</span>
@@ -497,7 +480,7 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%time</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="n">time</span>
 
 <span class="k">with</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">GHS_pop</span><span class="p">)</span> <span class="k">as</span> <span class="n">src</span><span class="p">:</span>
     <span class="n">pixelSizeX</span><span class="p">,</span> <span class="n">pixelSizeY</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">res</span>
@@ -551,76 +534,19 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">CPLE_OpenFailedError</span><span class="g g-Whitespace">                      </span>Traceback (most recent call last)
-<span class="nn">File rasterio/_base.pyx:310,</span> in <span class="ni">rasterio._base.DatasetBase.__init__</span><span class="nt">()</span>
-
-<span class="nn">File rasterio/_base.pyx:221,</span> in <span class="ni">rasterio._base.open_dataset</span><span class="nt">()</span>
-
-<span class="nn">File rasterio/_err.pyx:221,</span> in <span class="ni">rasterio._err.exc_wrap_pointer</span><span class="nt">()</span>
-
-<span class="ne">CPLE_OpenFailedError</span>: C:\Users\war-machine\Documents\world_bank_work\UZB_project\GHS_POP_E2015_GLOBE_R2019A_54009_1K_V1_0\GHS_POP_E2015_GLOBE_R2019A_54009_1K_V1_0.tif: No such file or directory
-
-<span class="n">During</span> <span class="n">handling</span> <span class="n">of</span> <span class="n">the</span> <span class="n">above</span> <span class="n">exception</span><span class="p">,</span> <span class="n">another</span> <span class="n">exception</span> <span class="n">occurred</span><span class="p">:</span>
-
-<span class="ne">RasterioIOError</span><span class="g g-Whitespace">                           </span>Traceback (most recent call last)
-<span class="n">File</span> <span class="o">&lt;</span><span class="n">timed</span> <span class="n">exec</span><span class="o">&gt;</span><span class="p">:</span><span class="mi">1</span>
-
-<span class="nn">File /opt/hostedtoolcache/Python/3.10.14/x64/lib/python3.10/site-packages/rasterio/env.py:451,</span> in <span class="ni">ensure_env_with_credentials.&lt;locals&gt;.wrapper</span><span class="nt">(*args, **kwds)</span>
-<span class="g g-Whitespace">    </span><span class="mi">448</span>     <span class="n">session</span> <span class="o">=</span> <span class="n">DummySession</span><span class="p">()</span>
-<span class="g g-Whitespace">    </span><span class="mi">450</span> <span class="k">with</span> <span class="n">env_ctor</span><span class="p">(</span><span class="n">session</span><span class="o">=</span><span class="n">session</span><span class="p">):</span>
-<span class="ne">--&gt; </span><span class="mi">451</span>     <span class="k">return</span> <span class="n">f</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">)</span>
-
-<span class="nn">File /opt/hostedtoolcache/Python/3.10.14/x64/lib/python3.10/site-packages/rasterio/__init__.py:304,</span> in <span class="ni">open</span><span class="nt">(fp, mode, driver, width, height, count, crs, transform, dtype, nodata, sharing, **kwargs)</span>
-<span class="g g-Whitespace">    </span><span class="mi">301</span> <span class="n">path</span> <span class="o">=</span> <span class="n">_parse_path</span><span class="p">(</span><span class="n">raw_dataset_path</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">303</span> <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;r&quot;</span><span class="p">:</span>
-<span class="ne">--&gt; </span><span class="mi">304</span>     <span class="n">dataset</span> <span class="o">=</span> <span class="n">DatasetReader</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">driver</span><span class="o">=</span><span class="n">driver</span><span class="p">,</span> <span class="n">sharing</span><span class="o">=</span><span class="n">sharing</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">305</span> <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;r+&quot;</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">306</span>     <span class="n">dataset</span> <span class="o">=</span> <span class="n">get_writer_for_path</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">driver</span><span class="o">=</span><span class="n">driver</span><span class="p">)(</span>
-<span class="g g-Whitespace">    </span><span class="mi">307</span>         <span class="n">path</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">driver</span><span class="o">=</span><span class="n">driver</span><span class="p">,</span> <span class="n">sharing</span><span class="o">=</span><span class="n">sharing</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
-<span class="g g-Whitespace">    </span><span class="mi">308</span>     <span class="p">)</span>
-
-<span class="nn">File rasterio/_base.pyx:312,</span> in <span class="ni">rasterio._base.DatasetBase.__init__</span><span class="nt">()</span>
-
-<span class="ne">RasterioIOError</span>: C:\Users\war-machine\Documents\world_bank_work\UZB_project\GHS_POP_E2015_GLOBE_R2019A_54009_1K_V1_0\GHS_POP_E2015_GLOBE_R2019A_54009_1K_V1_0.tif: No such file or directory
-</pre></div>
-</div>
-</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">statistics</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">statistics</span>
 
 <span class="n">UZB_pop_median</span> <span class="o">=</span> <span class="n">statistics</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">pop_values</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">12</span><span class="p">],</span> <span class="n">line</span> <span class="mi">3</span>
-<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="kn">import</span> <span class="nn">statistics</span>
-<span class="ne">----&gt; </span><span class="mi">3</span> <span class="n">UZB_pop_median</span> <span class="o">=</span> <span class="n">statistics</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">pop_values</span><span class="p">)</span>
-
-<span class="ne">NameError</span>: name &#39;pop_values&#39; is not defined
-</pre></div>
-</div>
-</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">UZB_pop_median</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">13</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">UZB_pop_median</span>
-
-<span class="ne">NameError</span>: name &#39;UZB_pop_median&#39; is not defined
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">UZB_pop_median</span>
 </pre></div>
 </div>
 </div>
@@ -630,7 +556,7 @@ document.write(`
 <h2>Second calculate the Sprawl metric for each shape<a class="headerlink" href="#second-calculate-the-sprawl-metric-for-each-shape" title="Permalink to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Psuedocode</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Psuedocode</span>
 
 <span class="c1"># for each Shape/FUA:</span>
 <span class="c1"># pixel_count_below_median = 0</span>
@@ -647,7 +573,7 @@ document.write(`
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%time</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="n">time</span>
 
 <span class="k">with</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">GHS_pop</span><span class="p">)</span> <span class="k">as</span> <span class="n">src</span><span class="p">:</span>
     <span class="n">pixelSizeX</span><span class="p">,</span> <span class="n">pixelSizeY</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">res</span>
@@ -729,63 +655,17 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">CPLE_OpenFailedError</span><span class="g g-Whitespace">                      </span>Traceback (most recent call last)
-<span class="nn">File rasterio/_base.pyx:310,</span> in <span class="ni">rasterio._base.DatasetBase.__init__</span><span class="nt">()</span>
-
-<span class="nn">File rasterio/_base.pyx:221,</span> in <span class="ni">rasterio._base.open_dataset</span><span class="nt">()</span>
-
-<span class="nn">File rasterio/_err.pyx:221,</span> in <span class="ni">rasterio._err.exc_wrap_pointer</span><span class="nt">()</span>
-
-<span class="ne">CPLE_OpenFailedError</span>: C:\Users\war-machine\Documents\world_bank_work\UZB_project\GHS_POP_E2015_GLOBE_R2019A_54009_1K_V1_0\GHS_POP_E2015_GLOBE_R2019A_54009_1K_V1_0.tif: No such file or directory
-
-<span class="n">During</span> <span class="n">handling</span> <span class="n">of</span> <span class="n">the</span> <span class="n">above</span> <span class="n">exception</span><span class="p">,</span> <span class="n">another</span> <span class="n">exception</span> <span class="n">occurred</span><span class="p">:</span>
-
-<span class="ne">RasterioIOError</span><span class="g g-Whitespace">                           </span>Traceback (most recent call last)
-<span class="n">File</span> <span class="o">&lt;</span><span class="n">timed</span> <span class="n">exec</span><span class="o">&gt;</span><span class="p">:</span><span class="mi">1</span>
-
-<span class="nn">File /opt/hostedtoolcache/Python/3.10.14/x64/lib/python3.10/site-packages/rasterio/env.py:451,</span> in <span class="ni">ensure_env_with_credentials.&lt;locals&gt;.wrapper</span><span class="nt">(*args, **kwds)</span>
-<span class="g g-Whitespace">    </span><span class="mi">448</span>     <span class="n">session</span> <span class="o">=</span> <span class="n">DummySession</span><span class="p">()</span>
-<span class="g g-Whitespace">    </span><span class="mi">450</span> <span class="k">with</span> <span class="n">env_ctor</span><span class="p">(</span><span class="n">session</span><span class="o">=</span><span class="n">session</span><span class="p">):</span>
-<span class="ne">--&gt; </span><span class="mi">451</span>     <span class="k">return</span> <span class="n">f</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">)</span>
-
-<span class="nn">File /opt/hostedtoolcache/Python/3.10.14/x64/lib/python3.10/site-packages/rasterio/__init__.py:304,</span> in <span class="ni">open</span><span class="nt">(fp, mode, driver, width, height, count, crs, transform, dtype, nodata, sharing, **kwargs)</span>
-<span class="g g-Whitespace">    </span><span class="mi">301</span> <span class="n">path</span> <span class="o">=</span> <span class="n">_parse_path</span><span class="p">(</span><span class="n">raw_dataset_path</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">303</span> <span class="k">if</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;r&quot;</span><span class="p">:</span>
-<span class="ne">--&gt; </span><span class="mi">304</span>     <span class="n">dataset</span> <span class="o">=</span> <span class="n">DatasetReader</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">driver</span><span class="o">=</span><span class="n">driver</span><span class="p">,</span> <span class="n">sharing</span><span class="o">=</span><span class="n">sharing</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">305</span> <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;r+&quot;</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">306</span>     <span class="n">dataset</span> <span class="o">=</span> <span class="n">get_writer_for_path</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">driver</span><span class="o">=</span><span class="n">driver</span><span class="p">)(</span>
-<span class="g g-Whitespace">    </span><span class="mi">307</span>         <span class="n">path</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">driver</span><span class="o">=</span><span class="n">driver</span><span class="p">,</span> <span class="n">sharing</span><span class="o">=</span><span class="n">sharing</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
-<span class="g g-Whitespace">    </span><span class="mi">308</span>     <span class="p">)</span>
-
-<span class="nn">File rasterio/_base.pyx:312,</span> in <span class="ni">rasterio._base.DatasetBase.__init__</span><span class="nt">()</span>
-
-<span class="ne">RasterioIOError</span>: C:\Users\war-machine\Documents\world_bank_work\UZB_project\GHS_POP_E2015_GLOBE_R2019A_54009_1K_V1_0\GHS_POP_E2015_GLOBE_R2019A_54009_1K_V1_0.tif: No such file or directory
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">output_new_temp_gdf</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">output_new_temp_gdf</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">16</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">output_new_temp_gdf</span>
-
-<span class="ne">NameError</span>: name &#39;output_new_temp_gdf&#39; is not defined
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># make the GeoDataFrame unprojected</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># make the GeoDataFrame unprojected</span>
 <span class="n">output_new_temp_gdf</span> <span class="o">=</span> <span class="n">output_new_temp_gdf</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="s2">&quot;epsg:4326&quot;</span><span class="p">)</span>
 
 <span class="c1"># output = r&quot;C:\Users\war-machine\Documents\world_bank_work\UZB_project\metrics_shape_tool&quot;</span>
@@ -808,33 +688,10 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">17</span><span class="p">],</span> <span class="n">line</span> <span class="mi">2</span>
-<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="c1"># make the GeoDataFrame unprojected</span>
-<span class="ne">----&gt; </span><span class="mi">2</span> <span class="n">output_new_temp_gdf</span> <span class="o">=</span> <span class="n">output_new_temp_gdf</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="s2">&quot;epsg:4326&quot;</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="c1"># output = r&quot;C:\Users\war-machine\Documents\world_bank_work\UZB_project\metrics_shape_tool&quot;</span>
-<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="c1"># output = r&quot;C:\Users\war-machine\Documents\world_bank_work\UZB_project\metrics_shape_tool\eca_metrics_results_russia&quot;</span>
-<span class="g g-Whitespace">      </span><span class="mi">6</span> <span class="c1"># output = r&quot;C:\Users\war-machine\Documents\world_bank_work\UZB_project\metrics_shape_tool\eca_urban_metrics_results_wo_rus&quot;</span>
-   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">9</span> <span class="c1"># output = r&quot;C:\Users\war-machine\Documents\world_bank_work\UZB_project\metrics_shape_tool\UZB_only_GHS_urban_extents_results_all&quot;</span>
-<span class="g g-Whitespace">     </span><span class="mi">10</span> <span class="c1"># output = r&quot;C:\Users\war-machine\Documents\world_bank_work\UZB_project\metrics_shape_tool\eca_urban_metrics_results_wo_rus_all&quot;</span>
-<span class="g g-Whitespace">     </span><span class="mi">11</span> <span class="n">output</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;C:\Users\war-machine\Documents\world_bank_work\UZB_project\metrics_shape_tool\all_urban_extents_results_5k_up&quot;</span>
-
-<span class="ne">NameError</span>: name &#39;output_new_temp_gdf&#39; is not defined
-</pre></div>
-</div>
-</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;total time to process: </span><span class="si">{</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="o">-</span><span class="n">start_time</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>total time to process: 0.4136803150177002
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;total time to process: </span><span class="si">{</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="o">-</span><span class="n">start_time</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
