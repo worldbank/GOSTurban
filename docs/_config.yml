@@ -8,7 +8,7 @@ logo: images/logo.png
 # Force re-execution of notebooks on each build.
 # See https://jupyterbook.org/content/execute.html
 execute:
-  execute_notebooks: force
+  execute_notebooks: false
   allow_errors: true
 
 # only build files in toc
@@ -34,6 +34,5 @@ html:
 sphinx:
   extra_extensions:
     - sphinx.ext.napoleon
-    - sphinxcontrib.apidoc
   config:
     apidoc_module_dir: ../src

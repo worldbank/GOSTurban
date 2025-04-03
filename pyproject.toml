@@ -31,8 +31,7 @@ dependencies = [
 	"pyproj",
 	"elevation",
 	"geojson",
-	"GOSTRocks",
-	"richdem"
+	"GOSTRocks"
 ]
 
 [project.optional-dependencies]

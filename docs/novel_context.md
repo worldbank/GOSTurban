@@ -1,4 +1,10 @@
 # Novel Urbanization
+The World Bank has long been interested in identifying novel methods for quantifying urbanization; relying on countries' reported statistics belies the inherent differences in how countries calculate urban areas, and makes comparisons across space and time very difficult. 
+
+This project compares two urbanization methods (Degree of Urbanization and Dartboard) across sub-saharan Africa, including the effects on poverty measures in a select number of countries. Details on the methods can be found below. If you want to access the data, see links below:
+
+- [Map comparing the results](https://geowb.maps.arcgis.com/apps/Compare/index.html?appid=c1cb50e173e54c58b4770b7db8ea1c65) of the two urbanization methods.
+- [Download the data](https://datacatalog.worldbank.org/int/search/dataset/0060818/Novel-urbanization---urban-extents) from the World Bank's Development Data Catalog.
 
 ## [Degree of Urbanization](https://ghsl.jrc.ec.europa.eu/degurbaOverview.php)
 
@@ -9,7 +15,7 @@ The European Commission developed a globally consistent, people-centric definiti
 | Urban areas | 300 people/km2 | 5000 people |
 | High density urban areas | 1500 people/km2 | 50000 people |
 
-## [Bellefon (2021)](https://www.sciencedirect.com/science/article/pii/S0094119019301032)
+## [Dartboard](https://www.sciencedirect.com/science/article/pii/S0094119019301032)
 
 This method eschews the absolute density thresholds of the EC methodology and instead compares actual building density to counterfactual density after random redistribution of the pixel values in its neighbourhood. The methodology is applied following these steps:
 
