@@ -1,5 +1,7 @@
 # Novel Urbanization
-The code herein support the extraction of the data and calculation of urban extents for the World Bank's experiment and investigation of two methods for evaluating urban:
+The code herein support the extraction of the data and calculation of urban extents for the World Bank's experiment and investigation of two methods for evaluating urban.
+- You can download the data [here](https://datacatalog.worldbank.org/int/search/dataset/0060818/Novel-urbanization---urban-extents)
+- You can explore the urban extents [here in an online map](https://www.arcgis.com/apps/Compare/index.html?appid=c1cb50e173e54c58b4770b7db8ea1c65).
 
 ## [Degree of Urbanization](https://ghsl.jrc.ec.europa.eu/degurbaOverview.php)
 The European Commission developed a globally consistent, people-centric definition of urban areas. The basic approach is to apply a threshold to population grids on both the minimum population density, and then on the minimum total population of the resulting settlements. While the team at the EC continues to advance and iterate on their methodology, we rely on the original definitions of urban they produced:
