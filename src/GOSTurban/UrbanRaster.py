@@ -30,8 +30,9 @@ from geopy.geocoders import Nominatim
 def tPrint(s):
     print("%s\t%s" % (time.strftime("%H:%M:%S"), s))
 
+
 def summarize_urban_pop(inD, urbanLyr, pop_lyr, reproj=True, calc_pop=True):
-    """ Summarize population and urban population within the defined polygonal dataset (inD)
+    """Summarize population and urban population within the defined polygonal dataset (inD)
 
     Parameters
     ----------
@@ -47,22 +48,24 @@ def summarize_urban_pop(inD, urbanLyr, pop_lyr, reproj=True, calc_pop=True):
 
     if urbanLyr.shape != pop_lyr.shape:
         raise ValueError("Urban and population layers must be the same shape")
-    
+
     # Summarize population within polygons
     if calc_pop:
         res = rMisc.zonalStats(inD, pop_lyr, minVal=0, return_df=True)
-        inD['Total_Pop'] = res['SUM']
+        inD["Total_Pop"] = res["SUM"]
 
     # Combine population and urban layers to get urban population
     urban_data = urbanLyr.read(1)
     pop_data = pop_lyr.read(1)
     urban_pop_data = pop_data * (urban_data > 0)
 
-    with rMisc.create_rasterio_inmemory(urbanLyr.profile, urban_pop_data) as urban_pop_lyr:
+    with rMisc.create_rasterio_inmemory(
+        urbanLyr.profile, urban_pop_data
+    ) as urban_pop_lyr:
         urban_res = rMisc.zonalStats(inD, urban_pop_lyr, minVal=0, return_df=True)
 
-    inD['Urban_Pop'] = urban_res['SUM']
-    return(inD)
+    inD["Urban_Pop"] = urban_res["SUM"]
+    return inD
 
 
 def geocode_cities(urban_extents):
@@ -423,7 +426,7 @@ class urbanGriddedPop(object):
             urban_raster = urban_raster.astype(rasterio.uint8)
             out_metadata["dtype"] = urban_raster.dtype
             out_metadata["nodata"] = 0
-            out_metadata['compress'] = 'lzw'
+            out_metadata["compress"] = "lzw"
             with rasterio.open(raster, "w", **out_metadata) as rOut:
                 rOut.write(urban_raster)
 
