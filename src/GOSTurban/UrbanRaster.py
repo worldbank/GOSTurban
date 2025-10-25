@@ -23,6 +23,7 @@ from rasterio import features
 from rasterio.features import rasterize
 from shapely.geometry import shape, Polygon
 from geopy.geocoders import Nominatim
+from rasterstats import zonal_stats
 
 """prints the time along with the message"""
 
@@ -324,6 +325,7 @@ class urbanGriddedPop(object):
         raster="",
         raster_pop="",
         print_message="",
+        sieve=False
     ):
         """
         Generate urban extents from gridded population data through the application of a minimum
@@ -339,45 +341,68 @@ class urbanGriddedPop(object):
                         Empty string is the default and will create no raster
         :param raster_pop: string path to create a raster of the population layer only in the urban areas
                             Empty string is the default and will create no raster
+        :param sieve: boolean to determine whether to apply a sieve filter to the urban raster
+
         :returns: GeoPandasDataFrame of the urban extents
         """
 
         popRaster = self.inR
-        data = popRaster.read()
+        data = popRaster.read()[0,:,:]
         urbanData = (data > densVal) * 1
         urbanData = urbanData.astype("int16")
 
         if verbose:
             tPrint("%s: Read in urban data" % print_message)
-
-        idx = 0
+        if sieve:
+            sieve_size = round(totalPopThresh/data.max()) # the minimum number of pixels to reach the totalPopThresh at max density
+            urbanData = features.sieve(urbanData, size=sieve_size)
+        
         # create output array to store urban raster
         urban_raster = urbanData * 0
-        for cShape, value in features.shapes(urbanData, transform=popRaster.transform):
-            if idx % 1000 == 0 and verbose:
-                tPrint("%s: Creating Shape %s" % (print_message, idx))
-            if value == 1:
-                # If the shape is urban, claculate total pop
-                mask = rasterize(
-                    [(cShape, 0)],
-                    out_shape=data[0, :, :].shape,
-                    fill=1,
-                    transform=popRaster.transform,
-                )
-                inData = np.ma.array(data=data, mask=mask.astype(bool))
-                curPop = np.nansum(inData)
-                if (
-                    curPop < 0
-                ):  # when smoothed, sometimes the pop withh be < 0 because of no data
-                    inData = np.ma.array(data=inData, mask=(inData < 0).astype(bool))
-                    curPop = np.nansum(inData)
-                if curPop > totalPopThresh:
-                    urban_raster += mask ^ 1
+        idx = 0
+        all_shps = []
+        
+        def calculate_urban_with_pop(curD, transform, thresh):
+            """ Calculate urban areas based on population threshold 
 
-            idx = idx + 1
+            Parameters
+            ----------
+            curD : numpy.ndarray
+                Binary array of urban areas based on density threshold
+            transform : Affine
+                Affine transformation for the raster
+            thresh : int
+                Minimum total population threshold for urban areas
+
+            Returns
+            -------
+            list of [numpy.ndarray, gpd.GeoDataFrame]
+                urban raster and geodataframe of urban areas with population above the threshold
+            """
+            for cShape, value in features.shapes(curD, transform=transform, mask=curD.astype(bool)):
+                if value == 1:
+                    all_shps.append(shape(cShape))
+
+            # Create geodataframe of all potential urban areas
+            potential_urban_areas = gpd.GeoDataFrame(geometry=all_shps, crs=popRaster.crs)
+            # Calculate population within each potential urban area
+            urban_pop = zonal_stats(potential_urban_areas, data, affine=popRaster.transform, stats=['sum'], nodata=0)
+            potential_urban_areas['pop'] = [up['sum'] for up in urban_pop]
+            # Select only those urban areas above the population threshold  
+            selected_urban_areas = potential_urban_areas[potential_urban_areas['pop'] >= thresh]
+            # Rasterize the selected urban areas to create the final urban raster
+            urban_raster = rasterize(
+                [(geom, 1) for geom in selected_urban_areas.geometry],
+                out_shape=data.shape,
+                fill=0,
+                transform=popRaster.transform
+            )
+            return ([urban_raster, selected_urban_areas])
+        
+        urban_raster, urban_areas = calculate_urban_with_pop(urbanData, popRaster.transform, totalPopThresh)
 
         if smooth:
-            inD = urban_raster[0, :, :]
+            inD = urban_raster
             total_urban_cells = inD.sum()
             current_cells = 0
             cnt = 0
@@ -390,37 +415,9 @@ class urbanGriddedPop(object):
                 finalD = np.amax(stackD, axis=2)
                 current_cells = finalD.sum()
                 urban_res = finalD
-            urban_raster[0, :, :] = urban_res
+            urban_raster, urban_areas = calculate_urban_with_pop(urban_raster, popRaster.transform, totalPopThresh)
 
-        allFeatures = []
-        badFeatures = []
-        for cShape, value in features.shapes(
-            urban_raster, transform=popRaster.transform
-        ):
-            if idx % 1000 == 0 and verbose:
-                tPrint("%s: Creating Shape %s" % (print_message, idx))
-            if value == 1:
-                # If the shape is urban, claculate total pop
-                mask = rasterize(
-                    [(cShape, 0)],
-                    out_shape=data[0, :, :].shape,
-                    fill=1,
-                    transform=popRaster.transform,
-                )
-                inData = np.ma.array(data=data, mask=mask.astype(bool))
-                curPop = np.nansum(inData)
-                if (
-                    curPop < 0
-                ):  # when smoothed, sometimes the pop withh be < 0 because of no data
-                    inData = np.ma.array(data=inData, mask=(inData < 0).astype(bool))
-                    curPop = np.nansum(inData)
-                if curPop > totalPopThresh:
-                    allFeatures.append(
-                        [idx, curPop, shape(geojson.loads(json.dumps(cShape)))]
-                    )
-
-            idx = idx + 1
-
+        # Create output rasters if specified
         if len(raster):
             out_metadata = popRaster.meta.copy()
             urban_raster = urban_raster.astype(rasterio.uint8)
@@ -428,24 +425,20 @@ class urbanGriddedPop(object):
             out_metadata["nodata"] = 0
             out_metadata["compress"] = "lzw"
             with rasterio.open(raster, "w", **out_metadata) as rOut:
-                rOut.write(urban_raster)
+                rOut.write_band(1, urban_raster)
 
         if len(raster_pop):
             out_metadata = popRaster.meta.copy()
             urban_pop = data * urban_raster
             with rasterio.open(raster_pop, "w", **out_metadata) as rOut:
-                rOut.write(urban_pop)
-
-        xx = pd.DataFrame(allFeatures, columns=["ID", "Pop", "geometry"])
-        xxGeom = gpd.GeoDataFrame(xx, geometry="geometry")
-        xxGeom.crs = popRaster.crs
+                rOut.write_band(1, urban_pop)
 
         if queen:
-            xxGeom["geometry"] = xxGeom.buffer((popRaster.res[0] / 2))
-            s = xxGeom["geometry"]
+            urban_areas["geometry"] = urban_areas.buffer((popRaster.res[0] / 2))
+            s = urban_areas["geometry"]
             overlap_matrix = s.apply(lambda x: s.intersects(x)).values.astype(int)
             n, ids = connected_components(overlap_matrix)
-            xxGeom["group"] = ids
-            xxGeom = xxGeom.dissolve(by="group", aggfunc="sum")
+            urban_areas["group"] = ids
+            urban_areas = urban_areas.dissolve(by="group", aggfunc="sum")
 
-        return xxGeom
+        return urban_areas

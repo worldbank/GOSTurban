@@ -6,7 +6,7 @@ import rasterio.features
 import pandas as pd
 import numpy as np
 
-from GOSTRocks.misc import tPrint
+from GOSTrocks.misc import tPrint
 from shapely.geometry import shape
 from shapely.wkt import loads
 
@@ -32,22 +32,40 @@ def mp_lei(
 def lei_from_feature(
     inD,
     inR,
-    old_list=[4, 5, 6],
-    new_list=[3],
+    old_list,
+    new_list,
     buffer_dist=300,
-    transform="",
     nCores=0,
     measure_crs=None,
     idx_col=None,
+    verbose=False
 ):
-    """Calculate LEI for each feature in inD, leveraging multi-processing, based on the built area in inR
+    """ Calculate the Landscape Expansion Index (LEI) from a categorical dataset 
+        for each polygonal feature in inD
 
-    INPUT
-    inD [geopandas]
-    inR [rasterio]
-    [optional] nCores [int] - number of cores to use in multi-processing
-    [optional] measure_crs [string] - string to convert all data to a CRS where distance and area measurements don't suck ie - "ESRI:54009"
-    ... see calculate_LEI for remaining arguments
+    Parameters
+    ----------
+    inD : geopands.GeoDataFrame
+        Feature dataset for which to calculate LEI
+    inR : rasterio.DatasetReader
+        Raster of built area evolution data
+    old_list : list, optional
+        values in inR to be considered baseline (or t0)
+    new_list : list, optional
+       values in inR to be considered new urban areas
+    buffer_dist : int, optional
+        distance to search around the newly developed area from which to search for existing built area, by default 300
+    nCores : int, optional
+        _description_, by default 0
+    measure_crs : _type_, optional
+        _description_, by default None
+    idx_col : _type_, optional
+        _description_, by default None
+
+    Returns
+    -------
+    _type_
+        _description_
     """
     if inD.crs != inR.crs:
         inD = inD.to_crs(inR.crs)
@@ -58,7 +76,8 @@ def lei_from_feature(
     lei_results = {}
     # For grid cells, extract the GHSL and calculate
     in_vals = []
-    tPrint("***** Preparing values for multiprocessing")
+    if verbose:
+        tPrint("***** Preparing values for multiprocessing")
     for idx, row in inD.iterrows():
         if idx % 100 == 0:
             tPrint(f"{idx} of {inD.shape[0]}: {len(in_vals)}")
@@ -81,9 +100,11 @@ def lei_from_feature(
                 cur_idx = row[idx_col]
             in_vals.append([curR, transform, cur_idx, old_list, new_list, buffer_dist])
 
-    if nCores == 0:
-        nCores = multiprocessing.cpu_count()
-    tPrint("***** starting multiprocessing")
+    
+    nCores = multiprocessing.cpu_count() - 1
+    
+    if verbose:
+        tPrint("***** starting multiprocessing")
     with multiprocessing.Pool(nCores) as pool:
         res = pool.starmap(mp_lei, in_vals)
 

@@ -4,6 +4,7 @@ pandas
 numpy
 scipy
 shapely
+GOSTrocks
 geopy
 pyproj
 elevation
