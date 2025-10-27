@@ -2,13 +2,15 @@
 requires = ["hatchling>=1.21.0", "hatch-vcs>=0.3.0"]
 build-backend = "hatchling.build"
 
-[project]
+[tool.poetry]
 name = "GOSTurban"
-dynamic = ["version"]
+version = "1.0"
 description = "Multiple functions, tools, and tutorials for calculating urbanization based on gridded population data"
+authors = ["Benjamin P. Stewart"]
+
+[project]
 readme = { file = "README.md", content-type = "text/markdown" }
 license = { file = "LICENSE" }
-authors = [{ name = "World Bank", email = "github@worldbank.org" }]
 maintainers = [
 	{ name = "Benjamin P. Stewart", email = "bstewart@worldbankgroup.org" },
 	{ name = "Andres Chamorro", email = "achamorroelizond@worldbank.org" },
@@ -19,6 +21,8 @@ classifiers = [
 	"Intended Audience :: Developers",
 	"Operating System :: OS Independent",
 ]
+keywords = ["gis", "spatial", "statistics", "world bank", "development"]
+
 requires-python = ">=3.8"
 dependencies = [
 	"rasterio",
@@ -31,7 +35,7 @@ dependencies = [
 	"pyproj",
 	"elevation",
 	"geojson",
-	"GOSTRocks"
+	"GOSTrocks"
 ]
 
 [project.optional-dependencies]
@@ -63,3 +67,14 @@ ignore-words-list = "gost,"
 
 [tool.ruff.lint.pydocstyle]
 convention = "numpy"
+
+[tool.poetry.group.test.dependencies]
+pytest = "*"
+pytest-mock = "*"
+pytest-cov = "*"
+shapely = "*"
+numpy = "*"
+cython = "*"
+pandas = "*"
+geopandas = "*" 
+pre-commit = "*"

@@ -327,25 +327,35 @@ class urbanGriddedPop(object):
         print_message="",
         sieve=False
     ):
-        """
-        Generate urban extents from gridded population data through the application of a minimum
+        """ Generate urban extents from gridded population data through the application of a minimum
             density threshold and a minimum total population threshold
 
-        :param densVal: integer of the minimum density value to be counted as urban
-        :param totalPopThresh: integer minimum total settlement population to ne considered urban
-        :param smooth: boolean to run a single modal smoothing function (this should be run when running
-                        on WorldPop as the increased resolution often leads to small holes and funny shapes
-        :param verbose: boolean on what messages to receive
-        :param queen: boolean to determine whether to dissolve final shape to connect queen's contiguity
-        :param raster: string path to create a boolean raster of urban and not.
-                        Empty string is the default and will create no raster
-        :param raster_pop: string path to create a raster of the population layer only in the urban areas
-                            Empty string is the default and will create no raster
-        :param sieve: boolean to determine whether to apply a sieve filter to the urban raster
+        Parameters
+        ----------
+        densVal : int, optional
+            Minimum density value to be counted as urban, by default 300
+        totalPopThresh : int, optional
+            Minimum total settlement population to be considered urban, by default 5000
+        smooth : bool, optional
+            Whether to run a single modal smoothing function, by default False
+        verbose : bool, optional
+            Whether to print progress messages, by default False
+        queen : bool, optional
+            Whether to dissolve final shape to connect queen's contiguity, by default False
+        raster : str, optional
+            Path to create a boolean raster of urban and not, by default ""
+        raster_pop : str, optional
+            Path to create a raster of the population layer only in the urban areas, by default ""
+        print_message : str, optional
+            Message to print during processing, by default ""
+        sieve : bool, optional
+            Whether to apply a sieve filter to the urban raster, by default False
 
-        :returns: GeoPandasDataFrame of the urban extents
+        Returns
+        -------
+        gpd.GeoDataFrame
+            GeoDataFrame of the urban extents
         """
-
         popRaster = self.inR
         data = popRaster.read()[0,:,:]
         urbanData = (data > densVal) * 1

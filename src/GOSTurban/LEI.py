@@ -11,9 +11,7 @@ from shapely.geometry import shape
 from shapely.wkt import loads
 
 
-def mp_lei(
-    curRxx, transformxx, idx_xx, old_list=[4, 5, 6], new_list=[3], buffer_dist=300
-):
+def _mp_lei(curRxx, transformxx, idx_xx, old_list=[4, 5, 6], new_list=[3], buffer_dist=300):
     """calculate and summarize LEI for curRxx, designed for use in multiprocessing function"""
     curRes = calculate_LEI(
         curRxx,
@@ -35,7 +33,6 @@ def lei_from_feature(
     old_list,
     new_list,
     buffer_dist=300,
-    nCores=0,
     measure_crs=None,
     idx_col=None,
     verbose=False
@@ -55,17 +52,17 @@ def lei_from_feature(
        values in inR to be considered new urban areas
     buffer_dist : int, optional
         distance to search around the newly developed area from which to search for existing built area, by default 300
-    nCores : int, optional
-        _description_, by default 0
-    measure_crs : _type_, optional
-        _description_, by default None
-    idx_col : _type_, optional
-        _description_, by default None
+    measure_crs : int, optional
+        CRS number to use for measurement, by default None
+    idx_col : str, optional
+        Column name to use as index, by default None
+    verbose : bool, optional
+        Whether to print progress messages, by default False
 
     Returns
     -------
-    _type_
-        _description_
+    pandas.DataFrame
+        DataFrame containing the LEI results
     """
     if inD.crs != inR.crs:
         inD = inD.to_crs(inR.crs)
@@ -73,13 +70,12 @@ def lei_from_feature(
     if measure_crs is not None:
         measureD = inD.to_crs(measure_crs)
 
-    lei_results = {}
     # For grid cells, extract the GHSL and calculate
     in_vals = []
     if verbose:
         tPrint("***** Preparing values for multiprocessing")
     for idx, row in inD.iterrows():
-        if idx % 100 == 0:
+        if idx % 100 == 0 and verbose:
             tPrint(f"{idx} of {inD.shape[0]}: {len(in_vals)}")
         ul = inR.index(*row["geometry"].bounds[0:2])
         lr = inR.index(*row["geometry"].bounds[2:4])
@@ -106,7 +102,7 @@ def lei_from_feature(
     if verbose:
         tPrint("***** starting multiprocessing")
     with multiprocessing.Pool(nCores) as pool:
-        res = pool.starmap(mp_lei, in_vals)
+        res = pool.starmap(_mp_lei, in_vals)
 
     res = pd.DataFrame(res)
     res = res.reset_index()
@@ -118,29 +114,27 @@ def lei_from_feature(
 def calculate_LEI(inputGHSL, old_list, new_list, buffer_dist=300, transform=""):
     """Calculate Landscape Expansion Index (LEI) through comparison of categorical values in a single raster dataset.
 
-    :param inputGHSL: Path to a geotiff or a rasterio object, or a numpy array containing the categorical
-        data used to calculate LEI
-    :type inputGHSL: rasterio.DatasetReader
-    :param old_list: Values in built area raster to consider old urban.
-    :type old_list: list of ints
-    :param new_list: Values in built area raster to consider new urban
-    :type new_list: list of ints
-    :param buffer_dist: distance to buffer new urban areas for comparison to old urban extents, defaults to 300 (m)
-    :type buffer_dist: int, optional
-    :param transform: rasterio transformation object. Required if inputGHSL is a numpy array, defaults to ''
-    :type transform: str, optional
-    :returns: individual vectors of new built areas with LEI results. Each item is a single new built feature with three columns:
-                1. geometry of the new built area feature
-                2. number of pixels in new built area donut from old built area
-                3. area of new built area buffer
+    Parameters
+    ----------
+    inputGHSL : str or rasterio.DatasetRaster or numpy.array
+        Landcover dataset containing categorical values
+    old_list : list of integers
+        values in inputGHSL to be considered baseline (or t0)
+    new_list : list of integers
+        Values in inputGHSL to be considered new urban areas
+    buffer_dist : int, optional
+        Distance to search around the newly developed area from which to search for existing built area, by default 300
+    transform : str, optional
+        Raster transform information, by default ""
 
-    :example:
-        # This calculates the LEI between 1990 and 2000 in the categorical GHSL
-        lei_raw = calculate_LEI(input_ghsl, old_list = [5,6], new_list=[4])
-        lei_90_00 = pd.DataFrame(lei_raw, columns=['geometry', 'old', 'total'])
-        lei_90_00['LEI'] = lei_90_00['old'] / lei_90_00['total']
-        lei_90_00.head()
-    """
+    Returns
+    -------
+    array of [curShape, oldArea, totalArea]
+        results for each new urban area found in the dataset; curShape is the geometry of the new urban area,
+        oldArea is the amount of old urban area found within buffer_dist of the new area, totalArea is the total area
+        within buffer_dist of the new area.
+    """ 
+    
     if isinstance(inputGHSL, str):
         inRaster = rasterio.open(inputGHSL)
         inR = inRaster.read()
@@ -182,21 +176,25 @@ def calculate_LEI(inputGHSL, old_list, new_list, buffer_dist=300, transform=""):
             totalArea = burned.sum()
             allVals.append([curShape, oldArea, totalArea])
 
-    return allVals
-
+    return allVals    
 
 def summarize_LEI(in_file, leap_val=0.05, exp_val=0.9):
     """Summarize the LEI results produced by self.calculate_LEI
 
-    :param in_file: LEI results generated from calculate_LEI above
-    :type in_file: string path to csv file or pandas dataframe
-    :param leap_val: LEI value below which areas are considered to be leapfrog, defaults to 0.05
-    :type leap_val: float, optional
-    :param exp_val: LEI value above which areas are considered to be infill, defaults to 0.9
-    :type exp_val: float, optional
-    :returns: pandas groupby row summarizing area in m2 of leapfrog, expansion, and infill areas
-    :rtype: pandas groupby row
+    Parameters
+    ----------
+    in_file : string path or pandas.DataFrame
+        LEI results generated from calculate_LEI above
+    leap_val : float, optional
+        LEI value below which areas are considered to be leapfrog, defaults to 0.05
+    exp_val : float, optional
+        LEI value above which areas are considered to be infill, defaults to 0.9
+    Returns
+    -------
+    pd.DataFrame
+        pandas groupby row summarizing area in m2 of leapfrog, expansion, and infill areas
     """
+    
     if isinstance(in_file, str):
         res = pd.read_csv(in_file)
         res["area"] = res["geometry"].apply(lambda x: loads(x).area)
