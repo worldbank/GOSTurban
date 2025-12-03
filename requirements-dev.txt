@@ -1,0 +1,14 @@
+# Testing and QA
+pytest
+pytest-cov
+pytest-mock
+pre-commit
+cython
+
+# Documentation
+docutils==0.17.1
+jupyter-book>=1,<2
+sphinxcontrib-apidoc>=0.4.0,<1
+jupyter-cache>=0.6.0
+nbconvert
+nbstripout
