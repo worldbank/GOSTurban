@@ -15,7 +15,7 @@ jobs:
           cache: "pip"
       - name: Dependencies
         run: |
-          if [ -f pyproject.toml ]; then pip install ".[docs]"; fi
+          if [ -f pyproject.toml ]; then python -m pip install ".[dev]"; fi
       - name: Clear notebooks and create conf.py file
         run: |
           jupyter-book config sphinx docs/
