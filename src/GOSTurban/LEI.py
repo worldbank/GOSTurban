@@ -11,7 +11,9 @@ from shapely.geometry import shape
 from shapely.wkt import loads
 
 
-def _mp_lei(curRxx, transformxx, idx_xx, old_list=[4, 5, 6], new_list=[3], buffer_dist=300):
+def _mp_lei(
+    curRxx, transformxx, idx_xx, old_list=[4, 5, 6], new_list=[3], buffer_dist=300
+):
     """calculate and summarize LEI for curRxx, designed for use in multiprocessing function"""
     curRes = calculate_LEI(
         curRxx,
@@ -35,9 +37,9 @@ def lei_from_feature(
     buffer_dist=300,
     measure_crs=None,
     idx_col=None,
-    verbose=False
+    verbose=False,
 ):
-    """ Calculate the Landscape Expansion Index (LEI) from a categorical dataset 
+    """Calculate the Landscape Expansion Index (LEI) from a categorical dataset
         for each polygonal feature in inD
 
     Parameters
@@ -96,9 +98,8 @@ def lei_from_feature(
                 cur_idx = row[idx_col]
             in_vals.append([curR, transform, cur_idx, old_list, new_list, buffer_dist])
 
-    
     nCores = multiprocessing.cpu_count() - 1
-    
+
     if verbose:
         tPrint("***** starting multiprocessing")
     with multiprocessing.Pool(nCores) as pool:
@@ -133,8 +134,8 @@ def calculate_LEI(inputGHSL, old_list, new_list, buffer_dist=300, transform=""):
         results for each new urban area found in the dataset; curShape is the geometry of the new urban area,
         oldArea is the amount of old urban area found within buffer_dist of the new area, totalArea is the total area
         within buffer_dist of the new area.
-    """ 
-    
+    """
+
     if isinstance(inputGHSL, str):
         inRaster = rasterio.open(inputGHSL)
         inR = inRaster.read()
@@ -176,7 +177,8 @@ def calculate_LEI(inputGHSL, old_list, new_list, buffer_dist=300, transform=""):
             totalArea = burned.sum()
             allVals.append([curShape, oldArea, totalArea])
 
-    return allVals    
+    return allVals
+
 
 def summarize_LEI(in_file, leap_val=0.05, exp_val=0.9):
     """Summarize the LEI results produced by self.calculate_LEI
@@ -194,7 +196,7 @@ def summarize_LEI(in_file, leap_val=0.05, exp_val=0.9):
     pd.DataFrame
         pandas groupby row summarizing area in m2 of leapfrog, expansion, and infill areas
     """
-    
+
     if isinstance(in_file, str):
         res = pd.read_csv(in_file)
         res["area"] = res["geometry"].apply(lambda x: loads(x).area)
