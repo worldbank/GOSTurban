@@ -3,13 +3,19 @@
 
 format: jb-book
 root: README
+
 parts:
+  - caption: API reference
+    chapters:
+      - file: pythonclient_lei.rst
+      - file: pythonclient_urbanraster.rst
+
   - caption: Novel Urbanization
     chapters:
-      - file: docs/novel_context.md
-      - file: docs/urbanization_comparison
-      - file: notebooks/Implementations/MENA_Benchmarking/Map_Extents.ipynb
+      - file: novel_context.md
+      - file: urbanization_comparison
+      #- file: ../notebooks/Implementations/MENA_Benchmarking/Map_Extents.ipynb
   - caption: Tutorials
     chapters:
-      - file: notebooks/Tutorials/UrbanAreas_tutorials.ipynb
-      - file: notebooks/Tutorials/LEI_Example.ipynb
+      - file: Tutorials/UrbanAreas_tutorials.ipynb
+      - file: Tutorials/LEI_Example.ipynb

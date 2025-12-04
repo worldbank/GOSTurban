@@ -1,14 +1,14 @@
 [build-system]
-requires = ["hatchling>=1.21.0", "hatch-vcs>=0.3.0"]
-build-backend = "hatchling.build"
+requires = ["setuptools>=61", "setuptools-scm>=8"]
+build-backend = "setuptools.build_meta"
 
 [project]
 name = "GOSTurban"
-dynamic = ["version"]
+dynamic = ["version", "dependencies", "optional-dependencies"]
 description = "Multiple functions, tools, and tutorials for calculating urbanization based on gridded population data"
 readme = { file = "README.md", content-type = "text/markdown" }
 license = { file = "LICENSE" }
-authors = [{ name = "World Bank", email = "github@worldbank.org" }]
+authors = [{ name = "Benjamin P. Stewart" }]
 maintainers = [
 	{ name = "Benjamin P. Stewart", email = "bstewart@worldbankgroup.org" },
 	{ name = "Andres Chamorro", email = "achamorroelizond@worldbank.org" },
@@ -18,48 +18,29 @@ classifiers = [
 	"Development Status :: 3 - Alpha",
 	"Intended Audience :: Developers",
 	"Operating System :: OS Independent",
+	"Topic :: Scientific/Engineering",
 ]
-requires-python = ">=3.8"
-dependencies = [
-	"rasterio",
-	"geopandas",
-	"pandas",
-	"numpy",
-	"scipy",
-	"shapely",
-	"geopy",
-	"pyproj",
-	"elevation",
-	"geojson",
-	"GOSTRocks"
-]
+keywords = ["gis", "spatial", "statistics", "world bank", "development"]
 
-[project.optional-dependencies]
-dev = ["pytest", "pytest-cov", "GOSTurban[docs]"]
-docs = [
-	"docutils==0.17.1",
-	"jupyter-book>=1,<2",
-	"sphinxcontrib-apidoc>=0.4.0,<1",
-	"jupyter-cache>=0.6.0",
-	"nbconvert",
-	"nbstripout"
-]
+requires-python = ">=3.10"
 
 [project.urls]
 "Homepage" = "https://github.com/worldbank/GOSTurban"
 "Bug Reports" = "https://github.com/worldbank/GOSTurban/issues"
 "Source" = "https://github.com/worldbank/GOSTurban"
 
-[tool.hatch.version]
-source = "vcs"
+[tool.setuptools.dynamic]
+dependencies = { file = ["requirements.txt"] }
 
-[tool.hatch.build.hooks.vcs]
-version-file = "src/GOSTurban/_version.py"
+[tool.setuptools.dynamic.optional-dependencies]
+dev = { file = ["requirements-dev.txt"] }
+
+[tool.setuptools_scm]
+version_file = "src/GOSTurban/_version.py"
 
 [tool.codespell]
 skip = 'docs/_build,docs/references.bib,__pycache__,*.png,*.gz,*.whl'
 ignore-regex = '^\s*"image\/png":\s.*'
-ignore-words-list = "gost,"
 
 [tool.ruff.lint.pydocstyle]
 convention = "numpy"

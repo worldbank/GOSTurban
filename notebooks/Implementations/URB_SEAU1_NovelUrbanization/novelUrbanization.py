@@ -16,7 +16,7 @@ from GOSTrocks.misc import tPrint
 
 # Import GOST urban functions
 sys.path.append("../../../src")
-import GOSTurban.urban_helper as helper
+import GOSTurban.RETIRED.urban_helper as helper
 
 importlib.reload(helper)
 importlib.reload(rMisc)

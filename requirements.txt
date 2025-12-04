@@ -4,11 +4,8 @@ pandas
 numpy
 scipy
 shapely
-GOSTrocks
 geopy
 pyproj
 elevation
 geojson
-hatch
-git
-richdem
+GOSTrocks

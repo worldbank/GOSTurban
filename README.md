@@ -32,16 +32,17 @@ pip install GOSTurban
 
 3. Install the package with dependencies:
 
-    ```shell
-    pip install .
-    ```
+```shell
+pip install .
+```
+
 ### Developer Installation
 
 Install the package **in editable** mode with all of the dependencies needed to run the tests and build the documentation locally:
 
- ```shell
- pip install -e .[dev]
- ```
+```shell
+pip install -e .[dev]
+```
 
 The `-e` flag stands for "editable," meaning changes to the source code will immediately affect the installed package.
 
