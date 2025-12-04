@@ -135,9 +135,9 @@ def MLpred(df):
     df.reset_index(inplace=True)
     pred_df_temp["PID"] = df.PID
 
-    ans = pd.merge(df, pred_df_temp, on="PID")
+    merged = pd.merge(df, pred_df_temp, on="PID")
 
-    return ans
+    return merged
 
 
 # Create an empty DF for append

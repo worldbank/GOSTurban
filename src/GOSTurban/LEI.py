@@ -159,7 +159,7 @@ def calculate_LEI(inputGHSL, old_list, new_list, buffer_dist=300, transform=""):
             # Clip out the original shape to leave just the donut
             try:
                 donutArea = bufferArea.difference(curShape)
-            except:
+            except Exception:
                 bufferArea = bufferArea.buffer(0)
                 curShape = curShape.buffer(0)
                 donutArea = bufferArea.difference(curShape)

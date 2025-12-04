@@ -92,15 +92,15 @@ def geocode_cities(urban_extents):
         res = all_res[idx]
         try:
             urban_extents.loc[idx, "City"] = res.raw["address"]["city"]
-        except:
+        except Exception:
             break
         try:
             urban_extents.loc[idx, "State"] = res.raw["address"]["state"]
-        except:
+        except Exception:
             pass
         try:
             urban_extents.loc[idx, "Country"] = res.raw["address"]["country"]
-        except:
+        except Exception:
             pass
     return urban_extents
 
@@ -112,7 +112,7 @@ class urbanGriddedPop(object):
 
         :param inRaster: string or rasterio object representing gridded population data
         """
-        if type(inRaster) == str:
+        if isinstance(inRaster, str):
             self.inR = rasterio.open(inRaster)
         elif isinstance(inRaster, rasterio.DatasetReader):
             self.inR = inRaster
@@ -185,11 +185,10 @@ class urbanGriddedPop(object):
             idx = idx + 1
             if value > 0:
                 # RRemove holes from urban shape
-                origShape = cShape
                 xx = shape(cShape)
                 xx = Polygon(xx.exterior)
                 cShape = xx.__geo_interface__
-                # If the shape is urban, claculate total pop
+                # If the shape is urban, calculate total pop
                 mask = rasterize(
                     [(cShape, 0)],
                     out_shape=data[0, :, :].shape,
@@ -231,7 +230,7 @@ class urbanGriddedPop(object):
                 tPrint("%s: Creating Shape %s" % (print_message, idx))
             idx = idx + 1
             if value > 0:
-                # If the shape is urban, claculate total pop
+                # If the shape is urban, calculate total pop
                 mask = rasterize(
                     [(cShape, 0)],
                     out_shape=data[0, :, :].shape,
@@ -280,7 +279,7 @@ class urbanGriddedPop(object):
             dists = xx["geometry"].apply(lambda y: y.distance(x))
             try:
                 return min(dists[dists > 0])
-            except:
+            except ValueError:
                 return 0
 
         to_be["dist"] = to_be["geometry"].apply(
@@ -371,7 +370,6 @@ class urbanGriddedPop(object):
 
         # create output array to store urban raster
         urban_raster = urbanData * 0
-        idx = 0
         all_shps = []
 
         def calculate_urban_with_pop(curD, transform, thresh):

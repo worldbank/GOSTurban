@@ -41,7 +41,6 @@ version_file = "src/GOSTurban/_version.py"
 [tool.codespell]
 skip = 'docs/_build,docs/references.bib,__pycache__,*.png,*.gz,*.whl'
 ignore-regex = '^\s*"image\/png":\s.*'
-ignore-words-list = "gost,"
 
 [tool.ruff.lint.pydocstyle]
 convention = "numpy"

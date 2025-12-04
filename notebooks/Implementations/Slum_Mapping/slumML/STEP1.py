@@ -49,7 +49,6 @@ KD_tree = KDTree(matrix)
 def Main(passed_dict):
     # unpack passed dict into local variables for this thread.
     short = passed_dict["df"]
-    thread_no = passed_dict["thread_no"]
     print_thresh = passed_dict["print_thresh"]
     save_thresh = passed_dict["save_thresh"]
 
@@ -128,8 +127,8 @@ def Main(passed_dict):
             0
         ]  # count of buildings in 100m radius
 
-        # add these stats to a dictionary called 'ans'
-        ans = {
+        # add these stats to a dictionary for this feature
+        result = {
             "PID": row.PID,
             "area": row.area,
             "D5_min": min_5,
@@ -153,7 +152,7 @@ def Main(passed_dict):
             "Count_100m": count_100m,
         }
 
-        bundle.append(ans)
+        bundle.append(result)
 
         # keep track of progress via this row
         if counter % print_thresh == 0:

@@ -18,6 +18,7 @@ repos:
     hooks:
       - id: markdownlint
         name: Markdownlint
+        exclude: "^notebooks/"
         files: \.(md|mdown|markdown)$
         args: [
             "--disable=MD013", # line-length
@@ -29,14 +30,18 @@ repos:
       - id: codespell
         name: codespell
         description: Checks for common misspellings in text files
+        exclude: "^notebooks/"
+        args: ["--ignore-words-list=gost,GOST"]
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.5.7
     hooks:
       - id: ruff
         types_or: [python, pyi, jupyter]
+        exclude: "^notebooks/"
         args: [--fix]
       - id: ruff-format
         types_or: [python, pyi, jupyter]
+        exclude: "^notebooks/"
   - repo: https://github.com/kynan/nbstripout
     rev: 0.7.1
     hooks:
