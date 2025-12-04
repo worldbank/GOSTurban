@@ -33,7 +33,7 @@
     <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css" />
     <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
-    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-design.5ea377869091fd0449014c60fc090103.min.css" />
   
@@ -60,10 +60,14 @@
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
     <script async="async" src="_static/sphinx-thebe.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'urbanization_comparison';</script>
+    <link rel="canonical" href="https://github.com/worldbank/GOST_Urban/urbanization_comparison.html" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Degree of Urbanization" href="Tutorials/UrbanAreas_tutorials.html" />
+    <link rel="prev" title="Novel Urbanization" href="novel_context.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
+    <meta name="docbuild:last-update" content="Dec 04, 2025"/>
   </head>
   
   
@@ -124,8 +128,6 @@
       
       
       
-        
-      
       <div class="bd-sidebar-primary bd-sidebar">
         
 
@@ -181,16 +183,22 @@
                 </a>
             </li>
         </ul>
-        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Novel Urbanization</span></p>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">API reference</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="notebooks/Implementations/MENA_Benchmarking/Map_Extents.html">Mapping and comparing urban extents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pythonclient_lei.html">Python Client</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pythonclient_urbanraster.html">Python Client</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Novel Urbanization</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="novel_context.html">Novel Urbanization</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Comparing urban methods</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="notebooks/Tutorials/UrbanAreas_tutorials.html">Degree of Urbanization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Tutorials/UrbanAreas_tutorials.html">Degree of Urbanization</a></li>
 
 
-<li class="toctree-l1"><a class="reference internal" href="notebooks/Tutorials/LEI_Example.html">Landscape Expansion Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Tutorials/LEI_Example.html">Landscape Expansion Index</a></li>
 
 </ul>
 
@@ -235,18 +243,50 @@
 <div class="article-header-buttons">
 
 
-<a href="https://github.com/worldbank/GOST_Urban" target="_blank"
-   class="btn btn-sm btn-source-repository-button"
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/worldbank/GOST_Urban" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
    title="Source repository"
-   data-bs-placement="bottom" data-bs-toggle="tooltip"
+   data-bs-placement="left" data-bs-toggle="tooltip"
 >
   
 
 <span class="btn__icon-container">
   <i class="fab fa-github"></i>
   </span>
-
+<span class="btn__text-container">Repository</span>
 </a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/worldbank/GOST_Urban/edit/main/urbanization_comparison.md" target="_blank"
+   class="btn btn-sm btn-source-edit-button dropdown-item"
+   title="Suggest edit"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">Suggest edit</span>
+</a>
+</li>
+      
+  </ul>
+</div>
 
 
 
@@ -455,7 +495,7 @@ DB Cores - Nairobi</label><div class="sd-tab-content docutils">
 <figure class="align-default" id="id1">
 <img alt="_images/KEN_Nairobi_Urbanization_Comparison_CO.png" src="_images/KEN_Nairobi_Urbanization_Comparison_CO.png" />
 <figcaption>
-<p><span class="caption-text">Nairobi zoom: comparing DB cores to DoU high density areas</span><a class="headerlink" href="#id1" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 1 </span><span class="caption-text">Nairobi zoom: comparing DB cores to DoU high density areas</span><a class="headerlink" href="#id1" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 </div>
@@ -465,7 +505,7 @@ DB Cities - Nairobi</label><div class="sd-tab-content docutils">
 <figure class="align-default" id="id2">
 <img alt="_images/KEN_Nairobi_Urbanization_Comparison_CC.png" src="_images/KEN_Nairobi_Urbanization_Comparison_CC.png" />
 <figcaption>
-<p><span class="caption-text">Nairboi zoom: comparing DB Cities to DoU high density areas</span><a class="headerlink" href="#id2" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 2 </span><span class="caption-text">Nairboi zoom: comparing DB Cities to DoU high density areas</span><a class="headerlink" href="#id2" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 </div>
@@ -475,7 +515,7 @@ DB Cores</label><div class="sd-tab-content docutils">
 <figure class="align-default" id="id3">
 <img alt="_images/KEN_Urbanization_Comparison_CO.png" src="_images/KEN_Urbanization_Comparison_CO.png" />
 <figcaption>
-<p><span class="caption-text">Comparing DB cores to DoU high density areas</span><a class="headerlink" href="#id3" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 3 </span><span class="caption-text">Comparing DB cores to DoU high density areas</span><a class="headerlink" href="#id3" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 </div>
@@ -485,7 +525,7 @@ DB Cities</label><div class="sd-tab-content docutils">
 <figure class="align-default" id="id4">
 <img alt="_images/KEN_Urbanization_Comparison_CC.png" src="_images/KEN_Urbanization_Comparison_CC.png" />
 <figcaption>
-<p><span class="caption-text">Comparing DB Cities to DoU high density areas</span><a class="headerlink" href="#id4" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 4 </span><span class="caption-text">Comparing DB Cities to DoU high density areas</span><a class="headerlink" href="#id4" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 </div>
@@ -523,6 +563,24 @@ DB Cities</label><div class="sd-tab-content docutils">
                 <footer class="prev-next-footer d-print-none">
                   
 <div class="prev-next-area">
+    <a class="left-prev"
+       href="novel_context.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Novel Urbanization</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="Tutorials/UrbanAreas_tutorials.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Degree of Urbanization</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
 </div>
                 </footer>
               
@@ -564,17 +622,13 @@ By Benjamin P. Stewart
   <div class="footer-item">
     
 
-  <p class="copyright">
-    
-      © Copyright 2023.
-      <br/>
-    
-  </p>
-
   </div>
   
   <div class="footer-item">
-    
+    <p class="last-updated">
+  Last updated on Dec 04, 2025.
+  <br/>
+</p>
   </div>
   
   <div class="footer-item">

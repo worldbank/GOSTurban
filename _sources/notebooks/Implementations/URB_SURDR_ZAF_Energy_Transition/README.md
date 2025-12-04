@@ -1,2 +1,0 @@
-# Just energy transition
-tbd
