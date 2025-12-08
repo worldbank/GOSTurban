@@ -6,7 +6,7 @@ ci:
 
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.6.0
+    rev: v6.0.0
     hooks:
       - id: trailing-whitespace
       - id: end-of-file-fixer
@@ -18,7 +18,7 @@ repos:
         args: [--allow-missing-credentials]
       - id: detect-private-key
   - repo: https://github.com/igorshubovych/markdownlint-cli
-    rev: v0.41.0
+    rev: v0.46.0
     hooks:
       - id: markdownlint
         name: Markdownlint
@@ -29,7 +29,7 @@ repos:
             "--disable=MD033", # no-inline-html
           ]
   - repo: https://github.com/codespell-project/codespell
-    rev: v2.3.0
+    rev: v2.4.1
     hooks:
       - id: codespell
         name: codespell
@@ -37,7 +37,7 @@ repos:
         exclude: "^notebooks/"
         args: ["--ignore-words-list=gost,GOST"]
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.5.7
+    rev: v0.14.8
     hooks:
       - id: ruff
         types_or: [python, pyi, jupyter]
@@ -47,6 +47,6 @@ repos:
         types_or: [python, pyi, jupyter]
         exclude: "^notebooks/"
   - repo: https://github.com/kynan/nbstripout
-    rev: 0.7.1
+    rev: 0.8.2
     hooks:
       - id: nbstripout
