@@ -50,7 +50,6 @@ def Main(passed_dict):
     # unpack passed dict into local variables for this thread.
     short = passed_dict["df"]
     print_thresh = passed_dict["print_thresh"]
-    save_thresh = passed_dict["save_thresh"]
 
     # set up some counters / timings
     t = time.time()

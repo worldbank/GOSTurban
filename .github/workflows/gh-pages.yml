@@ -1,33 +1,48 @@
-name: docs
+name: GitHub Pages
 on:
   push:
-  pull_request:
+    # Build on any branch; deploy job gates on main
+    branches:
+      - '**'
 
+env:
+  BASE_URL: /${{ github.event.repository.name }}
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Set up Python
-        uses: actions/setup-python@v4
+      - uses: actions/setup-node@v4
         with:
-          python-version: "3.10"
-          cache: "pip"
-      - name: Dependencies
-        run: |
-          if [ -f pyproject.toml ]; then python -m pip install ".[dev]"; fi
-      - name: Clear notebooks and create conf.py file
-        run: |
-          jupyter-book config sphinx docs/
-          jupyter nbconvert --ClearOutputPreprocessor.enabled=True --ClearMetadataPreprocessor.enabled=True --clear-output --inplace $(find . -type f -name '*.ipynb')
-          jupyter-book build --all --config docs/_config.yml --toc docs/_toc.yml .
-      - name: Build Sphinx Documentation
-        run: |
-          sphinx-build docs _build/html -b html
-      - name: Deploy
-        uses: peaceiris/actions-gh-pages@v3
-        if: github.ref == 'refs/heads/main' && job.status == 'success'
+          node-version: 18.x
+      - name: Install Jupyter Book (via myst)
+        run: npm install -g jupyter-book
+      - name: Build HTML Assets
+        working-directory: docs
+        run: jupyter-book build --html
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./_build/html
-          enable_jekyll: false
+          path: "./docs/_build/html"
+
+  deploy:
+    if: github.ref == 'refs/heads/main'
+    needs: build
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup Pages
+        uses: actions/configure-pages@v3
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
