@@ -93,15 +93,13 @@ def geocode_cities(urban_extents):
         try:
             urban_extents.loc[idx, "City"] = res.raw["address"]["city"]
         except Exception:
-            continue
+            break
         try:
             urban_extents.loc[idx, "State"] = res.raw["address"]["state"]
-        except Exception:
         except Exception:
             pass
         try:
             urban_extents.loc[idx, "Country"] = res.raw["address"]["country"]
-        except Exception:
         except Exception:
             pass
     return urban_extents
@@ -114,7 +112,6 @@ class urbanGriddedPop(object):
 
         :param inRaster: string or rasterio object representing gridded population data
         """
-        if isinstance(inRaster, str):
         if isinstance(inRaster, str):
             self.inR = rasterio.open(inRaster)
         elif isinstance(inRaster, rasterio.DatasetReader):
@@ -187,11 +184,10 @@ class urbanGriddedPop(object):
                 tPrint("%s: Creating Shape %s" % (print_message, idx))
             idx = idx + 1
             if value > 0:
-                # Remove holes from urban shape
+                # RRemove holes from urban shape
                 xx = shape(cShape)
                 xx = Polygon(xx.exterior)
                 cShape = xx.__geo_interface__
-                # If the shape is urban, calculate total pop
                 # If the shape is urban, calculate total pop
                 mask = rasterize(
                     [(cShape, 0)],
@@ -234,7 +230,6 @@ class urbanGriddedPop(object):
                 tPrint("%s: Creating Shape %s" % (print_message, idx))
             idx = idx + 1
             if value > 0:
-                # If the shape is urban, calculate total pop
                 # If the shape is urban, calculate total pop
                 mask = rasterize(
                     [(cShape, 0)],
@@ -284,7 +279,7 @@ class urbanGriddedPop(object):
             dists = xx["geometry"].apply(lambda y: y.distance(x))
             try:
                 return min(dists[dists > 0])
-            except Exception:
+            except ValueError:
                 return 0
 
         to_be["dist"] = to_be["geometry"].apply(
@@ -330,7 +325,6 @@ class urbanGriddedPop(object):
         raster_pop="",
         print_message="",
         sieve=False,
-        sieve=False,
     ):
         """Generate urban extents from gridded population data through the application of a minimum
             density threshold and a minimum total population threshold
@@ -363,7 +357,6 @@ class urbanGriddedPop(object):
         """
         popRaster = self.inR
         data = popRaster.read()[0, :, :]
-        data = popRaster.read()[0, :, :]
         urbanData = (data > densVal) * 1
         urbanData = urbanData.astype("int16")
 
@@ -373,19 +366,13 @@ class urbanGriddedPop(object):
             sieve_size = round(
                 totalPopThresh / data.max()
             )  # the minimum number of pixels to reach the totalPopThresh at max density
-            sieve_size = round(
-                totalPopThresh / data.max()
-            )  # the minimum number of pixels to reach the totalPopThresh at max density
             urbanData = features.sieve(urbanData, size=sieve_size)
-
 
         # create output array to store urban raster
         urban_raster = urbanData * 0
         all_shps = []
 
-
         def calculate_urban_with_pop(curD, transform, thresh):
-            """Calculate urban areas based on population threshold
             """Calculate urban areas based on population threshold
 
             Parameters
@@ -405,9 +392,6 @@ class urbanGriddedPop(object):
             for cShape, value in features.shapes(
                 curD, transform=transform, mask=curD.astype(bool)
             ):
-            for cShape, value in features.shapes(
-                curD, transform=transform, mask=curD.astype(bool)
-            ):
                 if value == 1:
                     all_shps.append(shape(cShape))
 
@@ -415,22 +399,7 @@ class urbanGriddedPop(object):
             potential_urban_areas = gpd.GeoDataFrame(
                 geometry=all_shps, crs=popRaster.crs
             )
-            potential_urban_areas = gpd.GeoDataFrame(
-                geometry=all_shps, crs=popRaster.crs
-            )
             # Calculate population within each potential urban area
-            urban_pop = zonal_stats(
-                potential_urban_areas,
-                data,
-                affine=popRaster.transform,
-                stats=["sum"],
-                nodata=0,
-            )
-            potential_urban_areas["pop"] = [up["sum"] for up in urban_pop]
-            # Select only those urban areas above the population threshold
-            selected_urban_areas = potential_urban_areas[
-                potential_urban_areas["pop"] >= thresh
-            ]
             urban_pop = zonal_stats(
                 potential_urban_areas,
                 data,
@@ -449,13 +418,7 @@ class urbanGriddedPop(object):
                 out_shape=data.shape,
                 fill=0,
                 transform=popRaster.transform,
-                transform=popRaster.transform,
             )
-            return [urban_raster, selected_urban_areas]
-
-        urban_raster, urban_areas = calculate_urban_with_pop(
-            urbanData, popRaster.transform, totalPopThresh
-        )
             return [urban_raster, selected_urban_areas]
 
         urban_raster, urban_areas = calculate_urban_with_pop(
@@ -476,9 +439,6 @@ class urbanGriddedPop(object):
                 finalD = np.amax(stackD, axis=2)
                 current_cells = finalD.sum()
                 urban_res = finalD
-            urban_raster, urban_areas = calculate_urban_with_pop(
-                urban_raster, popRaster.transform, totalPopThresh
-            )
             urban_raster, urban_areas = calculate_urban_with_pop(
                 urban_raster, popRaster.transform, totalPopThresh
             )
