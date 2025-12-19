@@ -1,0 +1,26 @@
+version: 1
+project:
+  title: GOST Urbanization
+  github: worldbank/GOSTurban
+
+  toc:
+    - file: README.md
+    - title: Novel Urbanization
+      children:
+        - file: novel_context.md
+        - file: urbanization_comparison.md
+        - file: tutorials/Map_Extents.ipynb
+    - title: Tutorials
+      children:
+        - file: tutorials/UrbanAreas_tutorials.ipynb
+        - file: tutorials/LEI_Example.ipynb
+    - title: Contributing
+      children:
+        - file: CODE_OF_CONDUCT.md
+site:
+  options:
+    favicon: images/favicon.ico
+    logo: images/logo.png
+    folders: true
+  parts:
+    primary_sidebar_footer: primary_sidebar_footer.md
