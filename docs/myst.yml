@@ -5,6 +5,10 @@ project:
 
   toc:
     - file: README.md
+    - title: Function Reference
+      children:
+        - file: api/LEI.md
+        - file: api/UrbanRaster.md
     - title: Novel Urbanization
       children:
         - file: novel_context.md

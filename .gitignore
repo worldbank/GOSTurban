@@ -129,8 +129,7 @@ dmypy.json
 .pyre/
 
 # Project-specific
-_build/
-docs/api/
+*_build/
 src/GOSTurban/_version.py
 docs/notebooks/
 

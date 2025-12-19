@@ -14,10 +14,12 @@ keywords = ["gosturban", "urban", "raster"]
 dynamic = ["version", "dependencies", "optional-dependencies"]
 requires-python = ">=3.8"
 authors = [{ name = "World Bank", email = "github@worldbank.org" }]
+
 maintainers = [
 	{ name = "Benjamin P. Stewart", email = "bstewart@worldbankgroup.org" },
 	{ name = "Andres Chamorro", email = "achamorroelizond@worldbank.org" },
 ]
+
 classifiers = [
 	"Programming Language :: Python :: 3.8",
 	"Programming Language :: Python :: 3.9",
@@ -43,7 +45,3 @@ dev = { file = ["requirements-dev.txt"] }
 "Homepage" = "https://github.com/worldbank/GOSTurban"
 "Bug Reports" = "https://github.com/worldbank/GOSTurban/issues"
 "Source" = "https://github.com/worldbank/GOSTurban"
-
-
-
-#
