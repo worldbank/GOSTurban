@@ -1,33 +1,35 @@
 [build-system]
-requires = ["setuptools>=61", "setuptools-scm>=8"]
+requires = [
+	"setuptools>=61",
+	"setuptools-scm[toml]>=8",
+]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "GOSTurban"
-dynamic = ["version", "dependencies", "optional-dependencies"]
 description = "Multiple functions, tools, and tutorials for calculating urbanization based on gridded population data"
 readme = { file = "README.md", content-type = "text/markdown" }
 license = { file = "LICENSE" }
-authors = [{ name = "Benjamin P. Stewart" }]
+keywords = ["gosturban", "urban", "raster"]
+dynamic = ["version", "dependencies", "optional-dependencies"]
+requires-python = ">=3.8"
+authors = [{ name = "World Bank", email = "github@worldbank.org" }]
 maintainers = [
 	{ name = "Benjamin P. Stewart", email = "bstewart@worldbankgroup.org" },
 	{ name = "Andres Chamorro", email = "achamorroelizond@worldbank.org" },
 ]
 classifiers = [
+	"Programming Language :: Python :: 3.8",
+	"Programming Language :: Python :: 3.9",
+	"Programming Language :: Python :: 3.10",
+	"Programming Language :: Python :: 3.11",
 	"Programming Language :: Python :: 3 :: Only",
+	"License :: OSI Approved :: MIT License",
 	"Development Status :: 3 - Alpha",
 	"Intended Audience :: Developers",
 	"Operating System :: OS Independent",
 	"Topic :: Scientific/Engineering",
 ]
-keywords = ["gis", "spatial", "statistics", "world bank", "development"]
-
-requires-python = ">=3.10"
-
-[project.urls]
-"Homepage" = "https://github.com/worldbank/GOSTurban"
-"Bug Reports" = "https://github.com/worldbank/GOSTurban/issues"
-"Source" = "https://github.com/worldbank/GOSTurban"
 
 [tool.setuptools.dynamic]
 dependencies = { file = ["requirements.txt"] }
@@ -36,11 +38,12 @@ dependencies = { file = ["requirements.txt"] }
 dev = { file = ["requirements-dev.txt"] }
 
 [tool.setuptools_scm]
-version_file = "src/GOSTurban/_version.py"
 
-[tool.codespell]
-skip = 'docs/_build,docs/references.bib,__pycache__,*.png,*.gz,*.whl'
-ignore-regex = '^\s*"image\/png":\s.*'
+[project.urls]
+"Homepage" = "https://github.com/worldbank/GOSTurban"
+"Bug Reports" = "https://github.com/worldbank/GOSTurban/issues"
+"Source" = "https://github.com/worldbank/GOSTurban"
 
-[tool.ruff.lint.pydocstyle]
-convention = "numpy"
+
+
+#

@@ -8,4 +8,4 @@ geopy
 pyproj
 elevation
 geojson
-GOSTrocks
+richdem
