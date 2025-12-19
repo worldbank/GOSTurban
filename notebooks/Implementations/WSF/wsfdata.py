@@ -41,7 +41,7 @@ class wsf_dataset(object):
                 notGood = curD > badThreshold
                 try:
                     newestBadYear = max([i for i, x in enumerate(notGood) if x])
-                except:
+                except Exception:
                     newestBadYear = 0
                 outArray[0, cIdx, rIdx] = notGood.sum()
                 outArray[1, cIdx, rIdx] = newestBadYear
@@ -73,7 +73,6 @@ class wsf_dataset(object):
         inIDC = rasterio.open(self.evolution_idc)
         inE = inEvolution.read()
         inD = inIDC.read()
-        outArray = np.zeros(inE.shape)
         for rIdx in range(0, inE.shape[2]):
             for cIdx in range(0, inE.shape[1]):
                 curE = inE[0, cIdx, rIdx]

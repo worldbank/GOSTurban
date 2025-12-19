@@ -31,7 +31,7 @@ def main(iso3, out_folder):
     try:
         if not os.path.exists(out_file):
             download_pop_file(wp_url, out_file)
-    except:
+    except Exception:
         print(f"Could not download national population data for {iso3} from {wp_url}")
         print(
             "If you can manually download to the defined out_folder, the script will run"

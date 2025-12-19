@@ -38,13 +38,13 @@ repos:
         description: Checks for common misspellings in text files
         additional_dependencies: [tomli]
         exclude: ^notebooks/.*\.ipynb$
-        args: ["--ignore-words-list=gost,GOST"]
+        exclude_types: [csv]
+        args: ["--ignore-words-list=gost,GOST,ans"]
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.2.1
     hooks:
       - id: ruff
         types_or: [python, pyi, jupyter]
-        exclude: "^notebooks/"
         args: [--fix]
         exclude: ^notebooks/.*\.ipynb$
       - id: ruff-format
