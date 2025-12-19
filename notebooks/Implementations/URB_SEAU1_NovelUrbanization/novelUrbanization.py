@@ -143,7 +143,7 @@ class urban_data(object):
                 print(p)
 
         if len(sel_rasters) > 0:
-            # Open all the ratser files and covert to pixel-level summary numbers
+            # Open all the raster files and convert to pixel-level summary numbers
             idx = 0
             for cur_raster in sel_rasters:
                 curR = rasterio.open(cur_raster)
@@ -278,8 +278,6 @@ def calculate_urban(
             final_folder="FINAL_STANDARD_1KM",
             ghspop_suffix="1k",
         )
-        adm2_res = os.path.join(xx.final_folder, "URBAN_ADMIN2_STATS_COMPILED.csv")
-        ea_res = os.path.join(xx.final_folder, "URBAN_COMMUNE_STATS_COMPILED.csv")
         tPrint(f"{iso3} ***1k Extracting Global Layers")
         xx.extract_layers(
             global_landcover,
@@ -358,9 +356,7 @@ def calc_pp_urban(in_folder, default_pop_file, admin_layer, output_folder, iso3=
 
     cur_layer = urban_layers[0]
     inD = gpd.read_file(admin_layer)
-    default_pop_1k = default_pop_file.replace(
-        default_pop_file[:3], "%s1k" % default_pop_file[:3]
-    )
+
     for cur_layer in urban_layers:
         # tPrint(cur_layer)
         # Open and read in urban data
@@ -369,10 +365,8 @@ def calc_pp_urban(in_folder, default_pop_file, admin_layer, output_folder, iso3=
         urban_data = (urban_data > 0).astype(urban_r.meta["dtype"])
         # Extract population data
         urban_layer = os.path.basename(cur_layer)
-        default_pop = default_pop_file
 
         if "1k" in urban_layer:
-            default_pop = default_pop_1k
             pop_layer = os.path.basename(cur_layer)[:11]
             pop_folder = os.path.join(output_folder, "FINAL_STANDARD_1KM")
         else:
@@ -382,7 +376,6 @@ def calc_pp_urban(in_folder, default_pop_file, admin_layer, output_folder, iso3=
 
         if not os.path.exists(pop_file):
             if "1k" in urban_layer:
-                default_pop = default_pop_1k
                 pop_layer = os.path.basename(cur_layer)[:9]
                 pop_folder = os.path.join(output_folder, "FINAL_STANDARD_1KM")
             else:
@@ -441,8 +434,8 @@ def pp_point_urban_summaries(inD, urban_tiffs, out_file):
                 inD[os.path.basename(pFile).replace(".tif", "")] = [
                     x[0] for x in list(urb_res)
                 ]
-            except:
-                pass
+            except Exception as exc:
+                print(f"Failed to process {pFile}: {exc}")
     pd.DataFrame(inD.drop(["geometry"], axis=1)).to_csv(out_file)
 
 
@@ -465,13 +458,13 @@ def point_urban_summaries(inD, pop_tiffs, out_file):
                 inD[os.path.basename(curFile).replace(".tif", "")] = [
                     x[0] for x in list(urb_res)
                 ]
-            except:
-                pass
+            except Exception as exc:
+                print(f"Failed to process {curFile}: {exc}")
     pd.DataFrame(inD.drop(["geometry"], axis=1)).to_csv(out_file)
 
 
 def run_country(iso3):
-    local_path = "/home/public/Data/COUNTRY/{country}/POPULATION/WORLDPOP/".format(
+    return "/home/public/Data/COUNTRY/{country}/POPULATION/WORLDPOP/".format(
         country=iso3
     )
 
@@ -665,7 +658,7 @@ if __name__ == "__main__":
             cur_def = EA_DEFS[iso3]
             ea_file = os.path.join(cur_def[0], cur_def[1])
             pt_file = os.path.join(cur_def[0], cur_def[2])
-        except:
+        except Exception:
             ea_file = ""
             pt_file = ""
 
