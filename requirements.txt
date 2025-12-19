@@ -8,4 +8,3 @@ geopy
 pyproj
 elevation
 geojson
-richdem
