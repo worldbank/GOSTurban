@@ -1,6 +1,6 @@
 pytest
 pytest-cov
-docutils==0.17.1
+docutils==0.22.4
 jupyter-book
 sphinxcontrib-apidoc>=0.4.0,<1
 jupyter-cache>=0.6.0
