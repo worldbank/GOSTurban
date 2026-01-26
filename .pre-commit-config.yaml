@@ -9,7 +9,7 @@ exclude: ^.*\.ipynb$
 
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.5.0
+    rev: v6.0.0
     hooks:
       - id: trailing-whitespace
       - id: end-of-file-fixer
@@ -21,7 +21,7 @@ repos:
         args: [--allow-missing-credentials]
       - id: detect-private-key
   - repo: https://github.com/igorshubovych/markdownlint-cli
-    rev: v0.41.0
+    rev: v0.47.0
     hooks:
       - id: markdownlint
         name: Markdownlint
@@ -31,7 +31,7 @@ repos:
             "--disable=MD033", # no-inline-html
           ]
   - repo: https://github.com/codespell-project/codespell
-    rev: v2.3.0
+    rev: v2.4.1
     hooks:
       - id: codespell
         name: codespell
@@ -41,7 +41,7 @@ repos:
         exclude_types: [csv]
         args: ["--ignore-words-list=gost,GOST,ans"]
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.2.1
+    rev: v0.14.14
     hooks:
       - id: ruff
         types_or: [python, pyi, jupyter]
